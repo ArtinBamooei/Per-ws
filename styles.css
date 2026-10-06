@@ -743,3 +743,55 @@ html[dir="rtl"] .contact-links { border-left: 0; border-right: 1px solid var(--b
   }
   .reveal { opacity: 1; transform: none; }
 }
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0d1520;
+  --surface: #121d2a;
+  --surface-secondary: #172535;
+  --text-primary: #edf4fb;
+  --text-secondary: #b5c4d3;
+  --text-muted: #7f92a5;
+  --border: #293b4d;
+  --accent: #55a9e6;
+  --accent-hover: #79bced;
+  --success: #4fc49e;
+  --warning: #e0ad55;
+  --error: #ed7a83;
+  --shadow-soft: 0 16px 44px rgba(0, 0, 0, .22);
+}
+html[data-theme="dark"] body {
+  background: radial-gradient(circle at 78% 8%, rgba(85, 169, 230, .08), transparent 28%), var(--bg);
+}
+html[data-theme="dark"] .site-header { background: rgba(13, 21, 32, .9); }
+html[data-theme="dark"] .button-secondary { background: var(--surface); }
+html[data-theme="dark"] .button-secondary:hover { background: #182838; border-color: #3b5268; }
+html[data-theme="dark"] .highlight-item { background: var(--bg); }
+html[data-theme="dark"] .status-chip { background: rgba(79, 196, 158, .08); }
+html[data-theme="dark"] .tag { background: rgba(85, 169, 230, .08); }
+html[data-theme="dark"] .language-item { background: var(--surface); }
+html[data-theme="dark"] .theme-toggle { background: var(--surface); }
+html[data-theme="dark"] .theme-icon-sun { display: none; }
+html[data-theme="dark"] .theme-icon-moon { display: block; }
+html[data-theme="light"] .theme-icon-moon,
+.theme-icon-moon { display: none; }
+
+.theme-toggle {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--accent);
+  cursor: pointer;
+  transition: color .18s ease, background .18s ease, border-color .18s ease, transform .18s ease;
+}
+.theme-toggle:hover {
+  color: var(--accent-hover);
+  border-color: #9fc0d9;
+  transform: translateY(-1px);
+}
+.theme-toggle svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
