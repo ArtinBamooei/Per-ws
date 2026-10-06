@@ -241,6 +241,27 @@ function setupLanguages() {
   if (["EN", "DE", "FA"].includes(saved)) applyLanguageState(saved);
 }
 
+function setupTheme() {
+  const toggle = qs("[data-theme-toggle]");
+  const root = document.documentElement;
+  if (!toggle) return;
+
+  const applyTheme = (theme) => {
+    const isDark = theme === "dark";
+    root.dataset.theme = isDark ? "dark" : "light";
+    toggle.setAttribute("aria-pressed", String(isDark));
+    toggle.setAttribute("aria-label", isDark ? "Switch to light mode" : "Switch to dark mode");
+    localStorage.setItem("portfolio-theme", isDark ? "dark" : "light");
+  };
+
+  const saved = localStorage.getItem("portfolio-theme");
+  applyTheme(saved === "dark" ? "dark" : "light");
+
+  toggle.addEventListener("click", () => {
+    applyTheme(root.dataset.theme === "dark" ? "light" : "dark");
+  });
+}
+
 function setYear() {
   const year = qs("#current-year");
   if (year) year.textContent = String(new Date().getFullYear());
@@ -254,6 +275,7 @@ document.addEventListener("DOMContentLoaded", () => {
   renderPublications();
   setYear();
   setupLanguages();
+  setupTheme();
   setupNav();
   setupReveal();
 });
