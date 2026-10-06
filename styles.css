@@ -777,11 +777,13 @@ html[data-theme="light"] .theme-icon-moon,
 .theme-icon-moon { display: none; }
 
 .theme-toggle {
-  width: 36px;
+  min-width: 82px;
   height: 36px;
-  display: grid;
-  place-items: center;
-  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 0 10px;
   border: 1px solid var(--border);
   border-radius: 8px;
   background: var(--surface);
@@ -795,3 +797,5 @@ html[data-theme="light"] .theme-icon-moon,
   transform: translateY(-1px);
 }
 .theme-toggle svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+
+.theme-toggle-label { font-size: 11px; font-weight: 750; letter-spacing: .01em; }
