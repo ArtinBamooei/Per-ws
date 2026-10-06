@@ -276,6 +276,10 @@ function setYear() {
   if (year) year.textContent = String(new Date().getFullYear());
 }
 
+// Theme initialization is intentionally independent from the rest of the page setup.
+// This keeps the theme toggle functional even if another optional initializer fails.
+setupTheme();
+
 document.addEventListener("DOMContentLoaded", () => {
   renderAcademicHighlights();
   renderSkills();
@@ -284,7 +288,6 @@ document.addEventListener("DOMContentLoaded", () => {
   renderPublications();
   setYear();
   setupLanguages();
-  setupTheme();
   setupNav();
   setupReveal();
 });
