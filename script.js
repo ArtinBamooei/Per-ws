@@ -227,7 +227,7 @@ function setupLanguages() {
       button.setAttribute("aria-pressed", String(active));
       button.classList.toggle("is-active", active);
     });
-    localStorage.setItem("portfolio-language", lang);
+    try { localStorage.setItem("portfolio-language", lang); } catch (_) {}
   };
 
   buttons.forEach(button => {
@@ -237,48 +237,15 @@ function setupLanguages() {
     });
   });
 
-  const saved = localStorage.getItem("portfolio-language");
+  let saved = null;
+  try { saved = localStorage.getItem("portfolio-language"); } catch (_) {}
   if (["EN", "DE", "FA"].includes(saved)) applyLanguageState(saved);
-}
-
-function setupTheme() {
-  const toggle = qs("[data-theme-toggle]");
-  const root = document.documentElement;
-  const themeColor = qs('meta[name="theme-color"]');
-  if (!toggle) return;
-
-  const applyTheme = (theme, persist = true) => {
-    const isDark = theme === "dark";
-    const activeTheme = isDark ? "dark" : "light";
-    root.dataset.theme = activeTheme;
-    toggle.setAttribute("aria-pressed", String(isDark));
-    toggle.setAttribute("aria-label", isDark ? "Switch to light mode" : "Switch to dark mode");
-    toggle.setAttribute("title", isDark ? "Switch to light mode" : "Switch to dark mode");
-    const label = qs(".theme-toggle-label", toggle);
-    if (label) label.textContent = isDark ? "Light" : "Dark";
-    if (themeColor) themeColor.setAttribute("content", isDark ? "#0d1520" : "#f7f9fc");
-    if (persist) {
-      try { localStorage.setItem("portfolio-theme", activeTheme); } catch (_) {}
-    }
-  };
-
-  const initialTheme = root.dataset.theme === "dark" ? "dark" : "light";
-  applyTheme(initialTheme, false);
-
-  toggle.addEventListener("click", () => {
-    const nextTheme = root.dataset.theme === "dark" ? "light" : "dark";
-    applyTheme(nextTheme);
-  });
 }
 
 function setYear() {
   const year = qs("#current-year");
   if (year) year.textContent = String(new Date().getFullYear());
 }
-
-// Theme initialization is intentionally independent from the rest of the page setup.
-// This keeps the theme toggle functional even if another optional initializer fails.
-setupTheme();
 
 document.addEventListener("DOMContentLoaded", () => {
   renderAcademicHighlights();
