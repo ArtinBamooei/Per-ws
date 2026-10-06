@@ -251,6 +251,8 @@ function setupTheme() {
     root.dataset.theme = isDark ? "dark" : "light";
     toggle.setAttribute("aria-pressed", String(isDark));
     toggle.setAttribute("aria-label", isDark ? "Switch to light mode" : "Switch to dark mode");
+    const label = qs(".theme-toggle-label", toggle);
+    if (label) label.textContent = isDark ? "Light" : "Dark";
     localStorage.setItem("portfolio-theme", isDark ? "dark" : "light");
   };
 
