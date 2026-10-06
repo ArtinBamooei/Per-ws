@@ -11,6 +11,16 @@
   <meta property="og:url" content="https://artinbamooei.github.io/Per-ws/">
   <link rel="canonical" href="https://artinbamooei.github.io/Per-ws/">
   <title>Artin Bamooei — Computer Science · Data · AI</title>
+  <script>
+    (() => {
+      try {
+        const savedTheme = localStorage.getItem("portfolio-theme");
+        document.documentElement.dataset.theme = savedTheme === "dark" ? "dark" : "light";
+      } catch (_) {
+        document.documentElement.dataset.theme = "light";
+      }
+    })();
+  </script>
   <link rel="stylesheet" href="./styles.css">
   <script defer src="./script.js"></script>
 </head>
