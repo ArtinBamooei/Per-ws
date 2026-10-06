@@ -122,8 +122,8 @@ svg { vector-effect: non-scaling-stroke; }
   display: grid;
   place-items: center;
   border: 1px solid var(--border);
-  border-radius: 8px;
-  background: var(--surface);
+  border-radius: 6px;
+  background: transparent;
   color: var(--accent);
   font-weight: 750;
   font-size: 12px;
@@ -171,20 +171,21 @@ svg { vector-effect: non-scaling-stroke; }
 .language-switcher,
 .footer-langs {
   display: inline-flex;
-  gap: 2px;
-  padding: 3px;
-  border: 1px solid var(--border);
-  border-radius: 7px;
-  background: var(--surface);
+  align-items: center;
+  gap: 1px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
 }
 .lang-button,
 .footer-langs button {
   border: 0;
   background: transparent;
   color: var(--text-muted);
-  min-width: 30px;
-  min-height: 28px;
-  padding: 2px 7px;
+  min-width: 26px;
+  min-height: 26px;
+  padding: 2px 5px;
   border-radius: 5px;
   cursor: pointer;
   font-size: 11px;
@@ -290,7 +291,7 @@ h1 {
 }
 .button svg,
 .text-link svg,
-.contact-row svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.6; }
+.contact-row svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.6; }
 .button:hover { transform: translateY(-2px); }
 .button-primary { color: #fff; background: var(--accent); border-color: var(--accent); }
 .button-primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
@@ -690,8 +691,7 @@ html[dir="rtl"] .contact-links { border-left: 0; border-right: 1px solid var(--b
 
 @media (max-width: 920px) {
   .container { width: min(calc(100% - 40px), var(--container)); }
-  .desktop-nav,
-  .nav-actions .language-switcher { display: none; }
+  .desktop-nav { display: none; }
   .nav-actions { gap: 6px; }
   .menu-toggle { display: block; }
   .mobile-nav.is-open { display: block; }
@@ -779,9 +779,9 @@ html[data-theme="light"] .theme-icon-moon,
 .theme-icon-moon { display: none; }
 
 .theme-toggle {
-  width: 34px;
-  min-width: 34px;
-  height: 34px;
+  width: 28px;
+  min-width: 28px;
+  height: 28px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
