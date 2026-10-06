@@ -72,6 +72,55 @@ const I18N = {
   }
 };
 
+
+const DYNAMIC = {
+  EN: {
+    highlights:["Selected course highlight","Academic average placeholder","Completed university units","Current academic direction"],
+    skillGroups:["Data","Engineering","AI / ML"], skillLevels:["Intermediate","Beginner","Beginner+"],
+    langNames:["German","English","Persian"],
+    projects:[
+      ["Air Quality Monitor","Data-oriented monitoring project focused on cleaning, analysis and presenting environmental measurements.","Data / Engineering"],
+      ["Supermarket Analytics","Interactive business intelligence workflow turning transactional data into a structured multi-page dashboard.","Analytics"],
+      ["Machine Learning Study","Experimental work covering model evaluation, overfitting and introductory supervised learning workflows.","Machine Learning"]
+    ],
+    pubs:[
+      ["Data workflow design principles","Placeholder for a concise technical article or academic note."],
+      ["Graph algorithms in practice","Placeholder for an academic presentation or seminar contribution."],
+      ["Research direction placeholder","Reserved structure for future research, publication or preprint."]
+    ]
+  },
+  DE: {
+    highlights:["Ausgewählte Kursleistung","Akademischer Notendurchschnitt (Platzhalter)","Abgeschlossene Universitätseinheiten","Aktuelle akademische Ausrichtung"],
+    skillGroups:["Daten","Engineering","KI / ML"], skillLevels:["Fortgeschritten","Anfänger","Anfänger+"],
+    langNames:["Deutsch","Englisch","Persisch"],
+    projects:[
+      ["Luftqualitätsmonitor","Datenorientiertes Monitoring-Projekt mit Fokus auf Bereinigung, Analyse und Darstellung von Umweltdaten.","Daten / Engineering"],
+      ["Supermarkt-Analyse","Interaktiver Business-Intelligence-Workflow, der Transaktionsdaten in ein strukturiertes mehrseitiges Dashboard überführt.","Analytik"],
+      ["Machine-Learning-Studie","Experimentelle Arbeit zu Modellevaluation, Overfitting und grundlegenden überwachten Lernverfahren.","Maschinelles Lernen"]
+    ],
+    pubs:[
+      ["Prinzipien für Daten-Workflows","Platzhalter für einen kompakten technischen Artikel oder eine akademische Notiz."],
+      ["Graphalgorithmen in der Praxis","Platzhalter für eine akademische Präsentation oder einen Seminarbeitrag."],
+      ["Platzhalter für Forschungsrichtung","Struktur für zukünftige Forschung, Publikationen oder Preprints."]
+    ]
+  },
+  FA: {
+    highlights:["درس منتخب","میانگین تحصیلی (موقت)","واحدهای گذرانده دانشگاه","مسیر آکادمیک فعلی"],
+    skillGroups:["داده","مهندسی","هوش مصنوعی / یادگیری ماشین"], skillLevels:["متوسط","مقدماتی","مقدماتی+"],
+    langNames:["آلمانی","انگلیسی","فارسی"],
+    projects:[
+      ["پایش کیفیت هوا","پروژه‌ای داده‌محور با تمرکز بر پاک‌سازی، تحلیل و ارائه داده‌های محیط‌زیستی.","داده / مهندسی"],
+      ["تحلیل سوپرمارکت","گردش‌کار هوش تجاری که داده‌های تراکنشی را به یک داشبورد ساختاریافته چندصفحه‌ای تبدیل می‌کند.","تحلیل داده"],
+      ["مطالعه یادگیری ماشین","کار آزمایشی درباره ارزیابی مدل، بیش‌برازش و گردش‌کارهای مقدماتی یادگیری نظارت‌شده.","یادگیری ماشین"]
+    ],
+    pubs:[
+      ["اصول طراحی گردش‌کار داده","متن موقت برای یک مقاله فنی کوتاه یا یادداشت آکادمیک."],
+      ["الگوریتم‌های گراف در عمل","متن موقت برای یک ارائه دانشگاهی یا مشارکت در سمینار."],
+      ["مسیر پژوهشی در آینده","ساختار رزرو شده برای پژوهش، مقاله یا پیش‌چاپ آینده."]
+    ]
+  }
+};
+
 const qs = (selector, parent = document) => parent.querySelector(selector);
 const qsa = (selector, parent = document) => [...parent.querySelectorAll(selector)];
 let currentLanguage = "EN";
@@ -79,43 +128,41 @@ let currentLanguage = "EN";
 function t(key) { return I18N[currentLanguage][key] ?? I18N.EN[key] ?? key; }
 
 function renderAcademicHighlights() {
-  const el = qs("#academic-highlights");
-  el.innerHTML = DATA.academicHighlights.map(item => `<div class="highlight-item"><strong>${item.value}</strong><span>${item.label}</span></div>`).join("");
+  const d = DYNAMIC[currentLanguage];
+  qs("#academic-highlights").innerHTML = DATA.academicHighlights.map((item,i) => `<div class="highlight-item"><strong>${item.value}</strong><span>${d.highlights[i]}</span></div>`).join("");
 }
 
 function renderSkills() {
-  const descriptions = [t("dataDesc"), t("engDesc"), t("mlDesc")];
-  const el = qs("#skill-groups");
-  el.innerHTML = DATA.skills.map((group, index) => `
-    <article class="skill-group reveal"><h3>${group.title}</h3><p>${descriptions[index]}</p><div class="skill-list">
-      ${group.items.map(([name, level]) => `<div class="skill-item"><span>${name}</span><span class="skill-level">${level}</span></div>`).join("")}
+  const d = DYNAMIC[currentLanguage], descriptions = [t("dataDesc"), t("engDesc"), t("mlDesc")];
+  qs("#skill-groups").innerHTML = DATA.skills.map((group, index) => `
+    <article class="skill-group reveal"><h3>${d.skillGroups[index]}</h3><p>${descriptions[index]}</p><div class="skill-list">
+      ${group.items.map(([name, level]) => {
+        const translatedLevel = level === "Intermediate" ? d.skillLevels[0] : level === "Beginner+" ? d.skillLevels[2] : level === "Beginner" ? d.skillLevels[1] : level;
+        return `<div class="skill-item"><span>${name}</span><span class="skill-level">${translatedLevel}</span></div>`;
+      }).join("")}
     </div></article>`).join("");
 }
 
 function renderLanguages() {
-  const notes = currentLanguage === "DE"
-    ? [t("targetGerman"), t("technicalReading"), t("nativeLanguage")]
-    : currentLanguage === "FA"
-      ? [t("targetGerman"), t("technicalReading"), t("nativeLanguage")]
-      : [t("targetGerman"), t("technicalReading"), t("nativeLanguage")];
-  qs("#language-list").innerHTML = DATA.languages.map((language, i) => `
-    <article class="language-item"><div class="language-top"><strong>${currentLanguage === "DE" && i === 2 ? "Persisch" : currentLanguage === "FA" ? ["آلمانی","انگلیسی","فارسی"][i] : language.name}</strong><span class="language-level">${language.level === "Native" ? t("native") : language.level}</span></div>
-    <p class="language-note">${notes[i]}</p><div class="language-meter" aria-label="${language.name} level indicator" role="img"><span style="--progress:${language.progress}"></span></div></article>`).join("");
+  const d = DYNAMIC[currentLanguage];
+  const notes = [t("targetGerman"), t("technicalReading"), t("nativeLanguage")];
+  qs("#language-list").innerHTML = DATA.languages.map((language,i) => `
+    <article class="language-item"><div class="language-top"><strong>${d.langNames[i]}</strong><span class="language-level">${language.level === "Native" ? t("native") : language.level}</span></div>
+    <p class="language-note">${notes[i]}</p><div class="language-meter" aria-label="${d.langNames[i]} level indicator" role="img"><span style="--progress:${language.progress}"></span></div></article>`).join("");
 }
 
 function renderProjects() {
-  const categories = [t("dataEngineering"), t("analytics"), t("machineLearning")];
-  const links = [t("github"), t("caseStudy"), t("notes")];
-  qs("#project-grid").innerHTML = DATA.projects.map((project, i) => `
-    <article class="project-card reveal"><span class="project-number">${project.number}</span><h3>${project.title}</h3><p>${project.description}</p>
+  const d = DYNAMIC[currentLanguage], links = [t("github"), t("caseStudy"), t("notes")];
+  qs("#project-grid").innerHTML = DATA.projects.map((project,i) => `
+    <article class="project-card reveal"><span class="project-number">${project.number}</span><h3>${d.projects[i][0]}</h3><p>${d.projects[i][1]}</p>
     <div class="project-tech">${project.tech.map(item => `<span>${item}</span>`).join("")}</div>
-    <div class="project-footer"><span class="project-category">${categories[i]}</span><a class="project-link" href="#contact" aria-label="${links[i]} for ${project.title}">${links[i]} ↗</a></div></article>`).join("");
+    <div class="project-footer"><span class="project-category">${d.projects[i][2]}</span><a class="project-link" href="#contact" aria-label="${links[i]} for ${d.projects[i][0]}">${links[i]} ↗</a></div></article>`).join("");
 }
 
 function renderPublications() {
-  const types = [t("technicalNote"), t("presentation"), t("research")];
-  qs("#publication-list").innerHTML = DATA.publications.map((item, i) => `
-    <article class="publication-item reveal"><time class="publication-date">${item.date}</time><div class="publication-copy"><h3>${item.title}</h3><p>${item.description}</p></div><span class="publication-type">${types[i]}</span></article>`).join("");
+  const d = DYNAMIC[currentLanguage], types = [t("technicalNote"), t("presentation"), t("research")];
+  qs("#publication-list").innerHTML = DATA.publications.map((item,i) => `
+    <article class="publication-item reveal"><time class="publication-date">${item.date}</time><div class="publication-copy"><h3>${d.pubs[i][0]}</h3><p>${d.pubs[i][1]}</p></div><span class="publication-type">${types[i]}</span></article>`).join("");
 }
 
 function applyStaticLanguage() {
