@@ -244,23 +244,30 @@ function setupLanguages() {
 function setupTheme() {
   const toggle = qs("[data-theme-toggle]");
   const root = document.documentElement;
+  const themeColor = qs('meta[name="theme-color"]');
   if (!toggle) return;
 
-  const applyTheme = (theme) => {
+  const applyTheme = (theme, persist = true) => {
     const isDark = theme === "dark";
-    root.dataset.theme = isDark ? "dark" : "light";
+    const activeTheme = isDark ? "dark" : "light";
+    root.dataset.theme = activeTheme;
     toggle.setAttribute("aria-pressed", String(isDark));
     toggle.setAttribute("aria-label", isDark ? "Switch to light mode" : "Switch to dark mode");
+    toggle.setAttribute("title", isDark ? "Switch to light mode" : "Switch to dark mode");
     const label = qs(".theme-toggle-label", toggle);
     if (label) label.textContent = isDark ? "Light" : "Dark";
-    localStorage.setItem("portfolio-theme", isDark ? "dark" : "light");
+    if (themeColor) themeColor.setAttribute("content", isDark ? "#0d1520" : "#f7f9fc");
+    if (persist) {
+      try { localStorage.setItem("portfolio-theme", activeTheme); } catch (_) {}
+    }
   };
 
-  const saved = localStorage.getItem("portfolio-theme");
-  applyTheme(saved === "dark" ? "dark" : "light");
+  const initialTheme = root.dataset.theme === "dark" ? "dark" : "light";
+  applyTheme(initialTheme, false);
 
   toggle.addEventListener("click", () => {
-    applyTheme(root.dataset.theme === "dark" ? "light" : "dark");
+    const nextTheme = root.dataset.theme === "dark" ? "light" : "dark";
+    applyTheme(nextTheme);
   });
 }
 
