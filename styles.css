@@ -1232,3 +1232,179 @@ html[dir="rtl"] .section-heading-side {
   color: var(--text-secondary);
   line-height: 1.7;
 }
+
+
+/* Creative micro-interactions: restrained, data-inspired, site-wide. */
+.scroll-progress {
+  position: fixed;
+  z-index: 120;
+  top: 0;
+  left: 0;
+  width: var(--scroll-progress, 0%);
+  height: 2px;
+  background: var(--accent);
+  transform-origin: left center;
+  pointer-events: none;
+  opacity: .85;
+}
+html[dir="rtl"] .scroll-progress {
+  left: auto;
+  right: 0;
+  transform-origin: right center;
+}
+
+.project-card,
+.skill-group,
+.highlights-card,
+.contact-shell {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+.project-card::after,
+.skill-group::after,
+.highlights-card::after,
+.contact-shell::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  width: 180px;
+  height: 180px;
+  left: calc(var(--mx, 50%) - 90px);
+  top: calc(var(--my, 50%) - 90px);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(23,105,170,.08), transparent 68%);
+  opacity: 0;
+  transition: opacity .35s ease;
+  pointer-events: none;
+}
+.project-card:hover::after,
+.skill-group:hover::after,
+.highlights-card:hover::after,
+.contact-shell:hover::after {
+  opacity: 1;
+}
+
+.project-card {
+  transition: transform .3s cubic-bezier(.22,1,.36,1), border-color .25s ease, box-shadow .3s ease;
+}
+.project-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(23,105,170,.32);
+  box-shadow: 0 18px 42px rgba(23,56,86,.09);
+}
+.project-card .project-number {
+  transition: transform .45s cubic-bezier(.22,1,.36,1), color .25s ease;
+}
+.project-card:hover .project-number {
+  transform: translateX(5px);
+  color: var(--accent);
+}
+.project-card .project-link svg {
+  transition: transform .3s cubic-bezier(.22,1,.36,1);
+}
+.project-card:hover .project-link svg {
+  transform: translateX(4px);
+}
+
+.skill-item {
+  transition: transform .22s cubic-bezier(.22,1,.36,1), border-color .22s ease, background .22s ease;
+}
+.skill-item:hover {
+  transform: translateY(-2px);
+  border-color: rgba(23,105,170,.35);
+}
+.skill-item::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 2px;
+  background: var(--accent);
+  transition: width .35s cubic-bezier(.22,1,.36,1);
+}
+.skill-item:hover::after { width: 100%; }
+
+.timeline-marker {
+  transition: box-shadow .3s ease, transform .3s ease;
+}
+.timeline-card:hover .timeline-marker {
+  transform: scale(1.25);
+  box-shadow: 0 0 0 6px rgba(23,105,170,.07);
+}
+
+.highlight-item {
+  position: relative;
+  overflow: hidden;
+  transition: transform .25s cubic-bezier(.22,1,.36,1), border-color .25s ease;
+}
+.highlight-item::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -45%;
+  width: 30%;
+  height: 1px;
+  background: var(--accent);
+  opacity: .55;
+  transform: skewX(-24deg);
+  transition: left .7s cubic-bezier(.22,1,.36,1);
+}
+.highlight-item:hover {
+  transform: translateY(-3px);
+  border-color: rgba(23,105,170,.3);
+}
+.highlight-item:hover::before { left: 120%; }
+
+.section-heading-row h2 {
+  position: relative;
+}
+.section-heading-row h2::after {
+  content: "";
+  display: block;
+  width: 42px;
+  height: 2px;
+  margin-top: 13px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .7s cubic-bezier(.22,1,.36,1) .12s;
+}
+.section-heading-row.is-visible h2::after {
+  transform: scaleX(1);
+}
+html[dir="rtl"] .section-heading-row h2::after {
+  transform-origin: right;
+}
+
+.language-item {
+  transition: transform .25s cubic-bezier(.22,1,.36,1), border-color .25s ease;
+}
+.language-item:hover {
+  transform: translateX(5px);
+  border-color: rgba(23,105,170,.3);
+}
+html[dir="rtl"] .language-item:hover { transform: translateX(-5px); }
+
+.nav-link::after {
+  transition: transform .28s cubic-bezier(.22,1,.36,1);
+}
+.lang-button {
+  transition: color .2s ease, background .2s ease, transform .2s ease;
+}
+.lang-button:hover { transform: translateY(-1px); }
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-progress { display: none; }
+  .project-card,
+  .skill-item,
+  .timeline-marker,
+  .highlight-item,
+  .language-item { transition: none !important; transform: none !important; }
+  .section-heading-row h2::after { transform: scaleX(1); transition: none; }
+  .project-card::after,
+  .skill-group::after,
+  .highlights-card::after,
+  .contact-shell::after { display: none; }
+}
