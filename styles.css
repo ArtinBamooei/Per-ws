@@ -739,7 +739,7 @@ html[dir="rtl"] .contact-links { border-left: 0; border-right: 1px solid var(--b
   .container { width: min(calc(100% - 40px), var(--container)); }
   .desktop-nav { display: none; }
   .nav-actions { gap: 6px; }
-  .menu-toggle { display: block; }
+  .menu-toggle { display: inline-grid; place-items: center; }
   .mobile-nav.is-open { display: block; }
   .nav-shell { grid-template-columns: 1fr auto; }
   .hero { padding-top: 52px; padding-bottom: 58px; }
