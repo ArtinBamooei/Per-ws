@@ -186,6 +186,16 @@ function applyStaticLanguage() {
   if (twitterTitle) twitterTitle.content = document.title;
   if (twitterDescription) twitterDescription.content = meta ? meta.content : document.title;
   if (locale) locale.content = currentLanguage === "FA" ? "fa_IR" : currentLanguage === "DE" ? "de_DE" : "en_US";
+
+  const url = new URL(window.location.href);
+  const canonical = qs('link[rel="canonical"]');
+  const ogUrl = qs('meta[property="og:url"]');
+  const queryLanguage = new URLSearchParams(window.location.search).get("lang")?.toUpperCase();
+  const canonicalUrl = ["EN", "DE", "FA"].includes(queryLanguage)
+    ? `${url.origin}${url.pathname}?lang=${currentLanguage.toLowerCase()}`
+    : `${url.origin}${url.pathname}`;
+  if (canonical) canonical.setAttribute("href", canonicalUrl);
+  if (ogUrl) ogUrl.setAttribute("content", canonicalUrl);
 }
 
 function syncThemeLabels() {
@@ -222,7 +232,24 @@ function setupTheme() {
 
 function setupLanguages() {
   const buttons = qsa("[data-lang]");
-  const applyLanguage = lang => {
+
+  const updateNavCurrent = () => {
+    const activeHash = window.location.hash || "#home";
+    qsa(".desktop-nav .nav-link, .mobile-nav a").forEach(link => {
+      const active = link.getAttribute("href") === activeHash;
+      if (active) link.setAttribute("aria-current", "location");
+      else link.removeAttribute("aria-current");
+      if (link.classList.contains("nav-link")) link.classList.toggle("is-active", active);
+    });
+  };
+
+  const syncLanguageUrl = () => {
+    const url = new URL(window.location.href);
+    url.searchParams.set("lang", currentLanguage.toLowerCase());
+    history.replaceState(null, "", url.pathname + url.search + url.hash);
+  };
+
+  const applyLanguage = (lang, syncUrl = true) => {
     currentLanguage = ["EN", "DE", "FA"].includes(lang) ? lang : "EN";
     document.documentElement.lang = currentLanguage === "FA" ? "fa" : currentLanguage.toLowerCase();
     document.documentElement.dir = currentLanguage === "FA" ? "rtl" : "ltr";
@@ -232,10 +259,6 @@ function setupLanguages() {
       button.setAttribute("aria-pressed", String(active));
       button.classList.toggle("is-active", active);
     });
-    qsa(".desktop-nav .nav-link").forEach(link => link.removeAttribute("aria-current"));
-    const activeHash = window.location.hash || "#home";
-    const activeLink = qs(`.desktop-nav .nav-link[href="${activeHash}"]`) || qs('.desktop-nav .nav-link[href="#home"]');
-    if (activeLink) activeLink.setAttribute("aria-current", "location");
 
     applyStaticLanguage();
     renderAcademicHighlights();
@@ -245,20 +268,25 @@ function setupLanguages() {
     renderPublications();
     syncThemeLabels();
     localizeNumbers();
+    updateNavCurrent();
 
     try { localStorage.setItem("portfolio-language", currentLanguage); } catch (_) {}
-    const url = new URL(window.location.href);
-    url.searchParams.set("lang", currentLanguage.toLowerCase());
-    history.replaceState(null, "", url.pathname + url.search + url.hash);
+    if (syncUrl) syncLanguageUrl();
   };
 
-  buttons.forEach(button => button.addEventListener("click", () => applyLanguage(button.dataset.lang)));
+  buttons.forEach(button => button.addEventListener("click", () => applyLanguage(button.dataset.lang, true)));
 
   let saved = null;
   try { saved = localStorage.getItem("portfolio-language"); } catch (_) {}
+
   const queryLanguage = new URLSearchParams(window.location.search).get("lang")?.toUpperCase();
-  const initialLanguage = ["EN", "DE", "FA"].includes(queryLanguage) ? queryLanguage : saved;
-  applyLanguage(initialLanguage && ["EN", "DE", "FA"].includes(initialLanguage) ? initialLanguage : "EN");
+  const hasValidQueryLanguage = ["EN", "DE", "FA"].includes(queryLanguage);
+  const initialLanguage = hasValidQueryLanguage
+    ? queryLanguage
+    : (["EN", "DE", "FA"].includes(saved) ? saved : "EN");
+
+  applyLanguage(initialLanguage, hasValidQueryLanguage);
+  window.addEventListener("hashchange", updateNavCurrent);
 }
 
 function setupReveal() {
