@@ -14,11 +14,11 @@ Static multilingual academic portfolio built with semantic HTML, CSS and vanilla
 
 ## Local development
 
-Serve the repository with any static HTTP server. No framework or build step is required.
+Serve the repository with any static HTTP server. No framework or build step is required for deployment. GitHub Pages serves the static files directly; the quality workflow runs linting and validation in CI.
 
 ## Languages
 
-EN, DE and FA are available. The selected language is stored in localStorage and can also be selected with `?lang=en`, `?lang=de` or `?lang=fa`.
+EN, DE and FA are available. The selected language is stored in localStorage. Explicit `?lang=en`, `?lang=de` or `?lang=fa` URLs take precedence and are persisted; changing language updates the query parameter while preserving the current hash anchor.
 
 ## Content updates
 
