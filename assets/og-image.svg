@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+<rect width="1200" height="630" fill="#f7f9fc"/>
+<rect x="70" y="70" width="1060" height="490" rx="28" fill="#fff" stroke="#d7e0e8"/>
+<text x="120" y="235" fill="#1769aa" font-family="Arial,sans-serif" font-size="28" font-weight="700" letter-spacing="3">COMPUTER SCIENCE / ACADEMIC PORTFOLIO</text>
+<text x="120" y="335" fill="#182433" font-family="Arial,sans-serif" font-size="76" font-weight="800">Artin Bamooei</text>
+<text x="120" y="400" fill="#5b6b7d" font-family="Arial,sans-serif" font-size="34">Computer Science · Data · AI</text>
+<path d="M900 170h150M900 230h100M900 290h170M900 350h125M900 410h155" stroke="#1769aa" stroke-width="4" opacity=".45"/>
+<circle cx="875" cy="170" r="7" fill="#1769aa"/><circle cx="875" cy="230" r="7" fill="#1769aa"/><circle cx="875" cy="290" r="7" fill="#1769aa"/><circle cx="875" cy="350" r="7" fill="#1769aa"/><circle cx="875" cy="410" r="7" fill="#1769aa"/>
+</svg>
