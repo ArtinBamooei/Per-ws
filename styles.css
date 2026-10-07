@@ -1133,3 +1133,31 @@ html[dir="rtl"] .section-heading-side {
     align-items: flex-start;
   }
 }
+
+
+.error-page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 32px;
+  background: var(--bg);
+}
+.error-card {
+  width: min(100%, 620px);
+  padding: 48px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-soft);
+}
+.error-card h1 {
+  margin: 12px 0 14px;
+  font-size: clamp(42px, 7vw, 64px);
+  line-height: 1;
+}
+.error-card p {
+  max-width: 480px;
+  margin-bottom: 28px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
