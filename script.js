@@ -29,8 +29,8 @@ const DATA = {
 
 const I18N = {
   EN: {
-    navLabel:"Primary navigation", languageSelection:"Language selection", navHome:"Home", navAbout:"About / Intro", navEducation:"Education", navSkills:"Skills", navProjects:"Projects", navPublications:"Publications", navContact:"Contact",
-    skip:"Skip to main content", brandSubtitle:"Computer Science · Data · AI", heroEyebrow:"Computer Science / Academic Portfolio", heroPosition:"Computer Science · Data · AI",
+    navLabel:"Primary navigation", mobileNavLabel:"Mobile navigation", languageSelection:"Language selection", navHome:"Home", navAbout:"About / Intro", navEducation:"Education", navSkills:"Skills", navLanguages:"Languages", navProjects:"Projects", navPublications:"Publications", navContact:"Contact",
+    skip:"Skip to main content", brandSubtitle:"Computer Science · Data · AI", heroEyebrow:"Computer Science / Academic Portfolio", visualData:"DATA / GRAPH / SIGNAL", heroPosition:"Computer Science · Data · AI",
     heroDescription:"A concise academic portfolio for a Computer Science student working across data analysis, machine learning, data engineering and applied technical projects.", viewWork:"View selected work", academicContact:"Academic contact", university:"Shiraz Azad University", dataFocus:"Data & AI focus",
     profile:"Profile", introduction:"Introduction", introTitle:"Focused on computing with data.", introLead:"Placeholder academic statement for a concise introduction. The final version will summarize education, technical direction and research interests without turning the home page into a biography.",
     interestData:"Data Science", interestML:"Machine Learning", interestDE:"Data Engineering", interestAI:"Applied AI",
@@ -43,8 +43,8 @@ const I18N = {
     caseStudy:"Case study", notes:"Notes", technicalNote:"Technical note", presentation:"Presentation", research:"Research", dataEngineering:"Data / Engineering", machineLearning:"Machine Learning", analytics:"Analytics"
   },
   DE: {
-    navLabel:"Hauptnavigation", languageSelection:"Sprachauswahl", navHome:"Startseite", navAbout:"Profil", navEducation:"Ausbildung", navSkills:"Kenntnisse", navProjects:"Projekte", navPublications:"Publikationen", navContact:"Kontakt",
-    skip:"Zum Hauptinhalt", brandSubtitle:"Informatik · Daten · KI", heroEyebrow:"Informatik / Akademisches Portfolio", heroPosition:"Informatik · Daten · KI",
+    navLabel:"Hauptnavigation", mobileNavLabel:"Mobile Navigation", languageSelection:"Sprachauswahl", navHome:"Startseite", navAbout:"Profil", navEducation:"Ausbildung", navSkills:"Kenntnisse", navLanguages:"Sprachen", navProjects:"Projekte", navPublications:"Publikationen", navContact:"Kontakt",
+    skip:"Zum Hauptinhalt", brandSubtitle:"Informatik · Daten · KI", heroEyebrow:"Informatik / Akademisches Portfolio", visualData:"DATEN / GRAPH / SIGNAL", heroPosition:"Informatik · Daten · KI",
     heroDescription:"Ein kompaktes akademisches Portfolio eines Informatikstudenten mit Schwerpunkt auf Datenanalyse, maschinellem Lernen, Data Engineering und angewandten technischen Projekten.", viewWork:"Ausgewählte Arbeiten", academicContact:"Akademischer Kontakt", university:"Islamische Azad-Universität Shiraz", dataFocus:"Fokus: Daten & KI",
     profile:"Profil", introduction:"Einleitung", introTitle:"Fokussiert auf Computing mit Daten.", introLead:"Platzhalter für eine kurze akademische Vorstellung. Die finale Version fasst Ausbildung, technische Ausrichtung und Forschungsinteressen prägnant zusammen.",
     interestData:"Data Science", interestML:"Maschinelles Lernen", interestDE:"Data Engineering", interestAI:"Angewandte KI",
@@ -57,8 +57,8 @@ const I18N = {
     caseStudy:"Fallstudie", notes:"Notizen", technicalNote:"Technische Notiz", presentation:"Präsentation", research:"Forschung", dataEngineering:"Daten / Engineering", machineLearning:"Maschinelles Lernen", analytics:"Analytik"
   },
   FA: {
-    navLabel:"ناوبری اصلی", languageSelection:"انتخاب زبان", navHome:"خانه", navAbout:"معرفی", navEducation:"تحصیلات", navSkills:"مهارت‌ها", navProjects:"پروژه‌ها", navPublications:"مقالات", navContact:"ارتباط",
-    skip:"رفتن به محتوای اصلی", brandSubtitle:"علوم کامپیوتر · داده · هوش مصنوعی", heroEyebrow:"علوم کامپیوتر / پورتفولیوی آکادمیک", heroPosition:"علوم کامپیوتر · داده · هوش مصنوعی",
+    navLabel:"ناوبری اصلی", mobileNavLabel:"ناوبری موبایل", languageSelection:"انتخاب زبان", navHome:"خانه", navAbout:"معرفی", navEducation:"تحصیلات", navSkills:"مهارت‌ها", navLanguages:"زبان‌ها", navProjects:"پروژه‌ها", navPublications:"مقالات", navContact:"ارتباط",
+    skip:"رفتن به محتوای اصلی", brandSubtitle:"علوم کامپیوتر · داده · هوش مصنوعی", heroEyebrow:"علوم کامپیوتر / پورتفولیوی آکادمیک", visualData:"داده / گراف / سیگنال", heroPosition:"علوم کامپیوتر · داده · هوش مصنوعی",
     heroDescription:"پورتفولیوی آکادمیک یک دانشجوی علوم کامپیوتر با تمرکز بر تحلیل داده، یادگیری ماشین، مهندسی داده و پروژه‌های فنی کاربردی.", viewWork:"مشاهده پروژه‌های منتخب", academicContact:"ارتباط آکادمیک", university:"دانشگاه آزاد شیراز", dataFocus:"تمرکز: داده و هوش مصنوعی",
     profile:"پروفایل", introduction:"معرفی", introTitle:"تمرکز بر محاسبات و داده.", introLead:"متن موقت برای معرفی کوتاه آکادمیک. نسخه نهایی تحصیلات، مسیر فنی و علایق پژوهشی را به‌صورت خلاصه بیان می‌کند.",
     interestData:"علم داده", interestML:"یادگیری ماشین", interestDE:"مهندسی داده", interestAI:"هوش مصنوعی کاربردی",
@@ -178,28 +178,54 @@ function applyStaticLanguage() {
   document.title = currentLanguage === "FA" ? "آرتین بموئی — علوم کامپیوتر · داده · هوش مصنوعی" : currentLanguage === "DE" ? "Artin Bamooei — Informatik · Daten · KI" : "Artin Bamooei — Computer Science · Data · AI";
   const meta = qs('meta[name="description"]');
   if (meta) meta.content = currentLanguage === "FA" ? "پورتفولیوی آکادمیک آرتین بموئی در حوزه علوم کامپیوتر، داده و هوش مصنوعی." : currentLanguage === "DE" ? "Akademisches Portfolio von Artin Bamooei mit Schwerpunkt auf Informatik, Daten und KI." : "Academic portfolio of Artin Bamooei focused on Computer Science, Data and AI.";
+
+  const ogTitle = qs('meta[property="og:title"]');
+  const ogDescription = qs('meta[property="og:description"]');
+  if (ogTitle) ogTitle.content = document.title;
+  if (ogDescription) ogDescription.content = meta ? meta.content : document.title;
+}
+
+function syncThemeLabels() {
+  const toggle = qs("[data-theme-toggle]");
+  if (!toggle) return;
+  const isDark = document.documentElement.dataset.theme === "dark";
+  const label = isDark
+    ? (currentLanguage === "FA" ? "تغییر به حالت روشن" : currentLanguage === "DE" ? "Zum hellen Modus wechseln" : "Switch to light mode")
+    : (currentLanguage === "FA" ? "تغییر به حالت تیره" : currentLanguage === "DE" ? "Zum dunklen Modus wechseln" : "Switch to dark mode");
+  toggle.setAttribute("aria-label", label);
+  toggle.setAttribute("title", label);
 }
 
 function setupLanguages() {
   const buttons = qsa("[data-lang]");
   const applyLanguage = lang => {
-    currentLanguage = ["EN","DE","FA"].includes(lang) ? lang : "EN";
+    currentLanguage = ["EN", "DE", "FA"].includes(lang) ? lang : "EN";
     document.documentElement.lang = currentLanguage === "FA" ? "fa" : currentLanguage.toLowerCase();
     document.documentElement.dir = currentLanguage === "FA" ? "rtl" : "ltr";
+
     buttons.forEach(button => {
       const active = button.dataset.lang === currentLanguage;
       button.setAttribute("aria-pressed", String(active));
       button.classList.toggle("is-active", active);
     });
+
     applyStaticLanguage();
-    renderAcademicHighlights(); renderSkills(); renderLanguages(); renderProjects(); renderPublications();
+    renderAcademicHighlights();
+    renderSkills();
+    renderLanguages();
+    renderProjects();
+    renderPublications();
+    syncThemeLabels();
     setupReveal();
+
     try { localStorage.setItem("portfolio-language", currentLanguage); } catch (_) {}
   };
+
   buttons.forEach(button => button.addEventListener("click", () => applyLanguage(button.dataset.lang)));
+
   let saved = null;
   try { saved = localStorage.getItem("portfolio-language"); } catch (_) {}
-  applyLanguage(saved && ["EN","DE","FA"].includes(saved) ? saved : "EN");
+  applyLanguage(saved && ["EN", "DE", "FA"].includes(saved) ? saved : "EN");
 }
 
 function setupReveal() {
@@ -212,17 +238,54 @@ function setupReveal() {
 }
 
 function setupNav() {
-  const header = qs("[data-header]"), menuToggle = qs("[data-menu-toggle]"), mobileNav = qs("[data-mobile-nav]");
-  const links = qsa(".desktop-nav .nav-link"), sections = qsa("main section[id]");
-  const closeMenu = () => { mobileNav.classList.remove("is-open"); document.body.classList.remove("menu-open"); menuToggle.setAttribute("aria-expanded","false"); };
-  menuToggle.addEventListener("click", () => { const open = mobileNav.classList.toggle("is-open"); document.body.classList.toggle("menu-open",open); menuToggle.setAttribute("aria-expanded",String(open)); });
+  const header = qs("[data-header]");
+  const menuToggle = qs("[data-menu-toggle]");
+  const mobileNav = qs("[data-mobile-nav]");
+  const links = qsa(".desktop-nav .nav-link");
+  const sections = qsa("main section[id]");
+
+  if (!header || !menuToggle || !mobileNav) return;
+
+  const closeMenu = () => {
+    mobileNav.classList.remove("is-open");
+    document.body.classList.remove("menu-open");
+    menuToggle.setAttribute("aria-expanded", "false");
+  };
+
+  menuToggle.addEventListener("click", () => {
+    const open = !mobileNav.classList.contains("is-open");
+    mobileNav.classList.toggle("is-open", open);
+    document.body.classList.toggle("menu-open", open);
+    menuToggle.setAttribute("aria-expanded", String(open));
+  });
+
   qsa("a", mobileNav).forEach(link => link.addEventListener("click", closeMenu));
+
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape" && mobileNav.classList.contains("is-open")) closeMenu();
+  });
+
+  const mobileQuery = window.matchMedia("(max-width: 1100px)");
+  const syncViewport = () => {
+    if (!mobileQuery.matches) closeMenu();
+  };
+  if (typeof mobileQuery.addEventListener === "function") {
+    mobileQuery.addEventListener("change", syncViewport);
+  }
+
   const updateHeader = () => header.classList.toggle("scrolled", window.scrollY > 12);
-  updateHeader(); window.addEventListener("scroll", updateHeader, {passive:true});
-  if ("IntersectionObserver" in window) {
-    const navObserver = new IntersectionObserver(entries => entries.forEach(entry => {
-      if (entry.isIntersecting) links.forEach(link => link.classList.toggle("is-active", link.getAttribute("href") === "#" + entry.target.id));
-    }), {rootMargin:"-35% 0px -58% 0px",threshold:0});
+  updateHeader();
+  window.addEventListener("scroll", updateHeader, { passive: true });
+
+  if ("IntersectionObserver" in window && links.length && sections.length) {
+    const navObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const target = "#" + entry.target.id;
+        links.forEach(link => link.classList.toggle("is-active", link.getAttribute("href") === target));
+      });
+    }, { rootMargin: "-35% 0px -58% 0px", threshold: 0 });
+
     sections.forEach(section => navObserver.observe(section));
   }
 }
