@@ -1119,7 +1119,7 @@ html[data-theme="dark"] .theme-toggle {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
 }
-.nav-link[aria-current="page"] {
+.nav-link[aria-current="location"] {
   color: var(--accent);
 }
 html[dir="rtl"] .nav-link::after {
