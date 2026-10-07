@@ -260,6 +260,7 @@ function setupLanguages() {
       button.classList.toggle("is-active", active);
     });
 
+    if (syncUrl) syncLanguageUrl();
     applyStaticLanguage();
     renderAcademicHighlights();
     renderSkills();
@@ -271,7 +272,6 @@ function setupLanguages() {
     updateNavCurrent();
 
     try { localStorage.setItem("portfolio-language", currentLanguage); } catch (_) {}
-    if (syncUrl) syncLanguageUrl();
   };
 
   buttons.forEach(button => button.addEventListener("click", () => applyLanguage(button.dataset.lang, true)));
