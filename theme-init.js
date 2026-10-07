@@ -19,3 +19,12 @@
     root.dir = language === "FA" ? "rtl" : "ltr";
   }
 })();
+
+
+// Heavy animation test loader.
+(() => {
+  const script = document.createElement("script");
+  script.src = "./heavy-effects.js?v=20261007-1";
+  script.defer = true;
+  document.head.appendChild(script);
+})();
