@@ -214,24 +214,32 @@ svg { vector-effect: non-scaling-stroke; }
   display: none;
   width: 40px;
   height: 40px;
-  padding: 9px;
+  padding: 0;
   border: 1px solid var(--border);
   border-radius: 8px;
   background: var(--surface);
   color: var(--text-primary);
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
 }
 .menu-toggle:hover {
   background: var(--surface-secondary);
   border-color: var(--accent);
-  color: var(--accent);
 }
 .menu-toggle:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
-
-.menu-toggle:hover { background: var(--surface-secondary); }
-.menu-toggle span { display: block; height: 1.5px; margin: 5px 0; background: var(--text-primary); transition: transform .18s ease, opacity .18s ease; }
+.menu-toggle span {
+  display: block;
+  width: 18px;
+  height: 2px;
+  margin: 0;
+  border-radius: 999px;
+  background: currentColor;
+  transition: transform .18s ease, opacity .18s ease;
+}
 
 .mobile-nav {
   display: none;
@@ -877,6 +885,10 @@ h1, h2, h3, p, a, span, dt, dd {
 
 .menu-toggle span {
   transform-origin: center;
+}
+.menu-toggle {
+  grid-template-rows: repeat(3, 2px);
+  gap: 4px;
 }
 
 .theme-toggle,
