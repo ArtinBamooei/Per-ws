@@ -1,0 +1,12 @@
+{
+  "name": "artinbamooei-academic-portfolio",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "check": "node tests/validate.mjs",
+    "lint": "eslint script.js"
+  },
+  "devDependencies": {
+    "eslint": "^9.0.0"
+  }
+}
