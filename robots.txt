@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://artinbamooei.github.io/Per-ws/sitemap.xml
