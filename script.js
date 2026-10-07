@@ -299,29 +299,7 @@ function withViewTransition(update) {
 }
 
 function setupHeroAnimations() {
-  const title = qs("#hero-title");
-  if (!title || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-  const finalText = title.textContent.trim();
-  const chars = "01<>[]{}#$%&*+~";
-  let frame = 0;
-  const total = finalText.length * 3;
-  title.classList.add("scramble-ready");
-  const timer = window.setInterval(() => {
-    frame += 1;
-    const progress = frame / total;
-    const revealCount = Math.floor(progress * finalText.length);
-    title.textContent = finalText.split("").map((char, index) => {
-      if (char === " ") return " ";
-      if (index < revealCount) return char;
-      return chars[Math.floor(Math.random() * chars.length)];
-    }).join("");
-    if (frame >= total) {
-      window.clearInterval(timer);
-      title.textContent = finalText;
-      title.classList.add("scramble-done");
-      window.setTimeout(() => title.classList.remove("scramble-done"), 520);
-    }
-  }, 46);
+  // Hero monogram animation is handled by SVG/CSS on first render.
 }
 
 function setupSkillMeters() {
