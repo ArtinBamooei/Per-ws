@@ -13,35 +13,6 @@
   }
 })();
 
-const DATA = {
-  academicHighlights: [
-    { value: "A+", label: "Selected course highlight" },
-    { value: "16+", label: "Academic average placeholder" },
-    { value: "32+", label: "Completed university units" },
-    { value: "01", label: "Current academic direction" }
-  ],
-  skills: [
-    { title: "Data", description: "Core analytics and data workflow tools.", items: [["NumPy","Intermediate"],["Pandas","Intermediate"],["Matplotlib","Beginner"],["Seaborn","Beginner"],["SQL","Beginner+"],["Database","Beginner+"],["ETL","Intermediate"],["API","Beginner"]] },
-    { title: "Engineering", description: "Foundational engineering and workflow tools.", items: [["Git","Intermediate"],["GitHub","Intermediate"],["Docker","Beginner"],["Python","Intermediate+"],["Power BI","Intermediate"]] },
-    { title: "AI / ML", description: "Applied machine learning direction.", items: [["Machine Learning","Intermediate"],["Model evaluation","Beginner+"],["Feature engineering","Beginner+"],["Data visualization","Intermediate"]] }
-  ],
-  languages: [
-    { name:"German", level:"B1 → B2", note:"Targeting academic study in German.", progress:"62%" },
-    { name:"English", level:"A2+", note:"Technical reading and ongoing development.", progress:"42%" },
-    { name:"Persian", level:"Native", note:"Native language.", progress:"100%" }
-  ],
-  projects: [
-    { number:"01", title:"Air Quality Monitor", description:"Data-oriented monitoring project focused on cleaning, analysis and presenting environmental measurements.", category:"Data / Engineering", tech:["Python","Pandas","Visualization"], linkLabel:"GitHub" },
-    { number:"02", title:"Supermarket Analytics", description:"Interactive business intelligence workflow turning transactional data into a structured multi-page dashboard.", category:"Analytics", tech:["Power BI","CSV","Data Prep"], linkLabel:"Case study" },
-    { number:"03", title:"Machine Learning Study", description:"Experimental work covering model evaluation, overfitting and introductory supervised learning workflows.", category:"Machine Learning", tech:["Python","ML","Evaluation"], linkLabel:"Notes" }
-  ],
-  publications: [
-    { date:"2026", type:"Technical note", title:"Data workflow design principles", description:"Placeholder for a concise technical article or academic note." },
-    { date:"2026", type:"Presentation", title:"Graph algorithms in practice", description:"Placeholder for an academic presentation or seminar contribution." },
-    { date:"Future", type:"Research", title:"Research direction placeholder", description:"Reserved structure for future research, publication or preprint." }
-  ]
-};
-
 const I18N = {
   EN: {
     navLabel:"Primary navigation", mobileNavLabel:"Mobile navigation", languageSelection:"Language selection", navHome:"Home", navAbout:"About / Intro", navEducation:"Education", navSkills:"Skills", navLanguages:"Languages", navProjects:"Projects", navPublications:"Publications", navContact:"Contact",
