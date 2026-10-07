@@ -1,3 +1,18 @@
+(() => {
+  const root = document.documentElement;
+  let theme = "light";
+  let language = null;
+  try { theme = localStorage.getItem("portfolio-theme") === "dark" ? "dark" : "light"; } catch (_) {}
+  try { language = localStorage.getItem("portfolio-language"); } catch (_) {}
+  const urlLanguage = new URLSearchParams(window.location.search).get("lang")?.toUpperCase();
+  if (["EN", "DE", "FA"].includes(urlLanguage)) language = urlLanguage;
+  root.dataset.theme = theme;
+  if (["EN", "DE", "FA"].includes(language)) {
+    root.lang = language === "FA" ? "fa" : language.toLowerCase();
+    root.dir = language === "FA" ? "rtl" : "ltr";
+  }
+})();
+
 const DATA = {
   academicHighlights: [
     { value: "A+", label: "Selected course highlight" },
@@ -128,41 +143,62 @@ let currentLanguage = "EN";
 function t(key) { return I18N[currentLanguage][key] ?? I18N.EN[key] ?? key; }
 
 function renderAcademicHighlights() {
-  const d = DYNAMIC[currentLanguage];
-  qs("#academic-highlights").innerHTML = DATA.academicHighlights.map((item,i) => `<div class="highlight-item"><strong>${item.value}</strong><span>${d.highlights[i]}</span></div>`).join("");
+  const labels = DYNAMIC[currentLanguage].highlights;
+  qsa("#academic-highlights [data-dynamic]").forEach((el, i) => { el.textContent = labels[i] ?? ""; });
 }
 
 function renderSkills() {
-  const d = DYNAMIC[currentLanguage], descriptions = [t("dataDesc"), t("engDesc"), t("mlDesc")];
-  qs("#skill-groups").innerHTML = DATA.skills.map((group, index) => `
-    <article class="skill-group reveal"><h3>${d.skillGroups[index]}</h3><p>${descriptions[index]}</p><div class="skill-list">
-      ${group.items.map(([name, level]) => {
-        const translatedLevel = level === "Intermediate" ? d.skillLevels[0] : level === "Beginner+" ? d.skillLevels[2] : level === "Beginner" ? d.skillLevels[1] : level;
-        return `<div class="skill-item"><span>${name}</span><span class="skill-level">${translatedLevel}</span></div>`;
-      }).join("")}
-    </div></article>`).join("");
+  const d = DYNAMIC[currentLanguage];
+  qsa("#skill-groups [data-dynamic^='skill-group-']").forEach((el, i) => { el.textContent = d.skillGroups[i] ?? ""; });
+  qsa("#skill-groups [data-dynamic^='skill-desc-']").forEach((el, i) => { el.textContent = [t("dataDesc"), t("engDesc"), t("mlDesc")][i] ?? ""; });
+  qsa("#skill-groups [data-level-key]").forEach(el => {
+    const level = el.dataset.levelKey;
+    const index = level === "Intermediate" || level === "Intermediate+" ? 0 : level === "Beginner" ? 1 : 2;
+    el.textContent = level === "Intermediate+" ? (d.skillLevels[0] ?? level) + "+" : (d.skillLevels[index] ?? level);
+  });
 }
 
 function renderLanguages() {
   const d = DYNAMIC[currentLanguage];
   const notes = [t("targetGerman"), t("technicalReading"), t("nativeLanguage")];
-  qs("#language-list").innerHTML = DATA.languages.map((language,i) => `
-    <article class="language-item"><div class="language-top"><strong>${d.langNames[i]}</strong><span class="language-level">${language.level === "Native" ? t("native") : language.level}</span></div>
-    <p class="language-note">${notes[i]}</p><div class="language-meter" aria-label="${d.langNames[i]} level indicator" role="img"><span style="--progress:${language.progress}"></span></div></article>`).join("");
+  qsa("#language-list [data-dynamic^='lang-name-']").forEach((el, i) => { el.textContent = d.langNames[i] ?? ""; });
+  qsa("#language-list [data-dynamic^='lang-note-']").forEach((el, i) => { el.textContent = notes[i] ?? ""; });
+  qsa("#language-list .language-meter").forEach((el, i) => {
+    const name = d.langNames[i] ?? "";
+    el.setAttribute("aria-label", `${name} level indicator`);
+  });
 }
 
 function renderProjects() {
-  const d = DYNAMIC[currentLanguage], links = [t("github"), t("caseStudy"), t("notes")];
-  qs("#project-grid").innerHTML = DATA.projects.map((project,i) => `
-    <article class="project-card reveal"><span class="project-number">${project.number}</span><h3>${d.projects[i][0]}</h3><p>${d.projects[i][1]}</p>
-    <div class="project-tech">${project.tech.map(item => `<span>${item}</span>`).join("")}</div>
-    <div class="project-footer"><span class="project-category">${d.projects[i][2]}</span><a class="project-link" href="#contact" aria-label="${links[i]} for ${d.projects[i][0]}">${links[i]} ↗</a></div></article>`).join("");
+  const d = DYNAMIC[currentLanguage];
+  const links = [t("github"), t("caseStudy"), t("notes")];
+  qsa("#project-grid [data-dynamic^='project-title-']").forEach((el, i) => {
+    el.textContent = d.projects[i]?.[0] ?? "";
+  });
+  qsa("#project-grid [data-dynamic^='project-desc-']").forEach((el, i) => {
+    el.textContent = d.projects[i]?.[1] ?? "";
+  });
+  qsa("#project-grid [data-dynamic^='project-cat-']").forEach((el, i) => {
+    el.textContent = d.projects[i]?.[2] ?? "";
+  });
+  qsa("#project-grid [data-dynamic^='project-link-']").forEach((el, i) => {
+    el.textContent = `${links[i] ?? ""} ↗`;
+    el.setAttribute("aria-label", `${links[i] ?? ""} for ${d.projects[i]?.[0] ?? ""}`);
+  });
 }
 
 function renderPublications() {
-  const d = DYNAMIC[currentLanguage], types = [t("technicalNote"), t("presentation"), t("research")];
-  qs("#publication-list").innerHTML = DATA.publications.map((item,i) => `
-    <article class="publication-item reveal"><time class="publication-date">${item.date}</time><div class="publication-copy"><h3>${d.pubs[i][0]}</h3><p>${d.pubs[i][1]}</p></div><span class="publication-type">${types[i]}</span></article>`).join("");
+  const d = DYNAMIC[currentLanguage];
+  const types = [t("technicalNote"), t("presentation"), t("research")];
+  qsa("#publication-list [data-dynamic^='pub-title-']").forEach((el, i) => {
+    el.textContent = d.pubs[i]?.[0] ?? "";
+  });
+  qsa("#publication-list [data-dynamic^='pub-desc-']").forEach((el, i) => {
+    el.textContent = d.pubs[i]?.[1] ?? "";
+  });
+  qsa("#publication-list [data-dynamic^='pub-type-']").forEach((el, i) => {
+    el.textContent = types[i] ?? "";
+  });
 }
 
 function applyStaticLanguage() {
@@ -181,8 +217,14 @@ function applyStaticLanguage() {
 
   const ogTitle = qs('meta[property="og:title"]');
   const ogDescription = qs('meta[property="og:description"]');
+  const twitterTitle = qs('meta[name="twitter:title"]');
+  const twitterDescription = qs('meta[name="twitter:description"]');
+  const locale = qs('meta[property="og:locale"]');
   if (ogTitle) ogTitle.content = document.title;
   if (ogDescription) ogDescription.content = meta ? meta.content : document.title;
+  if (twitterTitle) twitterTitle.content = document.title;
+  if (twitterDescription) twitterDescription.content = meta ? meta.content : document.title;
+  if (locale) locale.content = currentLanguage === "FA" ? "fa_IR" : currentLanguage === "DE" ? "de_DE" : "en_US";
 }
 
 function syncThemeLabels() {
@@ -208,6 +250,10 @@ function setupLanguages() {
       button.setAttribute("aria-pressed", String(active));
       button.classList.toggle("is-active", active);
     });
+    qsa(".desktop-nav .nav-link").forEach(link => link.removeAttribute("aria-current"));
+    const activeHash = window.location.hash || "#home";
+    const activeLink = qs(`.desktop-nav .nav-link[href="${activeHash}"]`) || qs('.desktop-nav .nav-link[href="#home"]');
+    if (activeLink) activeLink.setAttribute("aria-current", "page");
 
     applyStaticLanguage();
     renderAcademicHighlights();
@@ -219,13 +265,18 @@ function setupLanguages() {
     setupReveal();
 
     try { localStorage.setItem("portfolio-language", currentLanguage); } catch (_) {}
+    const url = new URL(window.location.href);
+    url.searchParams.set("lang", currentLanguage.toLowerCase());
+    history.replaceState(null, "", url.pathname + url.search + url.hash);
   };
 
   buttons.forEach(button => button.addEventListener("click", () => applyLanguage(button.dataset.lang)));
 
   let saved = null;
   try { saved = localStorage.getItem("portfolio-language"); } catch (_) {}
-  applyLanguage(saved && ["EN", "DE", "FA"].includes(saved) ? saved : "EN");
+  const queryLanguage = new URLSearchParams(window.location.search).get("lang")?.toUpperCase();
+  const initialLanguage = ["EN", "DE", "FA"].includes(queryLanguage) ? queryLanguage : saved;
+  applyLanguage(initialLanguage && ["EN", "DE", "FA"].includes(initialLanguage) ? initialLanguage : "EN");
 }
 
 function setupReveal() {
@@ -282,7 +333,12 @@ function setupNav() {
       entries.forEach(entry => {
         if (!entry.isIntersecting) return;
         const target = "#" + entry.target.id;
-        links.forEach(link => link.classList.toggle("is-active", link.getAttribute("href") === target));
+        links.forEach(link => {
+          const active = link.getAttribute("href") === target;
+          link.classList.toggle("is-active", active);
+          if (active) link.setAttribute("aria-current", "page");
+          else link.removeAttribute("aria-current");
+        });
       });
     }, { rootMargin: "-35% 0px -58% 0px", threshold: 0 });
 
