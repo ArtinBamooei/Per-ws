@@ -7,7 +7,10 @@
   try { language = localStorage.getItem("portfolio-language"); } catch (_) {}
 
   const queryLanguage = new URLSearchParams(window.location.search).get("lang")?.toUpperCase();
-  if (["EN", "DE", "FA"].includes(queryLanguage)) language = queryLanguage;
+  if (["EN", "DE", "FA"].includes(queryLanguage)) {
+    language = queryLanguage;
+    try { localStorage.setItem("portfolio-language", queryLanguage); } catch (_) {}
+  }
 
   root.dataset.theme = theme;
 
