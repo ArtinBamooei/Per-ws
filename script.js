@@ -99,9 +99,7 @@ const DYNAMIC = {
       ["Machine Learning Study","Experimental work covering model evaluation, overfitting and introductory supervised learning workflows.","Machine Learning"]
     ],
     pubs:[
-      ["Data workflow design principles","Placeholder for a concise technical article or academic note."],
-      ["Graph algorithms in practice","Placeholder for an academic presentation or seminar contribution."],
-      ["Research direction placeholder","Reserved structure for future research, publication or preprint."]
+      ["Prim's Algorithm","University presentation on Prim's minimum spanning tree algorithm."]
     ]
   },
   DE: {
@@ -114,9 +112,7 @@ const DYNAMIC = {
       ["Machine-Learning-Studie","Experimentelle Arbeit zu Modellevaluation, Overfitting und grundlegenden überwachten Lernverfahren.","Maschinelles Lernen"]
     ],
     pubs:[
-      ["Prinzipien für Daten-Workflows","Platzhalter für einen kompakten technischen Artikel oder eine akademische Notiz."],
-      ["Graphalgorithmen in der Praxis","Platzhalter für eine akademische Präsentation oder einen Seminarbeitrag."],
-      ["Platzhalter für Forschungsrichtung","Struktur für zukünftige Forschung, Publikationen oder Preprints."]
+      ["Prims Algorithmus","Universitätspräsentation über den Algorithmus für minimale Spannbäume nach Prim."]
     ]
   },
   FA: {
@@ -129,9 +125,7 @@ const DYNAMIC = {
       ["مطالعه یادگیری ماشین","کار آزمایشی درباره ارزیابی مدل، بیش‌برازش و گردش‌کارهای مقدماتی یادگیری نظارت‌شده.","یادگیری ماشین"]
     ],
     pubs:[
-      ["اصول طراحی گردش‌کار داده","متن موقت برای یک مقاله فنی کوتاه یا یادداشت آکادمیک."],
-      ["الگوریتم‌های گراف در عمل","متن موقت برای یک ارائه دانشگاهی یا مشارکت در سمینار."],
-      ["مسیر پژوهشی در آینده","ساختار رزرو شده برای پژوهش، مقاله یا پیش‌چاپ آینده."]
+      ["الگوریتم پریم","ارائه دانشگاهی درباره الگوریتم پریم برای یافتن درخت پوشای کمینه."]
     ]
   }
 };
@@ -189,7 +183,7 @@ function renderProjects() {
 
 function renderPublications() {
   const d = DYNAMIC[currentLanguage];
-  const types = [t("technicalNote"), t("presentation"), t("research")];
+  const types = [t("presentation")];
   qsa("#publication-list [data-dynamic^='pub-title-']").forEach((el, i) => {
     el.textContent = d.pubs[i]?.[0] ?? "";
   });
