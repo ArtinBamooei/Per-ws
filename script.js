@@ -274,7 +274,7 @@ function setupLanguages() {
     qsa(".desktop-nav .nav-link").forEach(link => link.removeAttribute("aria-current"));
     const activeHash = window.location.hash || "#home";
     const activeLink = qs(`.desktop-nav .nav-link[href="${activeHash}"]`) || qs('.desktop-nav .nav-link[href="#home"]');
-    if (activeLink) activeLink.setAttribute("aria-current", "page");
+    if (activeLink) activeLink.setAttribute("aria-current", "location");
 
     applyStaticLanguage();
     renderAcademicHighlights();
@@ -357,7 +357,7 @@ function setupNav() {
         links.forEach(link => {
           const active = link.getAttribute("href") === target;
           link.classList.toggle("is-active", active);
-          if (active) link.setAttribute("aria-current", "page");
+          if (active) link.setAttribute("aria-current", "location");
           else link.removeAttribute("aria-current");
         });
       });
