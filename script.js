@@ -226,7 +226,8 @@ function setupTheme() {
   };
   applyTheme(document.documentElement.dataset.theme === "dark" ? "dark" : "light", false);
   toggle.addEventListener("click", () => {
-    applyTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
+    const nextTheme = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+    withViewTransition(() => applyTheme(nextTheme));
   });
 }
 
@@ -274,7 +275,7 @@ function setupLanguages() {
     try { localStorage.setItem("portfolio-language", currentLanguage); } catch (_) {}
   };
 
-  buttons.forEach(button => button.addEventListener("click", () => applyLanguage(button.dataset.lang, true)));
+  buttons.forEach(button => button.addEventListener("click", () => withViewTransition(() => applyLanguage(button.dataset.lang, true))));
 
   let saved = null;
   try { saved = localStorage.getItem("portfolio-language"); } catch (_) {}
@@ -287,6 +288,54 @@ function setupLanguages() {
 
   applyLanguage(initialLanguage, hasValidQueryLanguage);
   window.addEventListener("hashchange", updateNavCurrent);
+}
+
+function withViewTransition(update) {
+  if (typeof document.startViewTransition === "function" && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    document.startViewTransition(update);
+  } else {
+    update();
+  }
+}
+
+function setupHeroAnimations() {
+  const title = qs("#hero-title");
+  if (!title || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const finalText = title.textContent.trim();
+  const chars = "01<>[]{}#$%&*+~";
+  let frame = 0;
+  const total = finalText.length * 3;
+  title.classList.add("scramble-ready");
+  const timer = window.setInterval(() => {
+    frame += 1;
+    const progress = frame / total;
+    const revealCount = Math.floor(progress * finalText.length);
+    title.textContent = finalText.split("").map((char, index) => {
+      if (char === " ") return " ";
+      if (index < revealCount) return char;
+      return chars[Math.floor(Math.random() * chars.length)];
+    }).join("");
+    if (frame >= total) {
+      window.clearInterval(timer);
+      title.textContent = finalText;
+      title.classList.add("scramble-done");
+      window.setTimeout(() => title.classList.remove("scramble-done"), 520);
+    }
+  }, 46);
+}
+
+function setupSkillMeters() {
+  const progress = { "Beginner": "35%", "Beginner+": "46%", "Intermediate": "64%", "Intermediate+": "72%" };
+  qsa(".skill-item").forEach(item => {
+    if (qs(".skill-meter", item)) return;
+    const level = qs(".skill-level", item)?.dataset.levelKey || "Beginner";
+    const meter = document.createElement("span");
+    meter.className = "skill-meter";
+    const fill = document.createElement("span");
+    fill.style.setProperty("--skill-progress", progress[level] || "50%");
+    meter.appendChild(fill);
+    item.appendChild(meter);
+  });
 }
 
 function setupReveal() {
@@ -359,4 +408,12 @@ function setupNav() {
 
 function setYear() { const year = qs("#current-year"); if (year) year.textContent = String(new Date().getFullYear()); }
 
-document.addEventListener("DOMContentLoaded", () => { setYear(); setupTheme(); setupLanguages(); setupNav(); setupReveal(); });
+document.addEventListener("DOMContentLoaded", () => {
+  setYear();
+  setupTheme();
+  setupLanguages();
+  setupNav();
+  setupSkillMeters();
+  setupReveal();
+  setupHeroAnimations();
+});
