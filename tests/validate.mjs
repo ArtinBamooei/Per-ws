@@ -13,14 +13,21 @@ assert.match(html, /rel="canonical"/, "Canonical URL is missing");
 assert.match(html, /property="og:image"/, "OG image is missing");
 assert.match(html, /name="twitter:card"/, "Twitter card is missing");
 assert.match(html, /rel="icon"/, "Favicon is missing");
-assert.match(html, /id="main"/, "Main landmark is missing");
+assert.match(html, /<main[^>]*id="main"[^>]*tabindex="-1"/, "Main skip target must be programmatically focusable");
 assert.match(html, /class="skip-link"/, "Skip link is missing");
+assert.doesNotMatch(html, /Placeholder contact copy|Platzhalter für einen kurzen professionellen Kontakttext|متن موقت برای ارتباط حرفه‌ای/, "Placeholder contact copy remains");
+assert.match(html, /href="https:\/\/github\.com\/ArtinBamooei"[^>]*target="_blank"[^>]*rel="noopener noreferrer"/, "Public GitHub contact link is missing or unsafe");
 assert.match(html, /aria-current="location"/, "Initial active navigation state is missing");
+assert.match(html, /data-lang="EN"[^>]*aria-label="English"/, "EN language control needs an aria-label");
+assert.match(html, /data-lang="DE"[^>]*aria-label="Deutsch"/, "DE language control needs an aria-label");
+assert.match(html, /data-lang="FA"[^>]*aria-label="فارسی"/, "FA language control needs an aria-label");
 assert.match(html, /\?lang=en/, "English language URL is missing");
 assert.match(html, /\?lang=de/, "German language URL is missing");
 assert.match(html, /\?lang=fa/, "Persian language URL is missing");
 assert.match(css, /prefers-reduced-motion/, "Reduced-motion support is missing");
 assert.match(css, /progress-42|progress-62|progress-100/, "Language progress classes are missing");
+assert.match((await fs.promises.readFile("script.js", "utf8")), /history\.replaceState/, "Language URL synchronization is missing");
+assert.match((await fs.promises.readFile("theme-init.js", "utf8")), /portfolio-language.*queryLanguage|queryLanguage.*portfolio-language/, "URL language is not persisted during bootstrap");
 
 for (const href of [...html.matchAll(/href="(#[-\w]+)"/g)].map(m => m[1])) {
   assert.match(html, new RegExp(`id="${href.slice(1)}"`), `Missing internal target: ${href}`);
