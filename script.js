@@ -260,7 +260,6 @@ function setupLanguages() {
     renderPublications();
     syncThemeLabels();
     localizeNumbers();
-    setupReveal();
 
     try { localStorage.setItem("portfolio-language", currentLanguage); } catch (_) {}
     const url = new URL(window.location.href);
