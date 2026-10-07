@@ -172,7 +172,9 @@ svg { vector-effect: non-scaling-stroke; }
 .nav-actions {
   display: flex;
   align-items: center;
-  gap: 10px;
+  justify-content: flex-end;
+  gap: 8px;
+  min-height: 40px;
 }
 .language-switcher,
 .footer-langs {
@@ -212,9 +214,14 @@ svg { vector-effect: non-scaling-stroke; }
 }
 .menu-toggle {
   display: none;
+  position: relative;
+  flex: 0 0 40px;
   width: 40px;
+  min-width: 40px;
   height: 40px;
+  min-height: 40px;
   padding: 0;
+  margin: 0;
   border: 1px solid var(--border);
   border-radius: 8px;
   background: var(--surface);
@@ -222,6 +229,8 @@ svg { vector-effect: non-scaling-stroke; }
   cursor: pointer;
   align-items: center;
   justify-content: center;
+  place-items: center;
+  box-sizing: border-box;
 }
 .menu-toggle:hover {
   background: var(--surface-secondary);
@@ -236,6 +245,10 @@ svg { vector-effect: non-scaling-stroke; }
   width: 20px;
   height: 20px;
   max-width: none;
+  margin: 0;
+  position: absolute;
+  inset: 50% auto auto 50%;
+  transform: translate(-50%, -50%);
   fill: none;
   stroke: currentColor;
   stroke-width: 1.8;
@@ -827,9 +840,11 @@ html[data-theme="light"] .theme-icon-moon,
 .theme-icon-moon { display: none; }
 
 .theme-toggle {
-  width: 28px;
-  min-width: 28px;
-  height: 28px;
+  flex: 0 0 40px;
+  width: 40px;
+  min-width: 40px;
+  height: 40px;
+  min-height: 40px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -847,7 +862,7 @@ html[data-theme="light"] .theme-icon-moon,
   border-color: #9fc0d9;
   transform: translateY(-1px);
 }
- .theme-toggle svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+ .theme-toggle svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
 .theme-toggle-label { display: none; }
 .language-switcher { margin-inline-start: 2px; }
 
@@ -876,7 +891,7 @@ h1, h2, h3, p, a, span, dt, dd {
 }
 
 .menu-toggle[aria-expanded="true"] .menu-icon {
-  transform: rotate(90deg);
+  transform: translate(-50%, -50%) rotate(90deg);
 }
 .menu-toggle .menu-icon {
   transition: transform .18s ease;
