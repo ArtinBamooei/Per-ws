@@ -347,6 +347,51 @@ function setupReveal() {
   items.forEach(item => observer.observe(item));
 }
 
+function setupCreativeMotion() {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  const progressRail = document.createElement("div");
+  progressRail.className = "scroll-progress";
+  progressRail.setAttribute("aria-hidden", "true");
+  document.body.appendChild(progressRail);
+
+  let ticking = false;
+  const updateProgress = () => {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    progressRail.style.setProperty("--scroll-progress", max > 0 ? (window.scrollY / max) * 100 + "%" : "0%");
+    ticking = false;
+  };
+  window.addEventListener("scroll", () => {
+    if (!ticking) {
+      window.requestAnimationFrame(updateProgress);
+      ticking = true;
+    }
+  }, { passive: true });
+  updateProgress();
+
+  qsa(".project-card, .skill-group, .highlights-card, .contact-shell").forEach(card => {
+    card.addEventListener("pointermove", event => {
+      const rect = card.getBoundingClientRect();
+      card.style.setProperty("--mx", ((event.clientX - rect.left) / rect.width) * 100 + "%");
+      card.style.setProperty("--my", ((event.clientY - rect.top) / rect.height) * 100 + "%");
+    }, { passive: true });
+    card.addEventListener("pointerleave", () => {
+      card.style.removeProperty("--mx");
+      card.style.removeProperty("--my");
+    }, { passive: true });
+  });
+
+  qsa(".skill-item").forEach(item => {
+    item.addEventListener("pointerenter", () => item.classList.add("is-hovered"));
+    item.addEventListener("pointerleave", () => item.classList.remove("is-hovered"));
+  });
+
+  qsa(".project-card").forEach(card => {
+    card.addEventListener("pointerenter", () => card.classList.add("project-focus"));
+    card.addEventListener("pointerleave", () => card.classList.remove("project-focus"));
+  });
+}
+
 function setupNav() {
   const header = qs("[data-header]");
   const menuToggle = qs("[data-menu-toggle]");
@@ -416,4 +461,5 @@ document.addEventListener("DOMContentLoaded", () => {
   setupSkillMeters();
   setupReveal();
   setupHeroAnimations();
+  setupCreativeMotion();
 });
