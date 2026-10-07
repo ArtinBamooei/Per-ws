@@ -210,7 +210,26 @@ svg { vector-effect: non-scaling-stroke; }
   background: transparent;
   cursor: pointer;
 }
-.menu-toggle { display: none; width: 40px; height: 40px; padding: 9px; border-radius: 8px; }
+.menu-toggle {
+  display: none;
+  width: 40px;
+  height: 40px;
+  padding: 9px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text-primary);
+}
+.menu-toggle:hover {
+  background: var(--surface-secondary);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.menu-toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
 .menu-toggle:hover { background: var(--surface-secondary); }
 .menu-toggle span { display: block; height: 1.5px; margin: 5px 0; background: var(--text-primary); transition: transform .18s ease, opacity .18s ease; }
 
