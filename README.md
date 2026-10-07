@@ -6,7 +6,8 @@ Static multilingual academic portfolio built with semantic HTML, CSS and vanilla
 
 - `index.html` — semantic page structure, SEO metadata and crawlable content
 - `styles.css` — responsive visual system, light/dark themes and reduced-motion support
-- `script.js` — language, theme, navigation and progressive enhancement
+- `theme-init.js` — minimal pre-paint theme/language bootstrap
+- `script.js` — language, theme controls, navigation and progressive enhancement
 - `assets/` — favicon and social preview artwork
 - `robots.txt` / `sitemap.xml` — search-engine discovery
 - `404.html` — branded GitHub Pages fallback
