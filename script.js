@@ -201,6 +201,17 @@ function renderPublications() {
   });
 }
 
+function localizeNumbers() {
+  const digits = "۰۱۲۳۴۵۶۷۸۹";
+  qsa(".highlight-item strong, .section-index, .project-number, .publication-date").forEach(el => {
+    if (!el.dataset.baseNumber) el.dataset.baseNumber = el.textContent;
+    const base = el.dataset.baseNumber;
+    el.textContent = currentLanguage === "FA"
+      ? base.replace(/[0-9]/g, digit => digits[Number(digit)])
+      : base;
+  });
+}
+
 function applyStaticLanguage() {
   const dict = I18N[currentLanguage];
   qsa("[data-i18n]").forEach(el => {
@@ -283,6 +294,7 @@ function setupLanguages() {
     renderProjects();
     renderPublications();
     syncThemeLabels();
+    localizeNumbers();
     setupReveal();
 
     try { localStorage.setItem("portfolio-language", currentLanguage); } catch (_) {}
