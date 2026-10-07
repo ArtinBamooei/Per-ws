@@ -780,11 +780,6 @@ html[dir="rtl"] .skill-meter span { transform-origin: right; }
 .hero-copy h1.scramble-ready { min-height: 1em; }
 .hero-copy h1.scramble-done { animation: name-settle .5s cubic-bezier(.22,1,.36,1); }
 
-@keyframes mesh-drift {
-  0% { background-position: 0% 15%; transform: translate3d(0,0,0); }
-  50% { background-position: 100% 70%; }
-  100% { background-position: 20% 100%; transform: translate3d(0,-2px,0); }
-}
 @keyframes name-settle {
   0% { opacity: .7; letter-spacing: -.035em; }
   100% { opacity: 1; letter-spacing: -.045em; }
@@ -794,7 +789,6 @@ html[dir="rtl"] .skill-meter span { transform-origin: right; }
 @keyframes dash { to { stroke-dashoffset: -160; } }
 @keyframes drift { from { transform: translateY(-2px); } to { transform: translateY(4px); } }
 @keyframes pulse { 0%, 100% { opacity: .18; } 50% { opacity: .36; } }
-@keyframes crosshair { 0%,100% { transform: translate(0,0); opacity: .2; } 50% { transform: translate(7px,-5px); opacity: .32; } }
 @keyframes bars { from { transform: scaleY(.94); } to { transform: scaleY(1.03); } }
 
 html[dir="rtl"] body { font-family: "Noto Sans Arabic", "Noto Sans Persian", Tahoma, Arial, sans-serif; }
