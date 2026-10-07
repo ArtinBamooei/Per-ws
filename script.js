@@ -238,6 +238,27 @@ function syncThemeLabels() {
   toggle.setAttribute("title", label);
 }
 
+function setupTheme() {
+  const toggle = qs("[data-theme-toggle]");
+  if (!toggle) return;
+  const applyTheme = (theme, persist = true) => {
+    const activeTheme = theme === "dark" ? "dark" : "light";
+    const isDark = activeTheme === "dark";
+    document.documentElement.dataset.theme = activeTheme;
+    toggle.setAttribute("aria-pressed", String(isDark));
+    syncThemeLabels();
+    const themeColor = qs('meta[name="theme-color"]');
+    if (themeColor) themeColor.setAttribute("content", isDark ? "#0d1520" : "#f7f9fc");
+    if (persist) {
+      try { localStorage.setItem("portfolio-theme", activeTheme); } catch (_) {}
+    }
+  };
+  applyTheme(document.documentElement.dataset.theme === "dark" ? "dark" : "light", false);
+  toggle.addEventListener("click", () => {
+    applyTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
+  });
+}
+
 function setupLanguages() {
   const buttons = qsa("[data-lang]");
   const applyLanguage = lang => {
@@ -348,4 +369,4 @@ function setupNav() {
 
 function setYear() { const year = qs("#current-year"); if (year) year.textContent = String(new Date().getFullYear()); }
 
-document.addEventListener("DOMContentLoaded", () => { setYear(); setupLanguages(); setupNav(); });
+document.addEventListener("DOMContentLoaded", () => { setYear(); setupTheme(); setupLanguages(); setupNav(); setupReveal(); });
