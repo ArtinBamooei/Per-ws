@@ -303,6 +303,7 @@ function setupNav() {
   const menuToggle = qs("[data-menu-toggle]");
   const mobileNav = qs("[data-mobile-nav]");
   const links = qsa(".desktop-nav .nav-link");
+  const mobileLinks = qsa(".mobile-nav a");
   const sections = qsa("main section[id]");
 
   if (!header || !menuToggle || !mobileNav) return;
@@ -343,9 +344,9 @@ function setupNav() {
       entries.forEach(entry => {
         if (!entry.isIntersecting) return;
         const target = "#" + entry.target.id;
-        links.forEach(link => {
+        [...links, ...mobileLinks].forEach(link => {
           const active = link.getAttribute("href") === target;
-          link.classList.toggle("is-active", active);
+          if (link.classList.contains("nav-link")) link.classList.toggle("is-active", active);
           if (active) link.setAttribute("aria-current", "location");
           else link.removeAttribute("aria-current");
         });
