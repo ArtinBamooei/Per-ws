@@ -30,4 +30,25 @@ for(const key of ["caseIntro","caseLead","airTitle","airSummary","superTitle","m
 for(const section of ["home","intro","education","skills","languages","projects","publications","contact"]) assert.match(html,new RegExp(`id=["']${section}["']`),`missing section ${section}`);
 assert.ok(sitemap.includes("projects.html"),"case study page missing from sitemap");
 assert.match(projects,/href="https:\/\/github\.com\/ArtinBamooei\/air-quality-monitor"[^>]*rel="noopener noreferrer"/,"repository link missing safe rel");
-console.log("Portfolio validation: PASS (two pages, anchors, i18n keys, cache versions, CSP, SEO, external-link safety, no placeholders)");
+
+const translationKeys = [...new Set(
+  [...html, ...projects].flatMap(source =>
+    [...source.matchAll(/data-i18n(?:-aria)?="([^"]+)"/g)].map(match => match[1])
+  )
+)];
+for (const lang of ["EN", "DE", "FA"]) {
+  const start = js.indexOf(`  ${lang}: {`);
+  const end = js.indexOf("\\n  },", start);
+  assert.ok(start >= 0 && end > start, `Unable to locate ${lang} translation dictionary`);
+  const dictionary = js.slice(start, end);
+  for (const key of translationKeys) {
+    assert.match(dictionary, new RegExp(`\\\\b${key}:`), `Missing ${lang} translation: ${key}`);
+  }
+}
+for (const [name, source] of [["index.html", html], ["projects.html", projects]]) {
+  const ids = [...source.matchAll(/\\bid="([^"]+)"/g)].map(match => match[1]);
+  assert.equal(ids.length, new Set(ids).size, `${name}: duplicate id attribute found`);
+  assert.match(source, /<html lang="[^"]+" dir="(ltr|rtl)"/, `${name}: initial language and direction missing`);
+}
+
+console.log("Portfolio validation: PASS (two pages, anchors, complete i18n, duplicate IDs, cache versions, CSP, SEO, external-link safety, no placeholders)");
