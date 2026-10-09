@@ -360,67 +360,42 @@ h1 {
 }
 .dot { width: 4px; height: 4px; border-radius: 50%; background: currentColor; }
 
-.hero-visual-wrap { display: flex; justify-content: flex-end; }
+.hero-visual-wrap { display: flex; justify-content: flex-end; perspective: 1200px; }
 .hero-visual {
-  width: min(100%, 590px);
-  aspect-ratio: 1.03 / 1;
-  position: relative;
-  overflow: hidden;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  background: var(--surface);
-  box-shadow: var(--shadow-soft);
-  color: var(--accent);
+  width: min(100%, 590px); aspect-ratio: 1.03 / 1; position: relative; overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--accent) 22%, var(--border)); border-radius: var(--radius-lg);
+  background: radial-gradient(ellipse at 50% 48%, color-mix(in srgb, var(--accent) 13%, var(--surface)), var(--surface) 68%);
+  box-shadow: var(--shadow-soft); color: var(--accent); isolation: isolate;
 }
 .data-field { padding: 22px 24px 18px; display: flex; flex-direction: column; }
-.field-topline,
-.field-bottomline {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  color: var(--text-muted);
-  font-size: 9px;
-  line-height: 1.4;
-  letter-spacing: .13em;
-}
-.field-topline { position: relative; z-index: 1; }
-.field-graphic { display: block; width: 100%; flex: 1; min-height: 0; margin: 5px 0; overflow: visible; }
-.field-orbit,
-.field-axis,
-.field-signal {
-  fill: none;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-.field-orbit { stroke: var(--text-muted); stroke-width: 1.15; opacity: .23; }
-.field-orbit-b { stroke-dasharray: 3 7; opacity: .28; }
-.field-axis { stroke: var(--accent); stroke-width: 1; stroke-dasharray: 2 6; opacity: .35; }
-.field-signal {
-  stroke: url(#signal-gradient);
-  stroke-width: 3;
-  stroke-dasharray: 1;
-  stroke-dashoffset: 1;
-  animation: field-draw 2.1s cubic-bezier(.65,0,.35,1) .2s forwards;
-}
-.field-node { fill: var(--surface); stroke: var(--accent); stroke-width: 2; }
-.field-node-muted { opacity: 0; animation: node-appear .35s ease-out 1.25s forwards; }
-.field-node-muted:nth-of-type(2) { animation-delay: 1.7s; }
-.field-node-main { fill: var(--accent); opacity: 0; animation: node-appear .4s ease-out 2.05s forwards; }
-.field-node-halo { fill: none; stroke: var(--accent); stroke-width: 1; opacity: 0; animation: node-halo .65s ease-out 2.12s forwards; }
-.field-label text,
-.field-coordinates text {
-  fill: var(--text-muted);
-  font: 9px/1.2 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  letter-spacing: 1.1px;
-}
-.field-label-top { opacity: .8; }
-.field-coordinates { opacity: .65; }
+.data-field::before { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .22; background: radial-gradient(circle at 50% 50%, var(--accent) 0 1px, transparent 1.5px); background-size: 22px 22px; mask-image: linear-gradient(transparent, #000 25%, #000 75%, transparent); }
+.field-topline, .field-bottomline { display: flex; justify-content: space-between; gap: 12px; color: var(--text-muted); font-size: 9px; line-height: 1.4; letter-spacing: .13em; position: relative; z-index: 2; }
+.field-graphic { display: block; width: 100%; flex: 1; min-height: 0; margin: 5px 0; overflow: visible; position: relative; z-index: 1; }
+.platform-face { fill: color-mix(in srgb, var(--accent) 7%, var(--surface)); stroke: url(#field-blue); stroke-width: 1.4; }
+.platform-edge { fill: none; stroke: url(#field-blue); stroke-width: 1.6; opacity: .85; }
+.field-platform { transform-box: fill-box; transform-origin: center; animation: platform-float 6s ease-in-out infinite; }
+.field-platform-top { animation-delay: -1.5s; }
+.field-platform-mid { animation-delay: -.5s; }
+.field-platform-base { animation-delay: -2.5s; }
+.network-lines { fill: none; stroke: #5d9eff; stroke-width: 1; opacity: .72; stroke-dasharray: 3 5; animation: network-flow 9s linear infinite; }
+.network-nodes circle { fill: #8bc7ff; stroke: #e5f4ff; stroke-width: 1.5; filter: url(#field-glow); animation: node-pulse 3.2s ease-in-out infinite alternate; }
+.network-nodes circle:nth-child(2n) { animation-delay: -1.4s; }
+.wave-lines { fill: none; stroke: url(#field-wave); stroke-width: 1.5; stroke-linecap: round; opacity: .85; animation: wave-drift 7s ease-in-out infinite alternate; }
+.field-connectors { fill: none; stroke: #6caeff; stroke-width: 1; stroke-dasharray: 3 5; opacity: .65; }
+.field-connectors circle { fill: #83c2ff; stroke: #d8ecff; stroke-width: 1; filter: url(#field-glow); animation: node-pulse 2.8s ease-in-out infinite alternate; }
+.circuit-lines { fill: none; stroke: #709eff; stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; opacity: .75; }
+.field-labels { fill: var(--text-muted); font: 9px/1.2 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; letter-spacing: 1px; opacity: .85; }
+.field-core-glow { fill: #6caeff; opacity: .18; filter: url(#field-glow); animation: core-breathe 3s ease-in-out infinite; }
+.field-core { fill: #dff4ff; filter: url(#field-glow); }
 .field-bottomline { align-items: center; border-top: 1px solid var(--border); padding-top: 14px; }
 .field-status { display: inline-flex; align-items: center; gap: 7px; white-space: nowrap; }
-.field-status i { width: 5px; height: 5px; border-radius: 50%; background: #27866b; }
-@keyframes field-draw { to { stroke-dashoffset: 0; } }
-@keyframes node-appear { to { opacity: 1; } }
-@keyframes node-halo { 0% { opacity: 0; transform: scale(.6); transform-origin: 544px 132px; } 65% { opacity: .5; } 100% { opacity: .22; transform: scale(1); transform-origin: 544px 132px; } }
+.field-status i { width: 5px; height: 5px; border-radius: 50%; background: #27866b; box-shadow: 0 0 8px #27866b88; animation: status-pulse 2s ease-in-out infinite; }
+@keyframes platform-float { 0%,100% { translate: 0 0; } 50% { translate: 0 -4px; } }
+@keyframes network-flow { to { stroke-dashoffset: -80; } }
+@keyframes node-pulse { from { opacity: .65; } to { opacity: 1; } }
+@keyframes wave-drift { from { translate: -3px 0; opacity: .55; } to { translate: 3px -3px; opacity: .95; } }
+@keyframes core-breathe { 0%,100% { opacity: .12; transform: scale(.8); } 50% { opacity: .34; transform: scale(1.15); } }
+@keyframes status-pulse { 0%,100% { opacity: .55; } 50% { opacity: 1; } }
 
 .section-heading-row {
   display: flex;
@@ -1389,7 +1364,8 @@ html[dir="rtl"] .language-item:hover { transform: translateX(-5px); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .field-signal { animation: none !important; stroke-dashoffset: 0; }
-  .field-node-muted, .field-node-main { animation: none !important; opacity: 1; }
-  .field-node-halo { animation: none !important; opacity: .22; }
+  .field-platform, .network-lines, .network-nodes circle, .wave-lines, .field-connectors circle, .field-core-glow, .field-status i { animation: none !important; }
+  .field-platform { translate: 0 0 !important; }
+  .network-lines { stroke-dashoffset: 0; }
+  .field-core-glow { opacity: .2; }
 }
