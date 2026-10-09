@@ -764,7 +764,7 @@ html[dir="rtl"] .skill-meter span { transform-origin: right; }
 @keyframes pulse { 0%, 100% { opacity: .18; } 50% { opacity: .36; } }
 @keyframes bars { from { transform: scaleY(.94); } to { transform: scaleY(1.03); } }
 
-html[dir="rtl"] body { font-family: "Noto Sans Arabic", "Noto Sans Persian", Tahoma, Arial, sans-serif; }
+html[dir="rtl"] body { font-family: "Vazirmatn", "Noto Sans Arabic", "Noto Sans Persian", Tahoma, Arial, sans-serif; font-weight: 400; }\nhtml[dir="rtl"] h1, html[dir="rtl"] h2, html[dir="rtl"] h3, html[dir="rtl"] .brand-copy, html[dir="rtl"] .nav-link, html[dir="rtl"] .button { letter-spacing: 0; }\nhtml[dir="rtl"] .hero-copy h1 { font-weight: 700; line-height: 1.45; }
 html[dir="rtl"] .nav-link::after { left: 10px; right: 10px; }
 html[dir="rtl"] .timeline-card { padding-left: 36px; padding-right: 54px; }
 html[dir="rtl"] .timeline-marker { left: auto; right: 22px; }
