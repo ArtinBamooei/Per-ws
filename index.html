@@ -98,17 +98,33 @@
         </div>
 
         <div class="hero-visual-wrap reveal reveal-delay" aria-hidden="true">
-          <div class="hero-visual hero-monogram">
-            <div class="monogram-frame">
-              <span>AB</span>
-              <span>DATA / AI</span>
-            </div>
-            <svg class="ab-monogram" viewBox="0 0 520 420" role="presentation" focusable="false">
-              <path class="ab-stroke" pathLength="1" d="M92 326 L194 72 L296 326 L132 226 L258 226 C330 226 370 205 370 150 C370 100 300 72 194 72 C300 72 388 105 388 170 C388 220 330 246 250 246 C330 246 400 260 400 310 C400 350 320 350 226 326" />
-              <circle class="ab-dot" cx="258" cy="226" r="4.5" />
+          <div class="hero-visual data-field">
+            <div class="field-topline"><span>DATA SYSTEMS</span><span>FIG. 01</span></div>
+            <svg class="field-graphic" viewBox="0 0 600 500" focusable="false">
+              <defs>
+                <pattern id="field-grid" width="32" height="32" patternUnits="userSpaceOnUse">
+                  <path d="M32 0H0V32" fill="none" stroke="currentColor" stroke-opacity=".075" stroke-width="1"/>
+                </pattern>
+                <linearGradient id="signal-gradient" x1="0" y1="1" x2="1" y2="0">
+                  <stop offset="0" stop-color="#6d9ec7" stop-opacity=".12"/>
+                  <stop offset="1" stop-color="#1769aa" stop-opacity=".9"/>
+                </linearGradient>
+              </defs>
+              <rect x="22" y="22" width="556" height="456" fill="url(#field-grid)"/>
+              <path class="field-orbit field-orbit-a" d="M56 344 C130 344 142 250 218 250 S306 354 386 300 S468 132 544 132"/>
+              <path class="field-orbit field-orbit-b" d="M56 410 C146 410 164 330 238 330 S326 190 396 214 S480 374 544 350"/>
+              <path class="field-signal" pathLength="1" d="M56 344 C130 344 142 250 218 250 S306 354 386 300 S468 132 544 132"/>
+              <path class="field-axis" d="M218 250V86 M218 250H74 M386 300V420 M386 300H530"/>
+              <circle class="field-node field-node-muted" cx="218" cy="250" r="5"/>
+              <circle class="field-node field-node-muted" cx="386" cy="300" r="5"/>
+              <circle class="field-node field-node-main" cx="544" cy="132" r="6"/>
+              <circle class="field-node-halo" cx="544" cy="132" r="15"/>
+              <g class="field-label field-label-top"><text x="236" y="82">INPUT</text><text x="400" y="422">MODEL</text></g>
+              <g class="field-coordinates"><text x="42" y="458">52.4° N</text><text x="468" y="458">DATA / AI</text></g>
             </svg>
-            <div class="monogram-caption">single stroke / 01</div>
+            <div class="field-bottomline"><span>COMPUTE · ANALYZE · BUILD</span><span class="field-status"><i></i> SYSTEM READY</span></div>
           </div>
+        </div>
         </div>
       </div>
     </section>
