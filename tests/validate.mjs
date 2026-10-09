@@ -37,18 +37,17 @@ const translationKeys = [...new Set(
   )
 )];
 for (const lang of ["EN", "DE", "FA"]) {
-  const start = js.indexOf(`  ${lang}: {`);
-  const end = js.indexOf("\\n  },", start);
-  assert.ok(start >= 0 && end > start, `Unable to locate ${lang} translation dictionary`);
+  const start = js.indexOf("  " + lang + ": {");
+  const end = js.indexOf("\n  },", start);
+  assert.ok(start >= 0 && end > start, "Unable to locate " + lang + " translation dictionary");
   const dictionary = js.slice(start, end);
   for (const key of translationKeys) {
-    assert.match(dictionary, new RegExp(`\\\\b${key}:`), `Missing ${lang} translation: ${key}`);
+    assert.match(dictionary, new RegExp("\\b" + key + ":"), "Missing " + lang + " translation: " + key);
   }
 }
 for (const [name, source] of [["index.html", html], ["projects.html", projects]]) {
-  const ids = [...source.matchAll(/\\bid="([^"]+)"/g)].map(match => match[1]);
-  assert.equal(ids.length, new Set(ids).size, `${name}: duplicate id attribute found`);
-  assert.match(source, /<html lang="[^"]+" dir="(ltr|rtl)"/, `${name}: initial language and direction missing`);
+  const ids = [...source.matchAll(/\bid="([^"]+)"/g)].map(match => match[1]);
+  assert.equal(ids.length, new Set(ids).size, name + ": duplicate id attribute found");
+  assert.match(source, /<html lang="[^"]+" dir="(ltr|rtl)"/, name + ": initial language and direction missing");
 }
-
 console.log("Portfolio validation: PASS (two pages, anchors, complete i18n, duplicate IDs, cache versions, CSP, SEO, external-link safety, no placeholders)");
