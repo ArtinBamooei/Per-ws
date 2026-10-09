@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import assert from "node:assert/strict";
 const html=fs.readFileSync("index.html","utf8"), projects=fs.readFileSync("projects.html","utf8"), js=fs.readFileSync("script.js","utf8"), css=fs.readFileSync("styles.css","utf8"), boot=fs.readFileSync("theme-init.js","utf8"), sitemap=fs.readFileSync("sitemap.xml","utf8");
-const version="20261009-22";
+const version="20261009-23";
 for(const [name,source] of [["index.html",html],["projects.html",projects]]){
  assert.match(source,/Content-Security-Policy/,`${name}: CSP missing`);
  assert.ok(source.includes(`theme-init.js?v=${version}`),`${name}: theme cache version mismatch`);
@@ -19,7 +19,10 @@ for(const [name,source] of [["index.html",html],["projects.html",projects]]){
 assert.equal((js.match(/innerHTML/g)||[]).length,0,"innerHTML usage detected");
 assert.equal((html.match(/style\s*=/gi)||[]).length,0,"inline styles violate CSP");
 assert.match(html,/fonts\.googleapis\.com\/css2\?family=Vazirmatn/,"Vazirmatn font missing");
-for(const id of ["air-quality","supermarket-analytics","machine-learning"]) { assert.ok(html.includes(`projects.html#${id}`),`missing landing link to ${id}`); assert.ok(projects.includes(`id="${id}"`),`missing detail ${id}`); }
+for(const id of ["air-quality","supermarket-analytics","machine-learning"]) { assert.match(html,new RegExp('<a class="project-card project-card-link reveal" href="./projects.html#'+id+'"'),`project card is not a whole-card link: ${id}`); assert.ok(projects.includes(`id="${id}"`),`missing detail ${id}`); }
+assert.doesNotMatch(html,/data-i18n="caseStudyLink"|Case study ↗|مطالعه موردی/, "obsolete case-study card link remains");
+assert.equal((html.match(/class="project-card project-card-link reveal"/g)||[]).length,3,"all project cards must be clickable links");
+assert.doesNotMatch(html,/<a[^>]*class="project-card[^"]*"[^>]*>[\\s\\S]*?<a\\b/, "nested anchor inside a clickable project card");
 assert.doesNotMatch(html,/Academic average placeholder|Placeholder academic statement|متن موقت برای معرفی کوتاه/,"placeholder academic copy remains");
 assert.match(html,/href="https:\/\/github\.com\/ArtinBamooei"[^>]*target="_blank"[^>]*rel="noopener noreferrer"/,"GitHub contact link missing or unsafe");
 assert.match(css,/prefers-reduced-motion/,"reduced motion support missing");
