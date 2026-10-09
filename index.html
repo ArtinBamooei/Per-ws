@@ -25,9 +25,9 @@
   <link rel="alternate" hreflang="x-default" href="https://artinbamooei.github.io/Per-ws/">
   <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; form-action 'self';">
-  <script src="./theme-init.js?v=20261009-17"></script>
-  <link rel="stylesheet" href="./styles.css?v=20261009-17">
-  <script defer src="./script.js?v=20261009-17"></script>
+  <script src="./theme-init.js?v=20261009-18"></script>
+  <link rel="stylesheet" href="./styles.css?v=20261009-18">
+  <script defer src="./script.js?v=20261009-18"></script>
 </head>
 <body>
   <a class="skip-link" href="#main" data-i18n="skip">Skip to main content</a>
@@ -97,35 +97,38 @@
           <div class="hero-meta" aria-label="Academic focus"><span data-i18n="university">Shiraz Azad University</span><span class="dot"></span><span data-i18n="dataFocus">Data &amp; AI focus</span></div>
         </div>
 
-        <div class="hero-visual-wrap reveal reveal-delay" aria-hidden="true">
-          <div class="hero-visual data-field">
-            <div class="field-topline"><span>DATA SYSTEMS</span><span>FIG. 01</span></div>
-            <svg class="field-graphic" viewBox="0 0 600 500" focusable="false">
-              <defs>
-                <pattern id="field-grid" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M28 0H0V28" fill="none" stroke="currentColor" stroke-opacity=".09"/></pattern>
-                <linearGradient id="field-blue" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#69b7ff"/><stop offset="1" stop-color="#5e67ef"/></linearGradient>
-                <linearGradient id="field-wave" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#63b5ff" stop-opacity=".15"/><stop offset=".5" stop-color="#7a9cff"/><stop offset="1" stop-color="#a58aff" stop-opacity=".8"/></linearGradient>
-                <filter id="field-glow"><feGaussianBlur stdDeviation="4" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-              </defs>
-              <rect x="20" y="20" width="560" height="460" fill="url(#field-grid)"/>
-              <g class="field-platform field-platform-top">
-                <path class="platform-face" d="M300 68 502 174 300 280 98 174Z"/>
-                <path class="platform-edge" d="M98 174 300 280 502 174"/>
-                <g class="network-lines"><path d="M190 151 266 117 347 145 408 178 337 216 253 203 190 151 253 203 266 117 337 216 347 145 253 203 408 178"/><path d="M266 117 300 90 347 145 337 216 300 246 253 203"/></g>
-                <g class="network-nodes"><circle cx="190" cy="151" r="5"/><circle cx="266" cy="117" r="6"/><circle cx="300" cy="90" r="5"/><circle cx="347" cy="145" r="6"/><circle cx="408" cy="178" r="5"/><circle cx="337" cy="216" r="5"/><circle cx="253" cy="203" r="5"/><circle cx="300" cy="246" r="4"/></g>
-              </g>
-              <g class="field-connectors"><path d="M190 151V314 M266 117V332 M347 145V319 M408 178V300 M300 246V365" /><circle cx="190" cy="314" r="3"/><circle cx="266" cy="332" r="3"/><circle cx="347" cy="319" r="3"/><circle cx="408" cy="300" r="3"/><circle cx="300" cy="365" r="3"/></g>
-              <g class="field-platform field-platform-mid">
-                <path class="platform-face" d="M300 205 500 310 300 415 100 310Z"/>
-                <path class="platform-edge" d="M100 310 300 415 500 310"/>
-                <g class="wave-lines"><path d="M120 308 C185 254 221 352 286 304 S388 259 480 306"/><path d="M120 317 C185 263 221 361 286 313 S388 268 480 315"/><path d="M120 326 C185 272 221 370 286 322 S388 277 480 324"/><path d="M120 335 C185 281 221 379 286 331 S388 286 480 333"/></g>
-              </g>
-              <g class="field-platform field-platform-base"><path class="platform-face" d="M300 326 480 420 300 482 120 388Z"/><path class="platform-edge" d="M120 388 300 482 480 420"/><path class="circuit-lines" d="M205 397h42l18 18h42l18-18h45 M245 419h26l13 13h35 M350 434h-24l-14 12h-24"/></g>
-              <g class="field-labels"><text x="36" y="86">01 / INPUT</text><text x="426" y="100">02 / MODEL</text><text x="38" y="438">03 / OUTPUT</text><text x="424" y="458">DATA → INSIGHT</text></g>
-              <circle class="field-core-glow" cx="300" cy="310" r="26"/><circle class="field-core" cx="300" cy="310" r="4"/>
-            </svg>
-            <div class="field-bottomline"><span>COMPUTE · ANALYZE · BUILD</span><span class="field-status"><i></i> SYSTEM READY</span></div>
-          </div>
+        <div class="hero-visual-wrap reveal reveal-delay">
+          <section class="hero3d" id="hero-visual" dir="ltr" aria-label="Animated data visualization">
+            <div class="hero3d-side hero3d-left"><p class="hero3d-tag">DATA / AI / CS</p><p class="hero3d-sub">Turning data into<br>meaningful insights.</p></div>
+            <div class="hero3d-stack" id="hero3d-stack" aria-hidden="true"><div class="hero3d-glow"></div>
+              <svg viewBox="0 0 600 600" focusable="false">
+                <defs>
+                  <linearGradient id="h3-edge" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#9cc4ff"/><stop offset="1" stop-color="#5b6cff"/></linearGradient>
+                  <linearGradient id="h3-fill" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#5b8cff" stop-opacity=".3"/><stop offset="1" stop-color="#2a3a9c" stop-opacity=".1"/></linearGradient>
+                  <linearGradient id="h3-wave" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#3fa0ff"/><stop offset="1" stop-color="#9a6bff"/></linearGradient>
+                  <filter id="h3-glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+                  <clipPath id="h3-clip"><rect x="-130" y="-130" width="260" height="260" rx="30" transform="translate(300 300) scale(1 .5) rotate(45)"/></clipPath>
+                </defs>
+                <g class="h3-enter h3-bottom"><g class="h3-par h3-p3"><g class="h3-float h3-f3">
+                  <rect class="h3-edge" x="-130" y="-130" width="260" height="260" rx="30" transform="translate(300 442) scale(1 .5) rotate(45)"/><rect class="h3-plate" x="-130" y="-130" width="260" height="260" rx="30" transform="translate(300 430) scale(1 .5) rotate(45)"/>
+                  <g class="h3-circuit"><rect x="-34" y="-34" width="68" height="68" rx="6" transform="translate(300 436) scale(1 .5) rotate(45)"/><rect x="-58" y="-58" width="116" height="116" rx="8" transform="translate(300 436) scale(1 .5) rotate(45)" opacity=".5"/><path d="M225 415 262 434 M375 415 338 434 M255 442 275 452 M345 442 325 452 M300 470 300 458 M180 430 225 415 M420 430 375 415 M240 470 255 442 M360 470 345 442"/></g>
+                  <g class="h3-pins" filter="url(#h3-glow)"><circle cx="225" cy="415" r="3.2"/><circle cx="255" cy="442" r="3.2"/><circle cx="300" cy="470" r="3.6"/><circle cx="345" cy="442" r="3.2"/><circle cx="375" cy="415" r="3.2"/></g>
+                </g></g></g>
+                <g class="h3-links"><path d="M225 320V415 M255 330V442 M300 335V470 M345 330V442 M375 320V415 M225 205V290 M375 205V290"/></g>
+                <g class="h3-pulses" filter="url(#h3-glow)"><circle r="2.6"><animateMotion dur="2.4s" repeatCount="indefinite" path="M225 320V415"/></circle><circle r="2.6"><animateMotion dur="3.1s" begin="-1s" repeatCount="indefinite" path="M255 330V442"/></circle><circle r="3"><animateMotion dur="2.2s" begin="-.5s" repeatCount="indefinite" path="M300 335V470"/></circle><circle r="2.6"><animateMotion dur="2.9s" begin="-1.6s" repeatCount="indefinite" path="M345 330V442"/></circle><circle r="2.6"><animateMotion dur="2.6s" begin="-.2s" repeatCount="indefinite" path="M375 320V415"/></circle></g>
+                <g class="h3-enter h3-mid"><g class="h3-par h3-p2"><g class="h3-float h3-f2">
+                  <rect class="h3-edge" x="-130" y="-130" width="260" height="260" rx="30" transform="translate(300 312) scale(1 .5) rotate(45)"/><rect class="h3-plate" x="-130" y="-130" width="260" height="260" rx="30" transform="translate(300 300) scale(1 .5) rotate(45)"/>
+                  <g clip-path="url(#h3-clip)" class="h3-waves"><path class="h3-wave"/><path class="h3-wave"/><path class="h3-wave"/><path class="h3-wave"/><path class="h3-wave"/><path class="h3-wave"/><path class="h3-wave"/><path class="h3-wave"/></g>
+                </g></g></g>
+                <g class="h3-enter h3-top"><g class="h3-par h3-p1"><g class="h3-float h3-f1">
+                  <rect class="h3-edge" x="-130" y="-130" width="260" height="260" rx="30" transform="translate(300 182) scale(1 .5) rotate(45)"/><rect class="h3-plate" x="-130" y="-130" width="260" height="260" rx="30" transform="translate(300 170) scale(1 .5) rotate(45)"/>
+                  <g class="h3-net"><path d="M300 105 232 135 360 140 405 150 400 190 350 205 310 182 250 175 190 172 232 135 M300 105 360 140 310 182 270 215 250 175 M232 135 250 175 M360 140 350 205"/></g>
+                  <g class="h3-nodes" filter="url(#h3-glow)"><circle cx="300" cy="105" r="5"/><circle cx="232" cy="135" r="5.5"/><circle cx="360" cy="140" r="5"/><circle cx="405" cy="150" r="5.5"/><circle cx="190" cy="172" r="4.5"/><circle cx="250" cy="175" r="4"/><circle cx="310" cy="182" r="7" class="h3-hot"/><circle cx="350" cy="205" r="5"/><circle cx="400" cy="190" r="3.5"/><circle cx="270" cy="215" r="3.5"/></g>
+                </g></g></g>
+              </svg>
+            </div>
+            <ul class="hero3d-side hero3d-steps"><li><i></i>ANALYZE</li><li><i></i>BUILD</li><li><i></i>IMPROVE</li></ul>
+          </section>
         </div>
       </div>
     </section>
