@@ -12,12 +12,14 @@ export default [
         URLSearchParams: "readonly",
         IntersectionObserver: "readonly",
         history: "readonly",
-        console: "readonly"
+        console: "readonly",
+        requestAnimationFrame: "readonly",
+        cancelAnimationFrame: "readonly"
       }
     },
     rules: {
       "no-undef": "error",
-      "no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
+      "no-unused-vars": ["warn", { "argsIgnorePattern": "^_", "caughtErrorsIgnorePattern": "^_" }],
       "no-redeclare": "error",
       "no-unreachable": "error"
     }
