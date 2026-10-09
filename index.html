@@ -25,9 +25,9 @@
   <link rel="alternate" hreflang="x-default" href="https://artinbamooei.github.io/Per-ws/">
   <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; form-action 'self';">
-  <script src="./theme-init.js?v=20261007-16"></script>
-  <link rel="stylesheet" href="./styles.css?v=20261007-16">
-  <script defer src="./script.js?v=20261007-16"></script>
+  <script src="./theme-init.js?v=20261009-17"></script>
+  <link rel="stylesheet" href="./styles.css?v=20261009-17">
+  <script defer src="./script.js?v=20261009-17"></script>
 </head>
 <body>
   <a class="skip-link" href="#main" data-i18n="skip">Skip to main content</a>
@@ -102,25 +102,27 @@
             <div class="field-topline"><span>DATA SYSTEMS</span><span>FIG. 01</span></div>
             <svg class="field-graphic" viewBox="0 0 600 500" focusable="false">
               <defs>
-                <pattern id="field-grid" width="32" height="32" patternUnits="userSpaceOnUse">
-                  <path d="M32 0H0V32" fill="none" stroke="currentColor" stroke-opacity=".075" stroke-width="1"/>
-                </pattern>
-                <linearGradient id="signal-gradient" x1="0" y1="1" x2="1" y2="0">
-                  <stop offset="0" stop-color="#6d9ec7" stop-opacity=".12"/>
-                  <stop offset="1" stop-color="#1769aa" stop-opacity=".9"/>
-                </linearGradient>
+                <pattern id="field-grid" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M28 0H0V28" fill="none" stroke="currentColor" stroke-opacity=".09"/></pattern>
+                <linearGradient id="field-blue" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#69b7ff"/><stop offset="1" stop-color="#5e67ef"/></linearGradient>
+                <linearGradient id="field-wave" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#63b5ff" stop-opacity=".15"/><stop offset=".5" stop-color="#7a9cff"/><stop offset="1" stop-color="#a58aff" stop-opacity=".8"/></linearGradient>
+                <filter id="field-glow"><feGaussianBlur stdDeviation="4" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
               </defs>
-              <rect x="22" y="22" width="556" height="456" fill="url(#field-grid)"/>
-              <path class="field-orbit field-orbit-a" d="M56 344 C130 344 142 250 218 250 S306 354 386 300 S468 132 544 132"/>
-              <path class="field-orbit field-orbit-b" d="M56 410 C146 410 164 330 238 330 S326 190 396 214 S480 374 544 350"/>
-              <path class="field-signal" pathLength="1" d="M56 344 C130 344 142 250 218 250 S306 354 386 300 S468 132 544 132"/>
-              <path class="field-axis" d="M218 250V86 M218 250H74 M386 300V420 M386 300H530"/>
-              <circle class="field-node field-node-muted" cx="218" cy="250" r="5"/>
-              <circle class="field-node field-node-muted" cx="386" cy="300" r="5"/>
-              <circle class="field-node field-node-main" cx="544" cy="132" r="6"/>
-              <circle class="field-node-halo" cx="544" cy="132" r="15"/>
-              <g class="field-label field-label-top"><text x="236" y="82">INPUT</text><text x="400" y="422">MODEL</text></g>
-              <g class="field-coordinates"><text x="42" y="458">52.4° N</text><text x="468" y="458">DATA / AI</text></g>
+              <rect x="20" y="20" width="560" height="460" fill="url(#field-grid)"/>
+              <g class="field-platform field-platform-top">
+                <path class="platform-face" d="M300 68 502 174 300 280 98 174Z"/>
+                <path class="platform-edge" d="M98 174 300 280 502 174"/>
+                <g class="network-lines"><path d="M190 151 266 117 347 145 408 178 337 216 253 203 190 151 253 203 266 117 337 216 347 145 253 203 408 178"/><path d="M266 117 300 90 347 145 337 216 300 246 253 203"/></g>
+                <g class="network-nodes"><circle cx="190" cy="151" r="5"/><circle cx="266" cy="117" r="6"/><circle cx="300" cy="90" r="5"/><circle cx="347" cy="145" r="6"/><circle cx="408" cy="178" r="5"/><circle cx="337" cy="216" r="5"/><circle cx="253" cy="203" r="5"/><circle cx="300" cy="246" r="4"/></g>
+              </g>
+              <g class="field-connectors"><path d="M190 151V314 M266 117V332 M347 145V319 M408 178V300 M300 246V365" /><circle cx="190" cy="314" r="3"/><circle cx="266" cy="332" r="3"/><circle cx="347" cy="319" r="3"/><circle cx="408" cy="300" r="3"/><circle cx="300" cy="365" r="3"/></g>
+              <g class="field-platform field-platform-mid">
+                <path class="platform-face" d="M300 205 500 310 300 415 100 310Z"/>
+                <path class="platform-edge" d="M100 310 300 415 500 310"/>
+                <g class="wave-lines"><path d="M120 308 C185 254 221 352 286 304 S388 259 480 306"/><path d="M120 317 C185 263 221 361 286 313 S388 268 480 315"/><path d="M120 326 C185 272 221 370 286 322 S388 277 480 324"/><path d="M120 335 C185 281 221 379 286 331 S388 286 480 333"/></g>
+              </g>
+              <g class="field-platform field-platform-base"><path class="platform-face" d="M300 326 480 420 300 482 120 388Z"/><path class="platform-edge" d="M120 388 300 482 480 420"/><path class="circuit-lines" d="M205 397h42l18 18h42l18-18h45 M245 419h26l13 13h35 M350 434h-24l-14 12h-24"/></g>
+              <g class="field-labels"><text x="36" y="86">01 / INPUT</text><text x="426" y="100">02 / MODEL</text><text x="38" y="438">03 / OUTPUT</text><text x="424" y="458">DATA → INSIGHT</text></g>
+              <circle class="field-core-glow" cx="300" cy="310" r="26"/><circle class="field-core" cx="300" cy="310" r="4"/>
             </svg>
             <div class="field-bottomline"><span>COMPUTE · ANALYZE · BUILD</span><span class="field-status"><i></i> SYSTEM READY</span></div>
           </div>
