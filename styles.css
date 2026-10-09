@@ -1386,8 +1386,6 @@ html[dir="rtl"] .language-item:hover { transform: translateX(-5px); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ab-stroke { animation: none !important; stroke-dashoffset: 0; }
-  .ab-dot { animation: none !important; opacity: .9; transform: scale(1); }
 }
 
 @media (prefers-reduced-motion: reduce) {
