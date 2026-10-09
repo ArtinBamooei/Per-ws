@@ -1531,3 +1531,28 @@ html[data-theme="dark"] .project-card:hover {
   .highlight-item, .publication-item, .project-card::before { transition: none !important; }
   .project-card::before { transform: none; }
 }
+
+
+/* Case studies: readable long-form project documentation. */
+.project-actions{display:flex;flex-wrap:wrap;align-items:center;gap:12px}
+.case-study-hero{padding-top:clamp(64px,9vw,112px);padding-bottom:clamp(42px,6vw,72px)}
+.case-study-hero h1{max-width:18ch;font-size:clamp(38px,6vw,68px);line-height:1.08;letter-spacing:-.04em;margin:12px 0 20px}
+.case-lead{max-width:76ch}
+.case-index{display:flex;flex-wrap:wrap;gap:10px 20px;margin-top:32px}
+.case-index a{color:var(--accent);font-weight:650;text-underline-offset:4px}
+.case-index a:hover{text-decoration:underline}
+.case-study-section{padding-top:36px;padding-bottom:36px;scroll-margin-top:calc(var(--header-height) + 18px)}
+.case-study-card{padding:clamp(22px,4vw,44px);border:1px solid var(--border);border-radius:var(--radius-lg);background:var(--surface);box-shadow:var(--shadow-soft)}
+.case-heading{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:start;margin-bottom:28px}
+.case-heading .project-number{font-size:14px}
+.case-heading h2{font-size:clamp(28px,4vw,42px);line-height:1.15;margin:4px 0 12px;letter-spacing:-.03em}
+.case-heading .lead{margin:0}
+.case-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-bottom:28px}
+.case-grid article{padding:20px;border:1px solid var(--border);border-radius:var(--radius-md);background:var(--bg)}
+.case-grid h3{font-size:15px;margin:0 0 8px;color:var(--accent)}
+.case-grid p{font-size:14px;color:var(--text-secondary);margin:0;line-height:1.8}
+.detail-nav{grid-template-columns:1fr auto}
+.detail-back{white-space:nowrap}
+html[dir="rtl"] .case-heading h2,html[dir="rtl"] .case-study-hero h1{letter-spacing:0}
+html[dir="rtl"] .case-index{direction:rtl}
+@media(max-width:620px){.case-grid{grid-template-columns:1fr}.case-heading{gap:12px}.detail-nav{gap:10px}.detail-nav .brand{min-width:0}.detail-nav .brand-copy small{display:none}.detail-back{font-size:12px;padding-inline:10px}.case-index{display:grid;gap:12px}}
