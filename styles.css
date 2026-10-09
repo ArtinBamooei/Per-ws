@@ -1556,3 +1556,11 @@ html[data-theme="dark"] .project-card:hover {
 html[dir="rtl"] .case-heading h2,html[dir="rtl"] .case-study-hero h1{letter-spacing:0}
 html[dir="rtl"] .case-index{direction:rtl}
 @media(max-width:620px){.case-grid{grid-template-columns:1fr}.case-heading{gap:12px}.detail-nav{gap:10px}.detail-nav .brand{min-width:0}.detail-nav .brand-copy small{display:none}.detail-back{font-size:12px;padding-inline:10px}.case-index{display:grid;gap:12px}}
+
+
+/* Whole-card navigation: one accessible link per project, no nested links. */
+a.project-card-link{color:inherit;text-decoration:none;cursor:pointer}
+a.project-card-link:focus-visible{outline:3px solid var(--accent);outline-offset:4px}
+a.project-card-link .project-open{display:inline-flex;align-items:center;gap:6px;color:var(--text-primary);font-size:12px;font-weight:750;transition:color .18s ease,transform .18s ease}
+a.project-card-link:hover .project-open,a.project-card-link:focus-visible .project-open{color:var(--accent);transform:translateX(2px)}
+html[dir="rtl"] a.project-card-link:hover .project-open,html[dir="rtl"] a.project-card-link:focus-visible .project-open{transform:translateX(-2px)}
