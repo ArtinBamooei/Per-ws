@@ -23,7 +23,7 @@ for(const id of ["air-quality","supermarket-analytics","machine-learning"]) { as
 assert.doesNotMatch(html,/data-i18n="caseStudyLink"|Case study ↗|مطالعه موردی/, "obsolete case-study card link remains");
 assert.equal((html.match(/class="project-card project-card-link reveal"/g)||[]).length,3,"all project cards must be clickable links");
 assert.equal((html.match(/class="project-card project-card-link reveal"/g)||[]).length,3,"exactly three full-card project links expected");
-for (const card of [...html.matchAll(/<a class="project-card project-card-link reveal"[^>]*>([\\s\\S]*?)<\\/a>/g)]) assert.doesNotMatch(card[1],/<a\\b/,"nested anchor inside clickable project card");
+for (const card of [...html.matchAll(/<a class="project-card project-card-link reveal"[^>]*>([\s\S]*?)<\/a>/g)]) assert.doesNotMatch(card[1],/<a\b/,"nested anchor inside clickable project card");
 assert.doesNotMatch(html,/Academic average placeholder|Placeholder academic statement|متن موقت برای معرفی کوتاه/,"placeholder academic copy remains");
 assert.match(html,/href="https:\/\/github\.com\/ArtinBamooei"[^>]*target="_blank"[^>]*rel="noopener noreferrer"/,"GitHub contact link missing or unsafe");
 assert.match(css,/prefers-reduced-motion/,"reduced motion support missing");
