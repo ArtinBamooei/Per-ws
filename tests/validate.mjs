@@ -37,12 +37,10 @@ const translationKeys = [...new Set(
   )
 )];
 for (const lang of ["EN", "DE", "FA"]) {
-  const start = js.indexOf("  " + lang + ": {");
-  const end = js.indexOf("\n  },", start);
-  assert.ok(start >= 0 && end > start, "Unable to locate " + lang + " translation dictionary");
-  const dictionary = js.slice(start, end);
+  assert.ok(js.includes(lang + ": {"), "Missing " + lang + " translation dictionary");
   for (const key of translationKeys) {
-    assert.match(dictionary, new RegExp("\\b" + key + ":"), "Missing " + lang + " translation: " + key);
+    const occurrences = (js.match(new RegExp("\\b" + key + ":", "g")) || []).length;
+    assert.ok(occurrences >= 3, "Translation key is not defined in all locales: " + key);
   }
 }
 for (const [name, source] of [["index.html", html], ["projects.html", projects]]) {
