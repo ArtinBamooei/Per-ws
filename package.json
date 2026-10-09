@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "scripts": {
-    "check": "node tests/validate.mjs",
+    "check": "node tests/validate.mjs && node tests/security.mjs",
     "lint": "eslint script.js"
   },
   "devDependencies": {
