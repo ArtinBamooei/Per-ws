@@ -4,7 +4,8 @@ Static multilingual academic portfolio built with semantic HTML, CSS and vanilla
 
 ## Structure
 
-- `index.html` — semantic page structure, SEO metadata and crawlable content
+- `index.html` — portfolio landing page, semantic structure and SEO metadata
+- `projects.html` — multilingual project case studies with scope, workflow, evidence and limitations
 - `styles.css` — responsive visual system, light/dark themes and reduced-motion support
 - `theme-init.js` — minimal pre-paint theme/language bootstrap
 - `script.js` — language, theme controls, navigation and progressive enhancement
@@ -26,4 +27,4 @@ Update the static HTML first so important content remains crawlable without Java
 
 ## Quality checks
 
-The repository includes ESLint configuration and a GitHub Actions workflow for JavaScript syntax/lint checks and basic HTML/link validation.
+The repository includes ESLint configuration and a GitHub Actions workflow for JavaScript syntax/lint checks and static HTML/link validation, content checks and JavaScript syntax/lint checks.
