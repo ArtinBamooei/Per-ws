@@ -2,23 +2,38 @@ name: Quality checks
 
 on:
   push:
-    branches: ["main"]
+    branches: ["main", "security/**"]
   pull_request:
     branches: ["main"]
+  workflow_dispatch:
 
 permissions:
   contents: read
 
+concurrency:
+  group: quality-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   quality:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Check out source
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 22
-      - run: npm install --no-audit --no-fund
-      - run: npm run check
-      - run: npm run lint
-      - run: node --check script.js
-      - run: node --check theme-init.js
+      - name: Install dependencies without lifecycle scripts
+        run: npm install --ignore-scripts --no-audit --no-fund
+      - name: Check dependency advisories
+        run: npm audit --audit-level=high
+      - name: Validate portfolio and security invariants
+        run: npm run check
+      - name: Lint JavaScript
+        run: npm run lint
+      - name: Check JavaScript syntax
+        run: |
+          node --check script.js
+          node --check theme-init.js
