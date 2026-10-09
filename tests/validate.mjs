@@ -8,7 +8,7 @@ const css = fs.readFileSync("styles.css", "utf8");
 assert.equal((js.match(/innerHTML/g) || []).length, 0, "Unsafe innerHTML remains in script.js");
 assert.equal((html.match(/style\s*=/gi) || []).length, 0, "Inline style attributes violate the CSP");
 assert.match(html, /Content-Security-Policy/, "CSP is missing");
-assert.match(html, /theme-init\.js\?v=20261007-11/, "Theme bootstrap is missing");
+assert.match(html, /theme-init\\.js\\?v=20261007-16/, "Theme bootstrap is missing");
 assert.match(html, /rel="canonical"/, "Canonical URL is missing");
 assert.match(html, /property="og:image"/, "OG image is missing");
 assert.match(html, /name="twitter:card"/, "Twitter card is missing");
