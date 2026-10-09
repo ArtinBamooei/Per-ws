@@ -1386,3 +1386,52 @@ html[dir="rtl"] .language-item:hover { transform: translateX(-5px); }
 @media(max-width:1100px){.hero3d{min-height:450px;grid-template-columns:75px minmax(190px,1fr) 78px;padding:16px 8px;gap:3px}.hero3d-tag{font-size:8px;letter-spacing:.08em}.hero3d-sub{font-size:9px}.hero3d-steps li{font-size:8px;gap:5px}}
 @media(max-width:760px){.hero3d{min-height:0;grid-template-columns:1fr;gap:0;padding:14px 10px}.hero3d-left{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:0 4px}.hero3d-tag{margin:0;font-size:9px}.hero3d-sub{text-align:right;font-size:9px;line-height:1.5}.hero3d-stack{width:min(100%,430px);justify-self:center}.hero3d-steps{display:flex;justify-self:center;gap:18px;padding:0}.hero3d-steps li{margin:0;font-size:8px}.hero3d-steps:before{display:none}}
 @media(prefers-reduced-motion:reduce){.hero3d *,.hero3d *:before,.hero3d *:after{animation:none!important}.h3-enter{opacity:1;transform:none}.hero3d-stack{transform:none!important}.h3-par{transform:none!important}}
+
+
+/* Subtle finish for the layered hero: calmer contrast, softer depth, cleaner labels. */
+.hero3d{
+  border-color:color-mix(in srgb,#7d9aaa 24%,var(--border));
+  background:radial-gradient(ellipse at 50% 48%,#1b2b3a 0%,#111d29 52%,#0d1721 100%);
+  color:#c4d0d9;
+  box-shadow:0 18px 42px rgba(14,27,40,.12);
+}
+.hero3d:before,.hero3d:after{
+  opacity:.16;
+  background-image:radial-gradient(#92a9bb .9px,transparent 1.2px);
+  background-size:22px 22px;
+}
+.hero3d-tag{color:#dce5ea;letter-spacing:.12em;font-weight:600}
+.hero3d-sub{color:#9eafbb}
+.hero3d-steps li{color:#b8c7d0;letter-spacing:.09em}
+.hero3d-steps i,.hero3d-steps li:nth-child(2) i,.hero3d-steps li:nth-child(3) i{
+  background:#78a9b8;
+  box-shadow:0 0 6px rgba(120,169,184,.38);
+}
+.hero3d-steps:before{background:linear-gradient(#78a9b8,#a0b6bd);opacity:.28}
+.hero3d-glow{
+  background:radial-gradient(closest-side,rgba(103,157,176,.25),transparent);
+  filter:blur(30px);
+  animation-duration:7s;
+}
+.h3-plate{filter:drop-shadow(0 3px 5px rgba(6,15,24,.22))}
+.h3-edge{stroke:#82a5b5;opacity:.42}
+.h3-net path{stroke:#8bb9c8;opacity:.48;stroke-dasharray:3 7;animation-duration:4.2s}
+.h3-nodes circle,.h3-nodes circle:nth-child(2n),.h3-nodes circle:nth-child(3n){
+  fill:#c0dbe2;
+  animation-duration:4.6s;
+}
+.h3-nodes .h3-hot{fill:#f0f6f7;animation-duration:3.8s}
+.h3-wave{opacity:.58;stroke-width:1}
+.h3-wave:nth-child(odd){opacity:.34}
+.h3-circuit{stroke:#82a9b8;opacity:.58;stroke-width:1}
+.h3-circuit path{animation-duration:5s;stroke-dasharray:4 8}
+.h3-pins circle{fill:#b5d2db;animation-duration:3.8s}
+.h3-links path{stroke:#83a7b7;opacity:.28}
+.h3-pulses circle{fill:#d8e8eb}
+@media(max-width:760px){
+  .hero3d{border-radius:14px}
+  .hero3d-glow{filter:blur(22px)}
+}
+@media(prefers-reduced-motion:reduce){
+  .hero3d-glow{animation:none;opacity:.25}
+}
