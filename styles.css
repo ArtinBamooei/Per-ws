@@ -1634,3 +1634,23 @@ html[dir="rtl"] .hero-actions {
     transform: none;
   }
 }
+
+
+/* Final responsive and keyboard-accessibility guardrails. */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 4px;
+}
+@media (max-width: 360px) {
+  .brand { min-width: 0; }
+  .brand-copy small { max-width: 128px; overflow-wrap: anywhere; }
+  .nav-actions { gap: 4px; }
+  .language-switcher { margin-inline-start: 0; }
+  .lang-button { min-width: 30px; }
+  .hero-actions { align-items: stretch; flex-wrap: wrap; }
+  .hero-actions .button { max-width: 100%; }
+}
+.case-index { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+.case-index a { display: inline-flex; align-items: center; border: 1px solid var(--border); border-radius: 999px; padding: 8px 13px; color: var(--text-secondary); font-size: 13px; transition: border-color .18s ease, color .18s ease, background .18s ease; }
+.case-index a:hover { color: var(--accent); border-color: var(--accent); background: var(--surface); }
+@media (prefers-reduced-motion: reduce) { .case-index a { transition: none; } }
