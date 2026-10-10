@@ -53,7 +53,9 @@ assert.match(js, /document\.documentElement\.dir\s*=\s*currentLanguage === "FA" 
 assert.match(css, /html\[dir="rtl"\]/, "RTL CSS missing");
 assert.match(css, /prefers-reduced-motion:\s*reduce/, "reduced-motion CSS missing");
 assert.match(js, /prefers-reduced-motion/, "motion JS ignores reduced-motion preference");
-assert.match(js, /Escape/, "mobile nav Escape handling missing");
+assert.match(js, /function setupNav\(\)/, "primary navigation setup missing");
+assert.match(main, /class="top-glass-menu"/, "centered glass navigation missing");
+assert.doesNotMatch(main, /data-menu-toggle|data-mobile-nav/, "obsolete hamburger navigation remains");
 assert.match(main, /class="skip-link"/, "skip link missing");
 assert.match(css, /:focus-visible/, "keyboard focus style missing");
 
