@@ -453,40 +453,9 @@ function setupCreativeMotion() {
 
 function setupNav() {
   const header = qs("[data-header]");
-  const menuToggle = qs("[data-menu-toggle]");
-  const mobileNav = qs("[data-mobile-nav]");
   const links = qsa(".desktop-nav .nav-link");
-  const mobileLinks = qsa(".mobile-nav a");
   const sections = qsa("main section[id]");
-
-  if (!header || !menuToggle || !mobileNav) return;
-
-  const closeMenu = () => {
-    mobileNav.classList.remove("is-open");
-    document.body.classList.remove("menu-open");
-    menuToggle.setAttribute("aria-expanded", "false");
-  };
-
-  menuToggle.addEventListener("click", () => {
-    const open = !mobileNav.classList.contains("is-open");
-    mobileNav.classList.toggle("is-open", open);
-    document.body.classList.toggle("menu-open", open);
-    menuToggle.setAttribute("aria-expanded", String(open));
-  });
-
-  qsa("a", mobileNav).forEach(link => link.addEventListener("click", closeMenu));
-
-  document.addEventListener("keydown", event => {
-    if (event.key === "Escape" && mobileNav.classList.contains("is-open")) closeMenu();
-  });
-
-  const mobileQuery = window.matchMedia("(max-width: 1100px)");
-  const syncViewport = () => {
-    if (!mobileQuery.matches) closeMenu();
-  };
-  if (typeof mobileQuery.addEventListener === "function") {
-    mobileQuery.addEventListener("change", syncViewport);
-  }
+  if (!header) return;
 
   const updateHeader = () => header.classList.toggle("scrolled", window.scrollY > 12);
   updateHeader();
@@ -497,15 +466,14 @@ function setupNav() {
       entries.forEach(entry => {
         if (!entry.isIntersecting) return;
         const target = "#" + entry.target.id;
-        [...links, ...mobileLinks].forEach(link => {
+        links.forEach(link => {
           const active = link.getAttribute("href") === target;
-          if (link.classList.contains("nav-link")) link.classList.toggle("is-active", active);
+          link.classList.toggle("is-active", active);
           if (active) link.setAttribute("aria-current", "location");
           else link.removeAttribute("aria-current");
         });
       });
     }, { rootMargin: "-35% 0px -58% 0px", threshold: 0 });
-
     sections.forEach(section => navObserver.observe(section));
   }
 }
