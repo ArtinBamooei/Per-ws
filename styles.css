@@ -1694,13 +1694,13 @@ html[dir="rtl"] .hero-actions {
 }
 
 
-/* Light mode: blend the hero visual into the page instead of showing a separate dark card. */
+/* Light mode: use the page surface itself, with only a faint atmospheric texture. */
 html[data-theme="light"] .hero3d {
   background-color: var(--bg);
   background-image:
-    linear-gradient(rgba(255, 255, 255, .76), rgba(255, 255, 255, .82)),
-    url("./assets/hero-atmosphere.svg?v=20261010-29");
-  border-color: var(--border);
+    linear-gradient(color-mix(in srgb, var(--bg) 91%, transparent), color-mix(in srgb, var(--bg) 94%, transparent)),
+    url("./assets/hero-atmosphere.svg?v=20261010-30");
+  border-color: transparent;
   box-shadow: none;
   color: var(--text-primary);
 }
@@ -1708,3 +1708,28 @@ html[data-theme="light"] .hero3d-tag,
 html[data-theme="light"] .hero3d-steps li { color: var(--text-primary); }
 html[data-theme="light"] .hero3d-sub { color: var(--text-secondary); }
 html[data-theme="light"] .hero3d-glow { opacity: .2; }
+
+
+/* Minimal contact method with a monochrome brand mark that reveals its color on hover. */
+.contact-links { display: grid; gap: 12px; }
+.contact-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-height: 82px;
+  padding: 18px 20px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: transparent;
+  color: var(--text-primary);
+  transition: border-color .2s ease, background-color .2s ease, transform .2s ease;
+}
+.contact-row .contact-brand-icon { width: 28px; height: 28px; flex: 0 0 28px; color: var(--text-secondary); transition: color .2s ease; }
+.contact-row span { display: grid; gap: 4px; min-width: 0; }
+.contact-row small { color: var(--text-secondary); font-size: 12px; }
+.contact-row strong { font-size: 15px; font-weight: 600; }
+.contact-row .contact-arrow { width: 20px; height: 20px; margin-left: auto; flex: 0 0 20px; stroke: currentColor; fill: none; stroke-width: 1.5; transition: transform .2s ease; }
+.contact-row:hover, .contact-row:focus-visible { border-color: color-mix(in srgb, #8b5cf6 50%, var(--border)); background: color-mix(in srgb, var(--surface) 65%, transparent); transform: translateY(-2px); }
+.contact-link-github:hover .contact-brand-icon, .contact-link-github:focus-visible .contact-brand-icon { color: #8b5cf6; }
+.contact-row:hover .contact-arrow, .contact-row:focus-visible .contact-arrow { transform: translate(2px, -2px); }
+@media (prefers-reduced-motion: reduce) { .contact-row, .contact-row * { transition: none !important; } }
