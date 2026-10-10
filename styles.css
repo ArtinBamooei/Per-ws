@@ -1692,3 +1692,19 @@ html[dir="rtl"] .hero-actions {
     will-change: auto;
   }
 }
+
+
+/* Light mode: blend the hero visual into the page instead of showing a separate dark card. */
+html[data-theme="light"] .hero3d {
+  background-color: var(--bg);
+  background-image:
+    linear-gradient(rgba(255, 255, 255, .76), rgba(255, 255, 255, .82)),
+    url("./assets/hero-atmosphere.svg?v=20261010-29");
+  border-color: var(--border);
+  box-shadow: none;
+  color: var(--text-primary);
+}
+html[data-theme="light"] .hero3d-tag,
+html[data-theme="light"] .hero3d-steps li { color: var(--text-primary); }
+html[data-theme="light"] .hero3d-sub { color: var(--text-secondary); }
+html[data-theme="light"] .hero3d-glow { opacity: .2; }
