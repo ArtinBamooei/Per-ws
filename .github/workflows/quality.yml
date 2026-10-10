@@ -34,6 +34,4 @@ jobs:
       - name: Lint JavaScript
         run: npm run lint
       - name: Check JavaScript syntax
-        run: |
-          node --check script.js
-          node --check theme-init.js
+        run: npm run check:syntax
