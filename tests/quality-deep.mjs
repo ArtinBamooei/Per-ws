@@ -60,9 +60,9 @@ assert.match(main, /class="skip-link"/, "skip link missing");
 assert.match(css, /:focus-visible/, "keyboard focus style missing");
 assert.match(css, /\.language-item::before/, "creative language card motif missing");
 assert.match(css, /\.project-card:hover/, "project card interaction missing");
-assert.match(main, /class="section-card-shell skills-shell"/, "skills card shell missing");
-assert.match(main, /class="section-card-shell languages-layout"/, "language card shell missing");
-assert.match(main, /class="section-card-shell publications-shell"/, "publication card shell missing");
+assert.match(main, /class="container section-card-shell skills-shell"/, "skills card shell missing");
+assert.match(main, /class="container section-card-shell languages-layout"/, "language card shell missing");
+assert.match(main, /class="container section-card-shell publications-shell"/, "publication card shell missing");
 
 for (const id of ["air-quality", "supermarket-analytics", "machine-learning"]) {
   assert.ok(cases.includes('id="' + id + '"'), "missing case study " + id);
