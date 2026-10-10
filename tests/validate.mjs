@@ -60,4 +60,4 @@ for (const [name, source] of [["index.html", html], ["projects.html", projects]]
   assert.equal(ids.length, new Set(ids).size, name + ": duplicate id attribute found");
   assert.match(source, /<html lang="[^"]+" dir="(ltr|rtl)"/, name + ": initial language and direction missing");
 }
-console.log("Portfolio validation: PASS (two pages, anchors, complete i18n, duplicate IDs, cache versions, CSP, SEO, external-link safety, no placeholders)");
+console.log("Portfolio validation: PASS (two pages, anchors, complete i18n, duplicate IDs, aligned asset cache versions, CSP, SEO, external-link safety, no placeholders)");
