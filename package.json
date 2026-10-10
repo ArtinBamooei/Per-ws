@@ -9,6 +9,6 @@
     "check:all": "npm run check && npm run lint && npm run check:syntax"
   },
   "devDependencies": {
-    "eslint": "^9.0.0"
+    "eslint": "^10.12.0"
   }
 }
