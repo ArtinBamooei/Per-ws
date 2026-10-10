@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import assert from "node:assert/strict";
 const html=fs.readFileSync("index.html","utf8"), projects=fs.readFileSync("projects.html","utf8"), js=fs.readFileSync("script.js","utf8"), css=fs.readFileSync("styles.css","utf8"), boot=fs.readFileSync("theme-init.js","utf8"), sitemap=fs.readFileSync("sitemap.xml","utf8");
-const version="20261010-31";
+const version="20261010-32";
 for(const [name,source] of [["index.html",html],["projects.html",projects]]){
  assert.match(source,/Content-Security-Policy/, `${name}: CSP missing`);
  assert.match(source,/object-src 'none'/, `${name}: object embedding not blocked`);
@@ -36,6 +36,11 @@ assert.doesNotMatch(html,/Academic average placeholder|Placeholder academic stat
 assert.match(html,/href="https:\/\/github\.com\/ArtinBamooei"[^>]*target="_blank"[^>]*rel="noopener noreferrer"/,"GitHub contact link missing or unsafe");
 assert.match(css,/prefers-reduced-motion/,"reduced motion support missing");
 assert.match(css,/case-study-card/,"case study styling missing");
+assert.match(css,/\.language-item::before/,"creative language card motif missing");
+assert.match(css,/\.project-card:hover/,"project card interaction missing");
+assert.match(html,/class="section-card-shell skills-shell"/,"skills card shell missing");
+assert.match(html,/class="section-card-shell languages-layout"/,"language card shell missing");
+assert.match(html,/class="section-card-shell publications-shell"/,"publication card shell missing");
 assert.match(js,/history\.replaceState/,"language URL sync missing");
 assert.match(boot,/queryLanguage/,"URL language bootstrap missing");
 for(const key of ["caseIntro","caseLead","airTitle","airSummary","superTitle","mlTitle","backToPortfolio"]) for(const lang of ["EN","DE","FA"]) assert.match(js,new RegExp(`${lang}:[\\s\\S]*?\\b${key}:`),`missing ${lang} translation for ${key}`);
