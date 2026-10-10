@@ -35,7 +35,7 @@ for (const [file, source] of docs) {
     const localPath = url.split(/[?#]/, 1)[0];
     if (!localPath) continue;
     const resolved = path.normalize(path.join(root, path.dirname(file), localPath));
-    assert.ok(resolved.startsWith(root + path.sep), file + ": path traversal");
+    assert.ok(resolved === root || resolved.startsWith(root + path.sep), file + ": path traversal");
     assert.ok(fs.existsSync(resolved), file + ": missing local asset/link " + url);
   }
 }
