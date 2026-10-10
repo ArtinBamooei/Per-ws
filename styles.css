@@ -1660,8 +1660,8 @@ html[dir="rtl"] .hero-actions {
 .hero3d {
   background-color: #081321;
   background-image:
-    linear-gradient(rgba(5, 13, 24, .88), rgba(5, 13, 24, .84)),
-    url("./assets/hero-atmosphere.svg");
+    linear-gradient(rgba(5, 13, 24, .58), rgba(5, 13, 24, .64)),
+    url("./assets/hero-atmosphere.svg?v=20261010-28");
   background-size: cover, cover;
   background-position: center, 52% 48%;
   background-repeat: no-repeat;
