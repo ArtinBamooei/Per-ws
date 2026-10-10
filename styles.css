@@ -1699,7 +1699,7 @@ html[data-theme="light"] .hero3d {
   background-color: var(--bg);
   background-image:
     linear-gradient(color-mix(in srgb, var(--bg) 91%, transparent), color-mix(in srgb, var(--bg) 94%, transparent)),
-    url("./assets/hero-atmosphere.svg?v=20261010-32");
+    url("./assets/hero-atmosphere.svg?v=20261010-33");
   border-color: transparent;
   box-shadow: none;
   color: var(--text-primary);
@@ -1887,3 +1887,5 @@ html[data-theme="light"] .section:not(.hero) > .container:has(.intro-grid) { box
  .skill-group, .project-card, .language-item { transition: none !important; }
  .skill-group:hover, .project-card:hover, .language-item:hover { transform: none; }
 }
+
+.home-directory{padding-top:clamp(42px,7vw,86px)}.home-section-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:28px}.home-section-card{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:16px;min-height:112px;padding:22px;border:1px solid var(--border);border-radius:20px;color:var(--text);text-decoration:none;background:color-mix(in srgb,var(--surface) 92%,transparent);box-shadow:0 10px 30px rgba(13,35,58,.04);transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease}.home-section-card:hover,.home-section-card:focus-visible{transform:translateY(-3px);border-color:color-mix(in srgb,var(--accent) 42%,var(--border));box-shadow:0 18px 36px rgba(13,35,58,.08);outline-offset:4px}.home-card-number{display:grid;place-items:center;width:42px;height:42px;border-radius:13px;border:1px solid color-mix(in srgb,var(--accent) 22%,var(--border));color:var(--accent);background:color-mix(in srgb,var(--accent) 7%,transparent);font-size:11px;font-weight:700}.home-card-content{display:grid;gap:7px;min-width:0}.home-card-content strong{font-size:16px;letter-spacing:-.02em}.home-card-content>span{color:var(--text-secondary);font-size:12px}.home-card-arrow{color:var(--accent);font-size:21px;transition:transform .2s ease}.home-section-card:hover .home-card-arrow{transform:translate(3px,-3px)}html[dir=rtl] .home-card-arrow{transform:scaleX(-1)}@media(max-width:680px){.home-section-grid{grid-template-columns:1fr;gap:11px}.home-section-card{min-height:92px;padding:17px;border-radius:17px}.home-card-content strong{font-size:15px}}@media(prefers-reduced-motion:reduce){.home-section-card,.home-card-arrow{transition:none}.home-section-card:hover{transform:none}}
