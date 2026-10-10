@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import assert from "node:assert/strict";
 const html=fs.readFileSync("index.html","utf8"), projects=fs.readFileSync("projects.html","utf8"), js=fs.readFileSync("script.js","utf8"), css=fs.readFileSync("styles.css","utf8"), boot=fs.readFileSync("theme-init.js","utf8"), sitemap=fs.readFileSync("sitemap.xml","utf8");
-const version="20261009-24";
+const version="20261010-25";
 for(const [name,source] of [["index.html",html],["projects.html",projects]]){
  assert.match(source,/Content-Security-Policy/, `${name}: CSP missing`);
  assert.match(source,/object-src 'none'/, `${name}: object embedding not blocked`);
