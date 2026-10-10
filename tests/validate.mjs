@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import assert from "node:assert/strict";
 const html=fs.readFileSync("index.html","utf8"), projects=fs.readFileSync("projects.html","utf8"), js=fs.readFileSync("script.js","utf8"), css=fs.readFileSync("styles.css","utf8"), boot=fs.readFileSync("theme-init.js","utf8"), sitemap=fs.readFileSync("sitemap.xml","utf8");
-const version="20261009-24";
+const version="20261010-25";
 for(const [name,source] of [["index.html",html],["projects.html",projects]]){
  assert.match(source,/Content-Security-Policy/, `${name}: CSP missing`);
  assert.match(source,/object-src 'none'/, `${name}: object embedding not blocked`);
@@ -60,4 +60,4 @@ for (const [name, source] of [["index.html", html], ["projects.html", projects]]
   assert.equal(ids.length, new Set(ids).size, name + ": duplicate id attribute found");
   assert.match(source, /<html lang="[^"]+" dir="(ltr|rtl)"/, name + ": initial language and direction missing");
 }
-console.log("Portfolio validation: PASS (two pages, anchors, complete i18n, duplicate IDs, cache versions, CSP, SEO, external-link safety, no placeholders)");
+console.log("Portfolio validation: PASS (two pages, anchors, complete i18n, duplicate IDs, aligned asset cache versions, CSP, SEO, external-link safety, no placeholders)");
