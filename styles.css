@@ -1564,3 +1564,73 @@ a.project-card-link:focus-visible{outline:3px solid var(--accent);outline-offset
 a.project-card-link .project-open{display:inline-flex;align-items:center;gap:6px;color:var(--text-primary);font-size:12px;font-weight:750;transition:color .18s ease,transform .18s ease}
 a.project-card-link:hover .project-open,a.project-card-link:focus-visible .project-open{color:var(--accent);transform:translateX(2px)}
 html[dir="rtl"] a.project-card-link:hover .project-open,html[dir="rtl"] a.project-card-link:focus-visible .project-open{transform:translateX(-2px)}
+
+
+/* Small visual refinements — preserve the existing layout and identity. */
+.hero-copy {
+  max-width: 640px;
+}
+.hero-copy h1 {
+  line-height: 1.04;
+  text-wrap: balance;
+}
+.hero-description {
+  line-height: 1.82;
+  text-wrap: pretty;
+}
+.hero-actions {
+  gap: 12px;
+}
+.timeline-card,
+.highlights-card,
+.skill-group,
+.project-card,
+.contact-shell {
+  transition: border-color .22s ease, box-shadow .22s ease, transform .22s ease;
+}
+.timeline-card:hover,
+.highlights-card:hover,
+.skill-group:hover {
+  border-color: color-mix(in srgb, var(--accent) 28%, var(--border));
+}
+.project-card:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 4px;
+}
+.project-card:hover {
+  transform: translateY(-3px);
+}
+html[dir="rtl"] .hero-copy,
+html[dir="rtl"] .intro-copy {
+  text-align: right;
+}
+html[dir="rtl"] .hero-actions {
+  justify-content: flex-start;
+}
+@media (max-width: 620px) {
+  .hero-actions {
+    gap: 10px;
+  }
+  .hero-actions .button {
+    min-width: 0;
+  }
+  .timeline-card,
+  .highlights-card,
+  .skill-group,
+  .project-card,
+  .contact-shell {
+    transition: border-color .18s ease, box-shadow .18s ease;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .timeline-card,
+  .highlights-card,
+  .skill-group,
+  .project-card,
+  .contact-shell {
+    transition: none !important;
+  }
+  .project-card:hover {
+    transform: none;
+  }
+}
