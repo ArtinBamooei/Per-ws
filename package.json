@@ -3,8 +3,10 @@
   "private": true,
   "version": "1.0.0",
   "scripts": {
-    "check": "node tests/validate.mjs && node tests/security.mjs",
-    "lint": "eslint script.js"
+    "check": "node tests/validate.mjs && node tests/security.mjs && node tests/quality-deep.mjs",
+    "lint": "eslint script.js",
+    "check:syntax": "node --check script.js && node --check theme-init.js",
+    "check:all": "npm run check && npm run lint && npm run check:syntax"
   },
   "devDependencies": {
     "eslint": "^9.0.0"
