@@ -75,6 +75,20 @@ assert.match(main,/data-i18n-aria="transcriptAriaLabel"/,"transcript list needs 
 assert.doesNotMatch(main,/data-dynamic="highlight-[0-3]"/,"old generic academic highlights must be removed");
 assert.match(css,/#education \.course-grade-grid\s*\{[\s\S]*?grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/,"desktop transcript two-column grid missing");
 assert.match(css,/@media \(max-width: 760px\)[\s\S]*?#education \.course-grade-grid \{ grid-template-columns: minmax\(0, 1fr\); \}/,"mobile transcript single-column layout missing");
+
+assert.equal((main.match(/class="contact-row contact-method/g)||[]).length,4,"exactly four contact method cards are required");
+assert.equal((main.match(/class="contact-brand-icon"/g)||[]).length,4,"each contact method must have a custom inline SVG brand icon");
+for(const brand of ["GitHub","Gmail","LinkedIn","Telegram"]) assert.ok(main.includes(brand), "missing contact method "+brand);
+assert.match(main,/contact-icon-gmail[\s\S]*?viewBox="0 0 48 40"/,"Gmail logo SVG missing or malformed");
+assert.match(main,/contact-icon-linkedin[\s\S]*?viewBox="0 0 48 48"/,"LinkedIn logo SVG missing or malformed");
+assert.match(main,/contact-icon-telegram[\s\S]*?viewBox="0 0 48 48"/,"Telegram logo SVG missing or malformed");
+assert.match(main,/data-i18n-aria="contactMethodsLabel"/,"contact grid accessible label missing");
+assert.doesNotMatch(main,/href="(?:mailto:|https?:\/\/)(?:YOUR|ADD_|your\.|add\.)/i,"fake placeholder contact URL must not be clickable");
+assert.equal((main.match(/class="contact-method-placeholder"/g)||[]).length,3,"unconfigured external contacts must be clearly marked as placeholders");
+assert.match(css,/\.contact-links\.contact-method-grid\s*\{[\s\S]*?grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/,"desktop contact grid missing");
+assert.match(css,/@media \(max-width: 540px\)[\s\S]*?\.contact-links\.contact-method-grid \{ grid-template-columns: minmax\(0, 1fr\);/,"mobile contact stack missing");
+assert.match(css,/main\[data-theme="dark"\] \.contact-links \.contact-method/,"dark-mode contact card styles missing");
+
 assert.match(main, /class="section-card-shell skills-shell"/, "skills card shell missing");
 assert.match(main, /class="section-card-shell languages-layout"/, "language card shell missing");
 assert.match(main, /class="section-card-shell publications-shell"/, "publication card shell missing");
