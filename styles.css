@@ -2968,3 +2968,44 @@ html[data-theme="dark"] .contact-links .contact-visual {
 @media (prefers-reduced-motion: reduce) {
   .contact-links .contact-method { animation: none !important; }
 }
+
+
+/* Slightly richer motion pass: brighter brand glow, a moving sheen, and livelier motifs. */
+.contact-links .contact-method {
+  background-image:
+    radial-gradient(ellipse at var(--contact-glow-x, 12%) 52%, color-mix(in srgb, var(--contact-brand, var(--accent)) 20%, transparent), transparent 62%),
+    linear-gradient(112deg, transparent 20%, color-mix(in srgb, var(--contact-brand, var(--accent)) 12%, transparent) 45%, color-mix(in srgb, var(--contact-brand, var(--accent)) 5%, transparent) 52%, transparent 76%),
+    linear-gradient(135deg, color-mix(in srgb, var(--contact-brand, var(--accent)) 3%, transparent), transparent 60%);
+  background-size: 190% 190%, 260% 100%, 100% 100%;
+  background-position: 0% 50%, -140% 50%, 0 0;
+  animation: contact-card-glow 7s ease-in-out infinite alternate, contact-card-sweep 7s ease-in-out infinite;
+}
+@keyframes contact-card-glow {
+  from { background-position: 0% 50%, -140% 50%, 0 0; }
+  to { background-position: 100% 50%, 140% 50%, 0 0; }
+}
+@keyframes contact-card-sweep {
+  0%, 100% { border-color: color-mix(in srgb, var(--contact-brand, var(--accent)) 22%, var(--border); box-shadow: 0 3px 14px color-mix(in srgb, var(--contact-brand, var(--accent)) 4%, transparent); }
+  50% { border-color: color-mix(in srgb, var(--contact-brand, var(--accent)) 45%, var(--border)); box-shadow: 0 7px 20px color-mix(in srgb, var(--contact-brand, var(--accent)) 9%, transparent); }
+}
+.contact-links .contact-context-art { opacity: 1; }
+.contact-links .context-code-line { animation-duration: 5.5s; }
+.contact-links .context-mail-at { animation-duration: 4.5s; }
+.contact-links .context-mail-line { animation-duration: 4.2s; }
+.contact-links .context-doc-title,
+.contact-links .context-doc-line { animation-duration: 5.2s; }
+.contact-links .context-chat-bubble { animation-duration: 4.8s; }
+.contact-links .contact-visual {
+  box-shadow: inset 0 0 18px color-mix(in srgb, var(--contact-brand, var(--accent)) 7%, transparent);
+}
+.contact-links .contact-visual::before {
+  animation: contact-frame-drift 9s ease-in-out infinite alternate;
+}
+@keyframes contact-frame-drift {
+  from { transform: rotate(8deg) scale(.98); opacity: .55; }
+  to { transform: rotate(19deg) scale(1.04); opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .contact-links .contact-method,
+  .contact-links .contact-visual::before { animation: none !important; }
+}
