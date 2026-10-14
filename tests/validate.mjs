@@ -43,7 +43,7 @@ assert.match(html,/contact-icon-linkedin[\s\S]*?viewBox="0 0 48 48"/,"LinkedIn l
 assert.match(html,/contact-icon-telegram[\s\S]*?viewBox="0 0 48 48"/,"Telegram logo SVG missing or malformed");
 assert.match(html,/data-i18n-aria="contactMethodsLabel"/,"contact grid accessible label missing");
 assert.doesNotMatch(html,/href="(?:mailto:|https?:\/\/)(?:YOUR|ADD_|your\.|add\.)/i,"fake placeholder contact URL must not be clickable");
-assert.equal((html.match(/class="contact-method-placeholder"/g)||[]).length,3,"unconfigured external contacts must be clearly marked as placeholders");
+assert.equal((html.match(/class="[^"]*\bcontact-method-placeholder\b/g)||[]).length,3,"unconfigured external contacts must be clearly marked as placeholders");
 assert.match(css,/\.contact-links\.contact-method-grid\s*\{[\s\S]*?grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/,"desktop contact grid missing");
 assert.match(css,/@media \(max-width: 540px\)[\s\S]*?\.contact-links\.contact-method-grid \{ grid-template-columns: minmax\(0, 1fr\);/,"mobile contact stack missing");
 assert.match(css,/html\[data-theme="dark"\] \.contact-links \.contact-method/,"dark-mode contact card styles missing");
