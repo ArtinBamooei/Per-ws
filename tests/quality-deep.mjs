@@ -95,9 +95,9 @@ assert.match(main,/contact-context-resume[\s\S]*?Academic network/,"LinkedIn doc
 assert.match(main,/contact-context-chat[\s\S]*?Message\.\.\./,"Telegram message context missing");
 assert.match(css,/@keyframes context-code-drift/,"code motion keyframe missing");
 assert.match(css,/@keyframes context-chat-drift/,"chat motion keyframe missing");
-assert.match(main, /class="section-card-shell skills-shell"/, "skills card shell missing");
-assert.match(main, /class="section-card-shell languages-layout"/, "language card shell missing");
-assert.match(main, /class="section-card-shell publications-shell"/, "publication card shell missing");
+assert.match(main, /class="[^"]*section-card-shell skills-shell"/, "skills card shell missing");
+assert.match(main, /class="[^"]*section-card-shell languages-layout"/, "language card shell missing");
+assert.match(main, /class="[^"]*section-card-shell publications-shell"/, "publication card shell missing");
 
 for (const id of ["air-quality", "supermarket-analytics", "machine-learning"]) {
   assert.ok(cases.includes('id="' + id + '"'), "missing case study " + id);
