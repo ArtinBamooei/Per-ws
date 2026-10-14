@@ -3383,3 +3383,47 @@ html[data-theme="dark"] .contact-links .contact-visual {
     transform: translate(-50%, -50%);
   }
 }
+
+
+/* Telegram: keep the requested emoji accents quiet so the chat artwork remains primary. */
+.contact-links .contact-visual-telegram .context-chat-emoji {
+  z-index: 2;
+  opacity: .32;
+  filter: none;
+  animation: telegram-emoji-subtle 7s ease-in-out infinite;
+}
+.contact-links .contact-visual-telegram .context-chat-hands {
+  top: 11px;
+  right: 11px;
+  font-size: 12px;
+  animation-delay: -1.2s;
+}
+.contact-links .contact-visual-telegram .context-chat-rose {
+  bottom: 11px;
+  left: 11px;
+  font-size: 11px;
+  animation-delay: -3.4s;
+}
+@keyframes telegram-emoji-subtle {
+  0%, 100% { opacity: .22; transform: translateY(0) scale(.96); }
+  50% { opacity: .4; transform: translateY(-1px) scale(1); }
+}
+@media (max-width: 540px) {
+  .contact-links .contact-visual-telegram .context-chat-hands {
+    top: 8px;
+    right: 8px;
+    font-size: 11px;
+  }
+  .contact-links .contact-visual-telegram .context-chat-rose {
+    bottom: 8px;
+    left: 8px;
+    font-size: 10px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .contact-links .contact-visual-telegram .context-chat-emoji {
+    animation: none !important;
+    opacity: .3;
+    transform: none;
+  }
+}
