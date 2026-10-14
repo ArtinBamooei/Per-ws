@@ -5,7 +5,7 @@ const I18N = {
     heroDescription:"A concise academic portfolio for a Computer Science student working across data analysis, machine learning, data engineering and applied technical projects.", viewWork:"View selected work", academicContact:"Academic contact", university:"Shiraz Azad University", dataFocus:"Data & AI focus",
     profile:"Profile", introduction:"Introduction", introTitle:"Focused on computing with data.", introLead:"I study Computer Science and Information Technology, with a growing focus on data analysis, machine learning and data engineering. This portfolio documents selected projects, current skills and academic interests.",
     interestData:"Data Science", interestML:"Machine Learning", interestDE:"Data Engineering", interestAI:"Applied AI",
-    educationLabel:"Education", educationTitle:"Academic foundation", current:"Current", undergraduate:"Undergraduate", degree:"Computer Science / Information Technology", academicStatus:"Academic status", undergraduateStudent:"Undergraduate student", direction:"Direction", focus:"Focus", focusValue:"Computing, analytics and technical systems", selectedHighlights:"Selected highlights", highlightsNote:"Curated academic highlights, not a full transcript.",
+    educationLabel:"Education", educationTitle:"Academic foundation", current:"Current", undergraduate:"Undergraduate", degree:"Computer Science / Information Technology", academicStatus:"Academic status", undergraduateStudent:"Undergraduate student", direction:"Direction", focus:"Focus", focusValue:"Computing, analytics and technical systems", selectedHighlights:"Selected highlights", transcriptTitle:"Relevant course grades", transcriptDescription:"A focused selection of coursework related to Computer Science, Data and AI.", transcriptCount:"course entries", courseNamePlaceholder:"Course title", gradePlaceholder:"— / 20", gradePending:"Grade not entered", transcriptCountAria:"Ten course-grade entries", transcriptAriaLabel:"Selected relevant course grades", transcriptNote:"Course titles and grades are placeholders for future verified results.",
     skillsLabel:"Skills preview", skillsTitle:"Technical stack, without fake precision.", fullSkills:"Full skill profile", languagesLabel:"Languages", languagesTitle:"Communication for an international academic path.",
     projectsLabel:"Selected projects", projectsTitle:"Technical work with an academic bias.", viewProjects:"View project case studies", projectOpen:"View project", publicationsLabel:"Publications / Articles", publicationsTitle:"Research notes, technical writing and academic work.",
     contactLabel:"Contact", contactTitle:"For academic conversations and technical opportunities.", contactCopy:"For academic discussions, project collaboration and technical opportunities, the public GitHub profile is the available contact channel.",
@@ -46,7 +46,7 @@ caseIntro:"Project case studies",
     heroDescription:"Ein kompaktes akademisches Portfolio eines Informatikstudenten mit Schwerpunkt auf Datenanalyse, maschinellem Lernen, Data Engineering und angewandten technischen Projekten.", viewWork:"Ausgewählte Arbeiten", academicContact:"Akademischer Kontakt", university:"Islamische Azad-Universität Shiraz", dataFocus:"Fokus: Daten & KI",
     profile:"Profil", introduction:"Einleitung", introTitle:"Fokussiert auf Computing mit Daten.", introLead:"Ich studiere Informatik und Informationstechnologie und konzentriere mich zunehmend auf Datenanalyse, maschinelles Lernen und Data Engineering. Dieses Portfolio dokumentiert ausgewählte Projekte, aktuelle Kenntnisse und akademische Interessen.",
     interestData:"Data Science", interestML:"Maschinelles Lernen", interestDE:"Data Engineering", interestAI:"Angewandte KI",
-    educationLabel:"Ausbildung", educationTitle:"Akademische Grundlage", current:"Aktuell", undergraduate:"Bachelorstudium", degree:"Informatik / Informationstechnologie", academicStatus:"Studienstatus", undergraduateStudent:"Bachelorstudent", direction:"Ausrichtung", focus:"Schwerpunkt", focusValue:"Computing, Analytik und technische Systeme", selectedHighlights:"Ausgewählte Leistungen", highlightsNote:"Ausgewählte akademische Leistungen, kein vollständiger Notenspiegel.",
+    educationLabel:"Ausbildung", educationTitle:"Akademische Grundlage", current:"Aktuell", undergraduate:"Bachelorstudium", degree:"Informatik / Informationstechnologie", academicStatus:"Studienstatus", undergraduateStudent:"Bachelorstudent", direction:"Ausrichtung", focus:"Schwerpunkt", focusValue:"Computing, Analytik und technische Systeme", selectedHighlights:"Ausgewählte Leistungen", transcriptTitle:"Noten relevanter Kurse", transcriptDescription:"Eine gezielte Auswahl von Kursen aus Informatik, Datenanalyse und KI.", transcriptCount:"Kurseinträge", courseNamePlaceholder:"Kursname", gradePlaceholder:"— / 20", gradePending:"Note noch nicht eingetragen", transcriptCountAria:"Zehn Kurse mit Noten", transcriptAriaLabel:"Ausgewählte Noten relevanter Kurse", transcriptNote:"Kurstitel und Noten sind Platzhalter für später bestätigte Ergebnisse.",
     skillsLabel:"Kenntnisse", skillsTitle:"Technischer Stack, ohne künstliche Präzision.", fullSkills:"Vollständiges Profil", languagesLabel:"Sprachen", languagesTitle:"Kommunikation für einen internationalen akademischen Weg.",
     projectsLabel:"Ausgewählte Projekte", projectsTitle:"Technische Arbeiten mit akademischem Schwerpunkt.", viewProjects:"Projekt-Fallstudien ansehen", projectOpen:"Projekt ansehen", publicationsLabel:"Publikationen / Artikel", publicationsTitle:"Forschungsnotizen, technische Texte und akademische Arbeiten.",
     contactLabel:"Kontakt", contactTitle:"Für akademischen Austausch und technische Möglichkeiten.", contactCopy:"Für akademischen Austausch, Projektzusammenarbeit und technische Möglichkeiten ist das öffentliche GitHub-Profil der verfügbare Kontaktkanal.",
@@ -87,7 +87,7 @@ caseIntro:"Projekt-Fallstudien",
     heroDescription:"پورتفولیوی آکادمیک یک دانشجوی علوم کامپیوتر با تمرکز بر تحلیل داده، یادگیری ماشین، مهندسی داده و پروژه‌های فنی کاربردی.", viewWork:"مشاهده پروژه‌های منتخب", academicContact:"ارتباط آکادمیک", university:"دانشگاه آزاد شیراز", dataFocus:"تمرکز: داده و هوش مصنوعی",
     profile:"پروفایل", introduction:"معرفی", introTitle:"تمرکز بر محاسبات و داده.", introLead:"در رشته علوم کامپیوتر و فناوری اطلاعات تحصیل می‌کنم و تمرکزم را بر تحلیل داده، یادگیری ماشین و مهندسی داده توسعه می‌دهم. این پورتفولیو پروژه‌های منتخب، مهارت‌های فعلی و علایق آکادمیکم را مستند می‌کند.",
     interestData:"علم داده", interestML:"یادگیری ماشین", interestDE:"مهندسی داده", interestAI:"هوش مصنوعی کاربردی",
-    educationLabel:"تحصیلات", educationTitle:"پایه آکادمیک", current:"در حال تحصیل", undergraduate:"کارشناسی", degree:"علوم کامپیوتر / فناوری اطلاعات", academicStatus:"وضعیت تحصیلی", undergraduateStudent:"دانشجوی کارشناسی", direction:"مسیر", focus:"تمرکز", focusValue:"محاسبات، تحلیل و سیستم‌های فنی", selectedHighlights:"برگزیده‌های تحصیلی", highlightsNote:"برگزیده‌ای از سوابق تحصیلی، نه ریزنمرات کامل.",
+    educationLabel:"تحصیلات", educationTitle:"پایه آکادمیک", current:"در حال تحصیل", undergraduate:"کارشناسی", degree:"علوم کامپیوتر / فناوری اطلاعات", academicStatus:"وضعیت تحصیلی", undergraduateStudent:"دانشجوی کارشناسی", direction:"مسیر", focus:"تمرکز", focusValue:"محاسبات، تحلیل و سیستم‌های فنی", selectedHighlights:"برگزیده‌های تحصیلی", transcriptTitle:"نمرات درس‌های مرتبط", transcriptDescription:"منتخبی از درس‌های مرتبط با علوم کامپیوتر، داده و هوش مصنوعی.", transcriptCount:"درس", courseNamePlaceholder:"نام درس", gradePlaceholder:"— / ۲۰", gradePending:"نمره وارد نشده", transcriptCountAria:"ظرفیت نمایش نمرات ۱۰ درس", transcriptAriaLabel:"نمرات درس‌های مرتبط", transcriptNote:"نام درس‌ها و نمرات فعلاً جای‌نگهدار هستند و بعداً با نتایج تأییدشده جایگزین می‌شوند.",
     skillsLabel:"پیش‌نمایش مهارت‌ها", skillsTitle:"پشته فنی، بدون نمایش دقت مصنوعی.", fullSkills:"پروفایل کامل مهارت‌ها", languagesLabel:"زبان‌ها", languagesTitle:"ارتباط برای یک مسیر آکادمیک بین‌المللی.",
     projectsLabel:"پروژه‌های منتخب", projectsTitle:"کارهای فنی با رویکرد آکادمیک.", viewProjects:"مشاهده مطالعات موردی پروژه‌ها", projectOpen:"مشاهده پروژه", publicationsLabel:"مقالات / نوشته‌ها", publicationsTitle:"یادداشت‌های پژوهشی، نوشته‌های فنی و کارهای آکادمیک.",
     contactLabel:"ارتباط", contactTitle:"برای گفت‌وگوهای آکادمیک و فرصت‌های فنی.", contactCopy:"برای گفت‌وگوهای آکادمیک، همکاری روی پروژه‌ها و فرصت‌های فنی، پروفایل عمومی گیت‌هاب کانال ارتباطی در دسترس است.",
@@ -127,7 +127,6 @@ caseIntro:"مطالعات موردی پروژه‌ها",
 
 const DYNAMIC = {
   EN: {
-    highlights:["Computer Science / IT","Data & AI focus","Project-based learning","Multilingual portfolio"],
     skillGroups:["Data","Engineering","AI / ML"], skillLevels:["Intermediate","Beginner","Beginner+"],
     langNames:["German","English","Persian"],
     projects:[
@@ -140,7 +139,6 @@ const DYNAMIC = {
     ]
   },
   DE: {
-    highlights:["Informatik / IT","Fokus auf Daten und KI","Projektorientiertes Lernen","Mehrsprachiges Portfolio"],
     skillGroups:["Daten","Engineering","KI / ML"], skillLevels:["Fortgeschritten","Anfänger","Anfänger+"],
     langNames:["Deutsch","Englisch","Persisch"],
     projects:[
@@ -153,7 +151,6 @@ const DYNAMIC = {
     ]
   },
   FA: {
-    highlights:["علوم کامپیوتر / فناوری اطلاعات","تمرکز بر داده و هوش مصنوعی","یادگیری پروژه‌محور","پورتفولیوی چندزبانه"],
     skillGroups:["داده","مهندسی","هوش مصنوعی / یادگیری ماشین"], skillLevels:["متوسط","مقدماتی","مقدماتی+"],
     langNames:["آلمانی","انگلیسی","فارسی"],
     projects:[
@@ -172,11 +169,6 @@ const qsa = (selector, parent = document) => [...parent.querySelectorAll(selecto
 let currentLanguage = "EN";
 
 function t(key) { return I18N[currentLanguage][key] ?? I18N.EN[key] ?? key; }
-
-function renderAcademicHighlights() {
-  const labels = DYNAMIC[currentLanguage].highlights;
-  qsa("#academic-highlights [data-dynamic]").forEach((el, i) => { el.textContent = labels[i] ?? ""; });
-}
 
 function renderSkills() {
   const d = DYNAMIC[currentLanguage];
@@ -344,7 +336,6 @@ function setupLanguages() {
 
     if (syncUrl) syncLanguageUrl();
     applyStaticLanguage();
-    renderAcademicHighlights();
     renderSkills();
     renderLanguages();
     renderProjects();
