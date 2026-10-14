@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import assert from "node:assert/strict";
 const html=fs.readFileSync("index.html","utf8"), projects=fs.readFileSync("projects.html","utf8"), js=fs.readFileSync("script.js","utf8"), css=fs.readFileSync("styles.css","utf8"), boot=fs.readFileSync("theme-init.js","utf8"), sitemap=fs.readFileSync("sitemap.xml","utf8");
-const version="20261014-33";
+const version="20261014-34";
 for(const [name,source] of [["index.html",html],["projects.html",projects]]){
  assert.match(source,/Content-Security-Policy/, `${name}: CSP missing`);
  assert.match(source,/object-src 'none'/, `${name}: object embedding not blocked`);
@@ -44,6 +44,15 @@ assert.doesNotMatch(css,/\.skill-item:hover::after\s*\{\s*width:\s*100%\s*;/,"sk
 assert.match(css,/#skills \.skill-item::after\s*\{\s*content:\s*none !important;\s*display:\s*none !important;\s*\}/,"duplicate hover underline must be disabled");
 assert.match(css,/\.skill-group\.is-visible \.skill-meter span\s*\{\s*transform:\s*scaleX\(1\)/,"proficiency meter reveal rule missing");
 assert.match(js,/function setupSkillMeters\(\)/,"proficiency meter setup missing");
+assert.equal((html.match(/class="course-grade-item"/g)||[]).length,10,"Selected highlights must provide ten course-grade slots");
+assert.match(html,/id="transcript-title"/,"transcript title and heading association missing");
+assert.match(html,/data-i18n="transcriptTitle"/,"transcript title translation missing");
+assert.match(html,/data-i18n="courseNamePlaceholder"/,"course-name placeholder missing");
+assert.match(html,/data-i18n="gradePlaceholder"/,"grade placeholder missing");
+assert.match(html,/data-i18n-aria="transcriptAriaLabel"/,"transcript list needs an accessible label");
+assert.doesNotMatch(html,/data-dynamic="highlight-[0-3]"/,"old generic academic highlights must be removed");
+assert.match(css,/#education \.course-grade-grid\s*\{[\s\S]*?grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/,"desktop transcript two-column grid missing");
+assert.match(css,/@media \(max-width: 760px\)[\s\S]*?#education \.course-grade-grid \{ grid-template-columns: minmax\(0, 1fr\); \}/,"mobile transcript single-column layout missing");
 assert.match(html,/class="section-card-shell skills-shell"/,"skills card shell missing");
 assert.match(html,/class="section-card-shell languages-layout"/,"language card shell missing");
 assert.match(html,/class="section-card-shell publications-shell"/,"publication card shell missing");
