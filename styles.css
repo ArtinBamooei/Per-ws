@@ -2083,3 +2083,178 @@ html[data-theme="dark"] #skills .skill-level {
   #skills .section-heading-side .text-link:hover { transform: none !important; }
   #skills .skill-meter span { transition: none !important; }
 }
+
+
+/* Academic highlights: roomy transcript panel designed for up to ten course-grade entries. */
+#education .education-layout {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 22px;
+  align-items: start;
+}
+#education .transcript-card {
+  position: relative;
+  min-width: 0;
+  overflow: hidden;
+  padding: clamp(22px, 3.2vw, 36px);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  background:
+    radial-gradient(ellipse at 100% 0%, color-mix(in srgb, var(--accent) 6%, transparent), transparent 34%),
+    color-mix(in srgb, var(--surface) 97%, transparent);
+  box-shadow: 0 14px 36px rgba(13, 35, 58, .05);
+}
+#education .transcript-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 22px;
+}
+#education .transcript-heading-copy { min-width: 0; }
+#education .transcript-heading-copy .section-label { margin-bottom: 7px; }
+#education .transcript-title,
+#education #transcript-title {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: clamp(19px, 2vw, 25px);
+  line-height: 1.3;
+  letter-spacing: -.025em;
+  text-wrap: balance;
+}
+#education .transcript-count {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  flex: 0 0 auto;
+  min-height: 42px;
+  padding: 7px 12px;
+  border: 1px solid color-mix(in srgb, var(--accent) 22%, var(--border));
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--accent) 5%, var(--surface));
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 650;
+  white-space: nowrap;
+}
+#education .transcript-count strong {
+  display: inline-grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+  color: var(--accent);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+#education .transcript-description {
+  max-width: 68ch;
+  margin: 12px 0 22px;
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.75;
+}
+#education .course-grade-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: course-grade;
+}
+#education .course-grade-item {
+  counter-increment: course-grade;
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 11px;
+  min-width: 0;
+  min-height: 64px;
+  padding: 10px 12px;
+  border: 1px solid color-mix(in srgb, var(--border) 87%, transparent);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--bg) 68%, var(--surface));
+  transition: border-color .18s ease, background-color .18s ease, transform .18s ease;
+}
+#education .course-grade-index {
+  display: inline-grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid color-mix(in srgb, var(--accent) 18%, var(--border));
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--accent) 5%, var(--surface));
+  color: var(--text-muted);
+  font-size: 10px;
+  font-weight: 750;
+  font-variant-numeric: tabular-nums;
+}
+#education .course-grade-name {
+  min-width: 0;
+  color: var(--text-primary);
+  font-size: 12px;
+  font-weight: 650;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+#education .course-grade-value {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 72px;
+  min-height: 32px;
+  padding: 5px 8px;
+  border: 1px dashed color-mix(in srgb, var(--accent) 26%, var(--border));
+  border-radius: 9px;
+  background: color-mix(in srgb, var(--accent) 4%, var(--surface));
+  color: var(--text-secondary);
+  direction: ltr;
+  font-size: 11px;
+  font-weight: 750;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+#education .transcript-note {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid color-mix(in srgb, var(--border) 75%, transparent);
+  font-size: 11px;
+  line-height: 1.7;
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  #education .course-grade-item:hover {
+    transform: translateY(-1px);
+    border-color: color-mix(in srgb, var(--accent) 35%, var(--border));
+    background: color-mix(in srgb, var(--accent) 3%, var(--surface));
+  }
+}
+html[data-theme="dark"] #education .transcript-card {
+  background:
+    radial-gradient(ellipse at 100% 0%, color-mix(in srgb, var(--accent) 9%, transparent), transparent 34%),
+    color-mix(in srgb, var(--surface) 97%, transparent);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, .13);
+}
+html[data-theme="dark"] #education .course-grade-item {
+  border-color: color-mix(in srgb, var(--border) 92%, transparent);
+  background: color-mix(in srgb, var(--surface-secondary) 20%, var(--surface));
+}
+html[data-theme="dark"] #education .course-grade-value {
+  color: var(--text-primary);
+}
+@media (max-width: 760px) {
+  #education .timeline-card { padding: 26px 24px 26px 48px; }
+  html[dir="rtl"] #education .timeline-card { padding: 26px 48px 26px 24px; }
+  #education .course-grade-grid { grid-template-columns: minmax(0, 1fr); }
+  #education .transcript-card { padding: 23px 18px; border-radius: 21px; }
+}
+@media (max-width: 420px) {
+  #education .transcript-head { flex-direction: column; gap: 14px; }
+  #education .course-grade-item { grid-template-columns: 30px minmax(0, 1fr) auto; gap: 8px; padding-inline: 9px; }
+  #education .course-grade-index { width: 29px; height: 29px; }
+  #education .course-grade-name { font-size: 11px; }
+  #education .course-grade-value { min-width: 66px; padding-inline: 6px; font-size: 10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #education .course-grade-item { transition: none !important; }
+  #education .course-grade-item:hover { transform: none !important; }
+}
