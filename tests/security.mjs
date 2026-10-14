@@ -17,12 +17,24 @@ for (const [name, html] of pages) {
   assert.match(html, /object-src 'none'/, name + ": object-src missing");
   assert.match(html, /base-uri 'self'/, name + ": base-uri missing");
   assert.match(html, /script-src 'self'/, name + ": script-src missing");
+  assert.match(html, /upgrade-insecure-requests/, name + ": HTTPS upgrade directive missing");
   assert.match(html, /frame-src 'none'/, name + ": frame-src missing");
   assert.match(html, /form-action 'self'/, name + ": form-action missing");
   assert.match(html, /name="referrer" content="strict-origin-when-cross-origin"/, name + ": referrer policy missing");
   assert.doesNotMatch(html, /unsafe-inline|unsafe-eval/, name + ": unsafe CSP exception");
   assert.doesNotMatch(html, /<script\b[^>]*>\s*[^<]/i, name + ": inline script content conflicts with CSP");
   assert.doesNotMatch(html, /<[^>]+\s+on[a-z]+\s*=/i, name + ": inline event handler conflicts with CSP");
+
+  for (const match of html.matchAll(/<script\b[^>]*src="(https?:\/\/[^"]+)"[^>]*>/gi)) {
+    const tag = match[0];
+    const url = new URL(match[1]);
+    const csp = html.match(/Content-Security-Policy" content="([^"]+)"/i)?.[1] ?? "";
+    const scriptPolicy = csp.match(/(?:^|; )script-src ([^;]+)/)?.[1] ?? "";
+    assert.ok(scriptPolicy.split(/\s+/).includes(url.origin), name + ": external script origin missing from CSP");
+    assert.match(tag, /\bintegrity="sha384-[^"]+"/i, name + ": external script missing SHA-384 SRI");
+    assert.match(tag, /\bcrossorigin="anonymous"/i, name + ": external script missing anonymous CORS mode");
+    assert.match(match[1], /@\d+\.\d+\.\d+\//, name + ": external script version must be pinned");
+  }
 
   for (const match of html.matchAll(/<a\b[^>]*target="_blank"[^>]*>/gi)) {
     assert.match(match[0], /\brel="[^"]*\bnoopener\b[^"]*"/i, name + ": target=_blank without noopener");
@@ -37,4 +49,4 @@ for (const [name, source] of scripts) {
   assert.doesNotMatch(source, /\binnerHTML\b|\bouterHTML\b|insertAdjacentHTML|document\.write\s*\(/, name + ": unsafe HTML sink detected");
   assert.doesNotMatch(source, /\beval\s*\(|new\s+Function\s*\(/, name + ": dynamic code execution detected");
 }
-console.log("Security invariants: PASS (CSP, referrer policy, inline execution, external tab safety, 404 page and DOM/code sinks)");
+console.log("Security invariants: PASS (CSP, HTTPS upgrades, SRI-pinned external scripts, referrer policy, inline execution, external tab safety, 404 page and DOM/code sinks)");
