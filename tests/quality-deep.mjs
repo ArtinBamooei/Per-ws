@@ -77,17 +77,17 @@ assert.match(css,/#education \.course-grade-grid\s*\{[\s\S]*?grid-template-colum
 assert.match(css,/@media \(max-width: 760px\)[\s\S]*?#education \.course-grade-grid \{ grid-template-columns: minmax\(0, 1fr\); \}/,"mobile transcript single-column layout missing");
 
 assert.equal((main.match(/class="contact-row contact-method/g)||[]).length,4,"exactly four contact method cards are required");
-assert.equal((main.match(/class="contact-brand-icon(?:\\s|")/g)||[]).length,4,"four recognizable brand icons required");
+assert.equal((main.match(/class="contact-brand-icon(?:\s|")/g)||[]).length,4,"four recognizable brand icons required");
 for(const brand of ["GitHub","Gmail","LinkedIn","Telegram"]) assert.ok(main.includes(brand),"missing contact method "+brand);
-assert.match(main,/contact-link-github[\\s\\S]*?<svg class="contact-brand-icon" viewBox="0 0 24 24"/,"GitHub logo missing");
-assert.match(main,/contact-visual-linkedin[\\s\\S]*?<svg class="contact-brand-icon contact-brand-icon-linkedin" viewBox="0 0 48 48"/,"LinkedIn logo missing");
+assert.match(main,/contact-link-github[\s\S]*?<svg class="contact-brand-icon" viewBox="0 0 24 24"/,"GitHub logo missing");
+assert.match(main,/contact-visual-linkedin[\s\S]*?<svg class="contact-brand-icon contact-brand-icon-linkedin" viewBox="0 0 48 48"/,"LinkedIn logo missing");
 assert.equal((main.match(/class="contact-motion-art"/g)||[]).length,0,"decorative contact animations should be removed");
 assert.match(css,/Contact cards: restrained motion, clearer brand marks/,"minimal contact overrides missing");
-assert.match(css,/\.contact-links \.contact-motion-art \\{ display: none !important; \\}/,"decorative motion should be disabled");
-assert.match(css,/\.contact-links \.contact-brand-icon \\{[\\s\\S]*?animation: none !important;/,"static contact logos required");
-assert.match(css,/html\\[data-theme="dark"\\] \.contact-links \.contact-visual/,"dark theme contact styling missing");
-assert.doesNotMatch(main,/href="(?:mailto:|https?:\\/\\/)(?:YOUR|ADD_|your\\.|add\\.)/i,"placeholder contact URL must not be clickable");
-assert.equal((main.match(/class="[^"]*\\bcontact-method-placeholder\\b/g)||[]).length,3,"three unset contact methods should remain placeholders");
+assert.match(css,/\.contact-links \.contact-motion-art \{ display: none !important; \}/,"decorative motion should be disabled");
+assert.match(css,/\.contact-links \.contact-brand-icon \{[\s\S]*?animation: none !important;/,"static contact logos required");
+assert.match(css,/html\[data-theme="dark"\] \.contact-links \.contact-visual/,"dark theme contact styling missing");
+assert.doesNotMatch(main,/href="(?:mailto:|https?:\/\/)(?:YOUR|ADD_|your\.|add\.)/i,"placeholder contact URL must not be clickable");
+assert.equal((main.match(/class="[^"]*\bcontact-method-placeholder\b/g)||[]).length,3,"three unset contact methods should remain placeholders");
 
 assert.match(main, /class="section-card-shell skills-shell"/, "skills card shell missing");
 assert.match(main, /class="section-card-shell languages-layout"/, "language card shell missing");
