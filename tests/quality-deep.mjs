@@ -89,10 +89,10 @@ assert.match(css,/html\[data-theme="dark"\] \.contact-links \.contact-visual/,"d
 assert.doesNotMatch(main,/href="(?:mailto:|https?:\/\/)(?:YOUR|ADD_|your\.|add\.)/i,"placeholder contact URL must not be clickable");
 assert.equal((main.match(/class="[^"]*\bcontact-method-placeholder\b/g)||[]).length,3,"three unset contact methods should remain placeholders");
 
-assert.match(main,/contact-context-code[\\s\\S]*?git commit[\\s\\S]*?git push/,"GitHub code context missing");
-assert.match(main,/contact-context-mail[\\s\\S]*?context-mail-at/,"Gmail @ context missing");
-assert.match(main,/contact-context-resume[\\s\\S]*?CV \/ ARTICLE/,"LinkedIn document context missing");
-assert.match(main,/contact-context-chat[\\s\\S]*?Message\.\.\./,"Telegram message context missing");
+assert.match(main,/contact-context-code[\s\S]*?git commit[\s\S]*?git push/,"GitHub code context missing");
+assert.match(main,/contact-context-mail[\s\S]*?context-mail-at/,"Gmail @ context missing");
+assert.match(main,/contact-context-resume[\s\S]*?CV \/ ARTICLE/,"LinkedIn document context missing");
+assert.match(main,/contact-context-chat[\s\S]*?Message\.\.\./,"Telegram message context missing");
 assert.match(css,/@keyframes context-code-drift/,"code motion keyframe missing");
 assert.match(css,/@keyframes context-chat-drift/,"chat motion keyframe missing");
 assert.match(main, /class="section-card-shell skills-shell"/, "skills card shell missing");
