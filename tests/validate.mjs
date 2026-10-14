@@ -57,13 +57,13 @@ assert.equal((html.match(/class="[^"]*\bcontact-method-placeholder\b/g)||[]).len
 assert.match(css,/\.contact-links\.contact-method-grid \{[\s\S]*?grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/,"desktop contact grid missing");
 assert.match(css,/@media \(max-width: 540px\)[\s\S]*?\.contact-links\.contact-method-grid \{ grid-template-columns: minmax\(0, 1fr\);/,"mobile contact stack missing");
 assert.match(css,/html\[data-theme="dark"\] \.contact-links \.contact-visual/,"dark-mode contact card styles missing");
-assert.match(html,/contact-context-code[\\s\\S]*?git commit[\\s\\S]*?git push/,"GitHub code context animation missing");
-assert.match(html,/contact-context-mail[\\s\\S]*?context-mail-at/,"Gmail @ context animation missing");
-assert.match(html,/contact-context-resume[\\s\\S]*?CV \/ ARTICLE/,"LinkedIn CV/article context missing");
-assert.match(html,/contact-context-chat[\\s\\S]*?Message\.\.\./,"Telegram message context missing");
+assert.match(html,/contact-context-code[\s\S]*?git commit[\s\S]*?git push/,"GitHub code context animation missing");
+assert.match(html,/contact-context-mail[\s\S]*?context-mail-at/,"Gmail @ context animation missing");
+assert.match(html,/contact-context-resume[\s\S]*?CV \/ ARTICLE/,"LinkedIn CV/article context missing");
+assert.match(html,/contact-context-chat[\s\S]*?Message\.\.\./,"Telegram message context missing");
 assert.match(css,/@keyframes context-code-drift/,"GitHub code drift animation missing");
 assert.match(css,/@keyframes context-chat-drift/,"Telegram chat drift animation missing");
-assert.match(css,/@media \\(prefers-reduced-motion: reduce\\)[\\s\\S]*?contact-context-art[\\s\\S]*?animation: none !important;/,"context animations must respect reduced motion");
+assert.match(css,/@media \(prefers-reduced-motion: reduce\)[\s\S]*?contact-context-art[\s\S]*?animation: none !important;/,"context animations must respect reduced motion");
 assert.match(css,/prefers-reduced-motion/,"reduced motion support missing");
 assert.match(css,/case-study-card/,"case study styling missing");
 assert.match(css,/\.language-item::before/,"creative language card motif missing");
