@@ -2447,3 +2447,17 @@ html[data-theme="dark"] .contact-links .contact-method:hover {
   .contact-links a.contact-method:hover,
   .contact-links a.contact-method:focus-visible { transform: none; }
 }
+
+
+/* Unconfigured channels are informational placeholders, not interactive controls. */
+.contact-links .contact-method-placeholder:hover {
+  padding-inline: 15px;
+  transform: none;
+  border-color: var(--border);
+  background: color-mix(in srgb, var(--surface) 91%, transparent);
+  box-shadow: none;
+  color: var(--text-primary);
+}
+.contact-links .contact-method-placeholder:hover .contact-method-copy strong {
+  color: var(--text-primary);
+}
