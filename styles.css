@@ -2461,3 +2461,235 @@ html[data-theme="dark"] .contact-links .contact-method:hover {
 .contact-links .contact-method-placeholder:hover .contact-method-copy strong {
   color: var(--text-primary);
 }
+
+
+/* Distinctive contact motion: large custom SVG scenes with clean, legible brand marks. */
+.contact-links .contact-method {
+  grid-template-columns: 108px minmax(0, 1fr);
+  grid-template-rows: minmax(72px, 1fr) auto;
+  align-items: center;
+  gap: 10px 15px;
+  min-height: 190px;
+  padding: 17px 18px;
+}
+.contact-links .contact-visual {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  place-items: center;
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  align-self: center;
+  justify-self: center;
+  width: 108px;
+  height: 108px;
+  min-width: 108px;
+  border: 1px solid color-mix(in srgb, var(--contact-brand, var(--accent)) 13%, var(--border));
+  border-radius: 27px;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 42%, color-mix(in srgb, var(--contact-brand, var(--accent)) 10%, transparent), transparent 68%),
+    color-mix(in srgb, var(--surface) 95%, transparent);
+}
+.contact-links .contact-visual::before {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  z-index: -1;
+  border: 1px solid color-mix(in srgb, var(--contact-brand, var(--accent)) 10%, transparent);
+  border-radius: 21px;
+  transform: rotate(12deg);
+}
+.contact-links .contact-motion-art {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+.contact-links .contact-motion-art .art-ring {
+  fill: none;
+  stroke: color-mix(in srgb, var(--contact-brand, var(--accent)) 24%, transparent);
+  stroke-width: 1;
+}
+.contact-links .contact-motion-art .art-ring-spin {
+  stroke-dasharray: 3 7 15 6;
+  transform-box: view-box;
+  transform-origin: 60px 60px;
+  animation: contact-orbit 19s linear infinite;
+}
+.contact-links .contact-motion-art .art-ring-dash {
+  stroke-dasharray: 2 6;
+  animation: contact-dash 22s linear infinite;
+}
+.contact-links .contact-motion-art .art-circuit,
+.contact-links .contact-motion-art .art-mail-trail,
+.contact-links .contact-motion-art .art-mail-route,
+.contact-links .contact-motion-art .art-link-path,
+.contact-links .contact-motion-art .art-telegram-route {
+  fill: none;
+  stroke: color-mix(in srgb, var(--contact-brand, var(--accent)) 54%, transparent);
+  stroke-width: 1.35;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.contact-links .contact-motion-art .art-circuit,
+.contact-links .contact-motion-art .art-mail-route,
+.contact-links .contact-motion-art .art-telegram-route {
+  stroke-dasharray: 5 6;
+  animation: contact-dash 3.8s linear infinite;
+}
+.contact-links .contact-motion-art .art-node {
+  fill: var(--contact-brand, var(--accent));
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: contact-node-pulse 3.3s ease-in-out infinite;
+}
+.contact-links .contact-motion-art .art-node-two { animation-delay: -.8s; }
+.contact-links .contact-motion-art .art-node-three { animation-delay: -1.5s; }
+.contact-links .contact-motion-art .art-node-four { animation-delay: -2.1s; }
+.contact-links .contact-brand-icon {
+  position: relative;
+  z-index: 2;
+  display: block;
+  width: 62px;
+  height: 62px;
+  max-width: none;
+  overflow: visible;
+  color: #1b2734;
+  filter: drop-shadow(0 4px 5px rgba(10, 28, 44, .10));
+}
+.contact-links .contact-visual-github { --contact-brand: #202b37; }
+.contact-links .contact-visual-github .contact-brand-icon { width: 61px; height: 61px; color: #202b37; }
+.contact-links .contact-visual-gmail { --contact-brand: #EA4335; }
+.contact-links .contact-visual-gmail .contact-brand-icon {
+  width: 77px;
+  height: 65px;
+  filter: drop-shadow(0 5px 6px rgba(32, 50, 68, .13));
+  animation: contact-mail-float 4.8s ease-in-out infinite;
+}
+.contact-links .contact-visual-linkedin { --contact-brand: #0A66C2; }
+.contact-links .contact-visual-linkedin .contact-brand-icon {
+  width: 57px;
+  height: 57px;
+  filter: drop-shadow(0 5px 7px rgba(10, 102, 194, .18));
+}
+.contact-links .contact-visual-telegram { --contact-brand: #229ED9; }
+.contact-links .contact-visual-telegram .contact-brand-icon {
+  width: 62px;
+  height: 62px;
+  filter: drop-shadow(0 6px 7px rgba(34, 158, 217, .18));
+  animation: contact-telegram-float 5.2s ease-in-out infinite;
+}
+.contact-links .contact-visual-gmail .art-message-dot { fill: #EA4335; }
+.contact-links .contact-visual-gmail .art-message-dot-two { fill: #34A853; }
+.contact-links .contact-visual-gmail .art-mail-trail { stroke-dasharray: 4 6; animation: contact-dash 5.5s linear infinite reverse; }
+.contact-links .contact-visual-gmail .art-mail-route { stroke: #FBBC04; }
+.contact-links .contact-visual-linkedin .art-link-path { stroke: color-mix(in srgb, #0A66C2 44%, transparent); stroke-dasharray: 3 8; animation: contact-dash 4.5s linear infinite; }
+.contact-links .contact-visual-linkedin .art-scan-line {
+  fill: none;
+  stroke: #0A66C2;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: 12 28;
+  animation: contact-linkedin-scan 3.6s ease-in-out infinite;
+}
+.contact-links .contact-visual-telegram .art-ring-spin { stroke: #229ED9; stroke-opacity: .44; animation-duration: 14s; }
+.contact-links .contact-visual-telegram .art-ring-dash { stroke: #229ED9; stroke-opacity: .3; animation-duration: 28s; }
+.contact-links .contact-visual-telegram .art-telegram-route { stroke: #229ED9; stroke-width: 1.5; stroke-dasharray: 3 7; }
+.contact-links .contact-visual-telegram .art-node-telegram { fill: #229ED9; animation: contact-telegram-node 4s ease-in-out infinite; }
+.contact-links .contact-method-copy { align-self: center; padding-inline-end: 17px; }
+.contact-links .contact-method-copy small { font-size: 10px; letter-spacing: .1em; }
+.contact-links .contact-method-copy strong { font-size: 14px; line-height: 1.4; }
+.contact-links .contact-method-copy > span { font-size: 11px; line-height: 1.55; }
+.contact-links .contact-method-status { grid-column: 2; grid-row: 2; }
+.contact-links .contact-arrow { z-index: 3; inset-inline-end: 12px; inset-block-start: 12px; }
+.contact-links .contact-method-placeholder:hover {
+  padding-inline: 18px;
+  transform: none;
+  border-color: var(--border);
+  background: color-mix(in srgb, var(--surface) 91%, transparent);
+  box-shadow: none;
+}
+.contact-links .contact-method-placeholder:hover .contact-method-copy strong { color: var(--text-primary); }
+.contact-links .contact-method-placeholder:hover .contact-arrow { transform: none; stroke: var(--text-muted); }
+@keyframes contact-orbit { to { transform: rotate(360deg); } }
+@keyframes contact-dash { to { stroke-dashoffset: -88; } }
+@keyframes contact-node-pulse {
+  0%, 100% { opacity: .55; transform: scale(.82); }
+  50% { opacity: 1; transform: scale(1.24); }
+}
+@keyframes contact-mail-float {
+  0%, 100% { transform: translateY(1px) rotate(-1deg); }
+  50% { transform: translateY(-3px) rotate(1deg); }
+}
+@keyframes contact-telegram-float {
+  0%, 100% { transform: translateY(1px) rotate(0deg); }
+  48% { transform: translateY(-3px) rotate(-2deg); }
+  74% { transform: translateY(0) rotate(1deg); }
+}
+@keyframes contact-linkedin-scan {
+  0%, 10% { transform: translateY(-4px); opacity: .45; }
+  55% { transform: translateY(54px); opacity: 1; }
+  90%, 100% { transform: translateY(72px); opacity: .25; }
+}
+@keyframes contact-telegram-node {
+  0%, 100% { transform: scale(.75); opacity: .5; }
+  45% { transform: scale(1.5); opacity: 1; }
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .contact-links a.contact-method:hover .contact-visual {
+    border-color: color-mix(in srgb, var(--contact-brand, var(--accent)) 34%, var(--border));
+    box-shadow: 0 0 0 5px color-mix(in srgb, var(--contact-brand, var(--accent)) 5%, transparent);
+  }
+  .contact-links a.contact-method:hover .contact-brand-icon { filter: drop-shadow(0 7px 9px rgba(10, 28, 44, .18)); }
+}
+html[data-theme="dark"] .contact-links .contact-visual {
+  background:
+    radial-gradient(circle at 50% 42%, color-mix(in srgb, var(--contact-brand, var(--accent)) 14%, transparent), transparent 68%),
+    color-mix(in srgb, var(--surface) 90%, transparent);
+}
+html[data-theme="dark"] .contact-links .contact-visual-github .contact-brand-icon { color: #f0f6fc; }
+html[data-theme="dark"] .contact-links .contact-visual-gmail .contact-brand-icon { filter: drop-shadow(0 5px 9px rgba(0, 0, 0, .24)); }
+@media (max-width: 540px) {
+  .contact-links .contact-method {
+    grid-template-columns: 96px minmax(0, 1fr);
+    min-height: 174px;
+    padding: 14px;
+    gap: 9px 13px;
+  }
+  .contact-links .contact-visual { width: 94px; height: 94px; min-width: 94px; border-radius: 23px; }
+  .contact-links .contact-brand-icon { width: 55px; height: 55px; }
+  .contact-links .contact-visual-gmail .contact-brand-icon { width: 69px; height: 58px; }
+  .contact-links .contact-method-copy { padding-inline-end: 9px; }
+  .contact-links .contact-method-copy strong { font-size: 13px; }
+  .contact-links .contact-arrow { inset-inline-end: 10px; inset-block-start: 10px; }
+  .contact-links .contact-method-placeholder { min-height: 174px; }
+}
+@media (max-width: 360px) {
+  .contact-links .contact-method {
+    grid-template-columns: 78px minmax(0, 1fr);
+    min-height: 158px;
+    padding: 11px;
+    gap: 8px 10px;
+  }
+  .contact-links .contact-visual { width: 77px; height: 77px; min-width: 77px; border-radius: 20px; }
+  .contact-links .contact-brand-icon { width: 47px; height: 47px; }
+  .contact-links .contact-visual-gmail .contact-brand-icon { width: 58px; height: 49px; }
+  .contact-links .contact-method-copy strong { font-size: 12px; }
+  .contact-links .contact-method-copy > span { font-size: 10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .contact-links .contact-motion-art .art-ring-spin,
+  .contact-links .contact-motion-art .art-ring-dash,
+  .contact-links .contact-motion-art .art-circuit,
+  .contact-links .contact-motion-art .art-mail-trail,
+  .contact-links .contact-motion-art .art-mail-route,
+  .contact-links .contact-motion-art .art-link-path,
+  .contact-links .contact-motion-art .art-telegram-route,
+  .contact-links .contact-motion-art .art-node,
+  .contact-links .contact-motion-art .art-scan-line,
+  .contact-links .contact-brand-icon { animation: none !important; }
+}
