@@ -83,9 +83,9 @@ assert.match(html,/data-i18n-aria="transcriptAriaLabel"/,"transcript list needs 
 assert.doesNotMatch(html,/data-dynamic="highlight-[0-3]"/,"old generic academic highlights must be removed");
 assert.match(css,/#education \.course-grade-grid\s*\{[\s\S]*?grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/,"desktop transcript two-column grid missing");
 assert.match(css,/@media \(max-width: 760px\)[\s\S]*?#education \.course-grade-grid \{ grid-template-columns: minmax\(0, 1fr\); \}/,"mobile transcript single-column layout missing");
-assert.match(html,/class="section-card-shell skills-shell"/,"skills card shell missing");
-assert.match(html,/class="section-card-shell languages-layout"/,"language card shell missing");
-assert.match(html,/class="section-card-shell publications-shell"/,"publication card shell missing");
+assert.match(html,/class="[^"]*section-card-shell skills-shell"/,"skills card shell missing");
+assert.match(html,/class="[^"]*section-card-shell languages-layout"/,"language card shell missing");
+assert.match(html,/class="[^"]*section-card-shell publications-shell"/,"publication card shell missing");
 assert.match(js,/history\.replaceState/,"language URL sync missing");
 assert.match(boot,/queryLanguage/,"URL language bootstrap missing");
 for(const key of ["caseIntro","caseLead","airTitle","airSummary","superTitle","mlTitle","backToPortfolio"]) for(const lang of ["EN","DE","FA"]) assert.match(js,new RegExp(`${lang}:[\\s\\S]*?\\b${key}:`),`missing ${lang} translation for ${key}`);
