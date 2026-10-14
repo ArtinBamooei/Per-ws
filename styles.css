@@ -3476,3 +3476,27 @@ html[data-theme="dark"] .top-glass-menu::before {
 @supports not ((backdrop-filter: blur(1px))) {
   .top-glass-menu { background: var(--surface); }
 }
+
+
+/* Remove the dark outline: the navigation should read as glass, not a framed panel. */
+.top-glass-menu {
+  border: 1px solid rgba(255,255,255,.24) !important;
+  outline: 0 !important;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.34), rgba(255,255,255,.07) 46%, rgba(255,255,255,.2)),
+    color-mix(in srgb, var(--surface) 36%, transparent) !important;
+  box-shadow:
+    0 10px 34px rgba(55,75,100,.075),
+    inset 0 1px 0 rgba(255,255,255,.52) !important;
+  backdrop-filter: blur(38px) saturate(200%);
+  -webkit-backdrop-filter: blur(38px) saturate(200%);
+}
+html[data-theme="dark"] .top-glass-menu {
+  border-color: rgba(255,255,255,.10) !important;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.10), rgba(255,255,255,.018) 48%, rgba(130,170,210,.055)),
+    rgba(15,25,38,.32) !important;
+  box-shadow:
+    0 10px 34px rgba(0,0,0,.12),
+    inset 0 1px 0 rgba(255,255,255,.12) !important;
+}
