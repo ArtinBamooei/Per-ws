@@ -2947,10 +2947,9 @@ html[data-theme="dark"] .contact-links .contact-visual {
   animation: contact-card-glow 8s ease-in-out infinite alternate, contact-card-sweep 10s ease-in-out infinite;
 }
 .contact-links .contact-link-github { --contact-glow-x: 15%; }
-.contact-links .contact-method-placeholder.contact-visual-gmail,
-.contact-links .contact-method:has(.contact-visual-gmail) { --contact-glow-x: 85%; }
-.contact-links .contact-method:has(.contact-visual-linkedin) { --contact-glow-x: 20%; }
-.contact-links .contact-method:has(.contact-visual-telegram) { --contact-glow-x: 80%; }
+.contact-links .contact-method:has(.contact-visual-gmail) { --contact-brand: #d94a3a; --contact-glow-x: 85%; }
+.contact-links .contact-method:has(.contact-visual-linkedin) { --contact-brand: #0a66c2; --contact-glow-x: 20%; }
+.contact-links .contact-method:has(.contact-visual-telegram) { --contact-brand: #229ed9; --contact-glow-x: 80%; }
 .contact-links .contact-visual { background-color: color-mix(in srgb, var(--contact-brand, var(--accent)) 9%, var(--surface)); }
 .contact-links .contact-context-art { opacity: .95; }
 .contact-links .contact-brand-icon,
