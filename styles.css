@@ -2028,7 +2028,7 @@ html[data-theme="light"] .section:not(.hero) > .container:has(.intro-grid) { box
 }
 #skills .skill-meter span {
   border-radius: inherit;
-  background: linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent) 58%, #8b5cf6));
+  background: linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent) 72%, #0b3f65));
   transition: transform .8s cubic-bezier(.22, 1, .36, 1);
 }
 #skills .skill-group.is-visible .skill-meter span { transform: scaleX(1); }
