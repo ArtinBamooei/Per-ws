@@ -3225,3 +3225,122 @@ html[data-theme="dark"] .contact-links .contact-visual {
     radial-gradient(ellipse at 50% 85%, rgba(10, 102, 194, .12), transparent 62%),
     linear-gradient(145deg, #fbfdff, #f0f7ff);
 }
+
+
+/* LinkedIn background redesign: a quiet professional-network map with a profile node. */
+.contact-links .contact-visual-linkedin {
+  background-color: #f4f9ff;
+  background-image:
+    radial-gradient(circle at 78% 22%, rgba(10, 102, 194, .16) 0 2px, transparent 2.8px),
+    radial-gradient(circle at 18% 76%, rgba(10, 102, 194, .2) 0 2px, transparent 2.8px),
+    radial-gradient(circle at 78% 75%, rgba(10, 102, 194, .13) 0 1.5px, transparent 2.5px),
+    linear-gradient(32deg, transparent 48.8%, rgba(10, 102, 194, .12) 49.3%, rgba(10, 102, 194, .12) 50%, transparent 50.5%),
+    linear-gradient(145deg, transparent 47.8%, rgba(10, 102, 194, .1) 48.3%, rgba(10, 102, 194, .1) 48.9%, transparent 49.4%),
+    radial-gradient(ellipse at 50% 50%, #ffffff 0%, #edf6ff 100%);
+  background-size: 100% 100%;
+}
+.contact-links .contact-visual-linkedin::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 9px;
+  border: 1px solid rgba(10, 102, 194, .11);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(10, 102, 194, .04), transparent 68%);
+  transform: scale(.92);
+  animation: linkedin-network-orbit 8s ease-in-out infinite alternate;
+}
+.contact-links .contact-visual-linkedin::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  left: 13px;
+  top: 17px;
+  width: 52px;
+  height: 56px;
+  border: 1px solid rgba(10, 102, 194, .2);
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 15px 15px, #c8e3ff 0 6px, transparent 6.5px),
+    linear-gradient(#0a66c2, #0a66c2) 27px 11px / 15px 2px no-repeat,
+    linear-gradient(#8ebde8, #8ebde8) 27px 16px / 11px 2px no-repeat,
+    linear-gradient(rgba(10,102,194,.16), rgba(10,102,194,.16)) 8px 30px / 36px 2px no-repeat,
+    linear-gradient(rgba(10,102,194,.12), rgba(10,102,194,.12)) 8px 36px / 28px 2px no-repeat,
+    linear-gradient(145deg, rgba(255,255,255,.98), rgba(230,243,255,.94));
+  box-shadow: 0 5px 14px rgba(10, 102, 194, .09);
+  transform: translateY(2px) rotate(-4deg);
+  animation: linkedin-profile-card 6.5s ease-in-out infinite;
+}
+.contact-links .contact-visual-linkedin .contact-context-resume {
+  inset: 17px 16px 15px 18px;
+  z-index: 2;
+  padding: 8px 7px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  animation: linkedin-network-card 6.5s ease-in-out infinite;
+}
+.contact-links .contact-visual-linkedin .context-doc-title {
+  margin: 0 0 5px 16px;
+  color: #0a66c2;
+  font-size: 5px;
+  letter-spacing: .04em;
+  opacity: .9;
+}
+.contact-links .contact-visual-linkedin .context-doc-label {
+  margin: 4px 0 2px;
+  color: #1769aa;
+  font-size: 4.5px;
+  letter-spacing: .01em;
+}
+.contact-links .contact-visual-linkedin .context-doc-line {
+  height: 2px;
+  margin: 3px 0;
+  border-radius: 2px;
+  background: #0a66c2;
+  opacity: .27;
+}
+.contact-links .contact-visual-linkedin .context-doc-line:nth-child(2) { width: 23px; }
+.contact-links .contact-visual-linkedin .context-doc-line:nth-child(5) { width: 17px; }
+.contact-links .contact-visual-linkedin .context-doc-line:nth-child(6) { width: 28px; }
+.contact-links .contact-visual-linkedin .contact-brand-icon {
+  z-index: 3;
+  width: 32px;
+  height: 32px;
+  margin: 0 7px 7px 0;
+  filter: drop-shadow(0 3px 5px rgba(10, 102, 194, .2));
+  animation: linkedin-logo-pulse 5.2s ease-in-out infinite;
+}
+@keyframes linkedin-network-orbit {
+  from { transform: scale(.9) rotate(-8deg); opacity: .55; }
+  to { transform: scale(1.04) rotate(8deg); opacity: 1; }
+}
+@keyframes linkedin-profile-card {
+  0%, 100% { transform: translateY(3px) rotate(-4deg); }
+  50% { transform: translateY(-2px) rotate(-1deg); }
+}
+@keyframes linkedin-network-card {
+  0%, 100% { transform: translateY(1px); opacity: .78; }
+  50% { transform: translateY(-2px); opacity: 1; }
+}
+@media (max-width: 540px) {
+  .contact-links .contact-visual-linkedin::after {
+    left: 8px;
+    top: 12px;
+    transform: scale(.88) rotate(-4deg);
+    transform-origin: top left;
+  }
+  .contact-links .contact-visual-linkedin .contact-context-resume {
+    inset: 13px 12px 11px 13px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .contact-links .contact-visual-linkedin::before,
+  .contact-links .contact-visual-linkedin::after,
+  .contact-links .contact-visual-linkedin .contact-context-resume,
+  .contact-links .contact-visual-linkedin .contact-brand-icon {
+    animation: none !important;
+    transform: none;
+  }
+}
