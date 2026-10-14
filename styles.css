@@ -2985,7 +2985,7 @@ html[data-theme="dark"] .contact-links .contact-visual {
   to { background-position: 100% 50%, 140% 50%, 0 0; }
 }
 @keyframes contact-card-sweep {
-  0%, 100% { border-color: color-mix(in srgb, var(--contact-brand, var(--accent)) 22%, var(--border); box-shadow: 0 3px 14px color-mix(in srgb, var(--contact-brand, var(--accent)) 4%, transparent); }
+  0%, 100% { border-color: color-mix(in srgb, var(--contact-brand, var(--accent)) 22%, var(--border)); box-shadow: 0 3px 14px color-mix(in srgb, var(--contact-brand, var(--accent)) 4%, transparent); }
   50% { border-color: color-mix(in srgb, var(--contact-brand, var(--accent)) 45%, var(--border)); box-shadow: 0 7px 20px color-mix(in srgb, var(--contact-brand, var(--accent)) 9%, transparent); }
 }
 .contact-links .contact-context-art { opacity: 1; }
