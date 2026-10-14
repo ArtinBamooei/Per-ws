@@ -3572,3 +3572,11 @@ html[data-theme="dark"] .top-glass-menu {
 @media (prefers-reduced-motion: reduce) {
   .h3-net path, .h3-circuit path, .h3-nodes circle, .h3-pins circle, .hero3d-glow { animation: none !important; }
 }
+
+
+/* Push the upper network and lower circuit into the background so the middle wave layer stays distinct. */
+.h3-net path { opacity: .16 !important; }
+.h3-circuit { opacity: .16 !important; }
+.h3-circuit path { opacity: .48 !important; }
+.h3-links path { opacity: .10 !important; }
+.h3-pins circle { opacity: .48 !important; }
