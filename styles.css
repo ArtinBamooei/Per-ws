@@ -3580,3 +3580,14 @@ html[data-theme="dark"] .top-glass-menu {
 .h3-circuit path { opacity: .48 !important; }
 .h3-links path { opacity: .10 !important; }
 .h3-pins circle { opacity: .48 !important; }
+
+
+/* Clear vertical separation: keep background circuitry at the outer edges of the stack. */
+.h3-net path { opacity: .13 !important; stroke-width: .85 !important; }
+.h3-circuit { opacity: .12 !important; }
+.h3-circuit path { opacity: .42 !important; stroke-width: .85 !important; }
+.h3-links path { opacity: .12 !important; }
+.h3-pins circle { opacity: .38 !important; }
+/* Eight wave paths remain the hero's focal layer; keep them fine and evenly weighted. */
+.h3-wave { opacity: .48 !important; stroke-width: 1.05 !important; stroke-linecap: round; }
+.h3-wave:nth-child(odd) { opacity: .34 !important; }
