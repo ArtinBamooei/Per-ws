@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import assert from "node:assert/strict";
 const html=fs.readFileSync("index.html","utf8"), projects=fs.readFileSync("projects.html","utf8"), js=fs.readFileSync("script.js","utf8"), css=fs.readFileSync("styles.css","utf8"), boot=fs.readFileSync("theme-init.js","utf8"), sitemap=fs.readFileSync("sitemap.xml","utf8");
-const version="20261014-34";
+const version="20261014-35";
 for(const [name,source] of [["index.html",html],["projects.html",projects]]){
  assert.match(source,/Content-Security-Policy/, `${name}: CSP missing`);
  assert.match(source,/object-src 'none'/, `${name}: object embedding not blocked`);
@@ -34,6 +34,20 @@ assert.equal((html.match(/class="project-card project-card-link reveal"/g)||[]).
 for (const card of [...html.matchAll(/<a class="project-card project-card-link reveal"[^>]*>([\s\S]*?)<\/a>/g)]) assert.doesNotMatch(card[1],/<a\b/,"nested anchor inside clickable project card");
 assert.doesNotMatch(html,/Academic average placeholder|Placeholder academic statement|متن موقت برای معرفی کوتاه/,"placeholder academic copy remains");
 assert.match(html,/href="https:\/\/github\.com\/ArtinBamooei"[^>]*target="_blank"[^>]*rel="noopener noreferrer"/,"GitHub contact link missing or unsafe");
+
+assert.equal((html.match(/class="contact-row contact-method/g)||[]).length,4,"exactly four contact method cards are required");
+assert.equal((html.match(/class="contact-brand-icon"/g)||[]).length,4,"each contact method must have a custom inline SVG brand icon");
+for(const brand of ["GitHub","Gmail","LinkedIn","Telegram"]) assert.ok(html.includes(brand), "missing contact method "+brand);
+assert.match(html,/contact-icon-gmail[\s\S]*?viewBox="0 0 48 40"/,"Gmail logo SVG missing or malformed");
+assert.match(html,/contact-icon-linkedin[\s\S]*?viewBox="0 0 48 48"/,"LinkedIn logo SVG missing or malformed");
+assert.match(html,/contact-icon-telegram[\s\S]*?viewBox="0 0 48 48"/,"Telegram logo SVG missing or malformed");
+assert.match(html,/data-i18n-aria="contactMethodsLabel"/,"contact grid accessible label missing");
+assert.doesNotMatch(html,/href="(?:mailto:|https?:\/\/)(?:YOUR|ADD_|your\.|add\.)/i,"fake placeholder contact URL must not be clickable");
+assert.equal((html.match(/class="contact-method-placeholder"/g)||[]).length,3,"unconfigured external contacts must be clearly marked as placeholders");
+assert.match(css,/\.contact-links\.contact-method-grid\s*\{[\s\S]*?grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/,"desktop contact grid missing");
+assert.match(css,/@media \(max-width: 540px\)[\s\S]*?\.contact-links\.contact-method-grid \{ grid-template-columns: minmax\(0, 1fr\);/,"mobile contact stack missing");
+assert.match(css,/html\[data-theme="dark"\] \.contact-links \.contact-method/,"dark-mode contact card styles missing");
+
 assert.match(css,/prefers-reduced-motion/,"reduced motion support missing");
 assert.match(css,/case-study-card/,"case study styling missing");
 assert.match(css,/\.language-item::before/,"creative language card motif missing");
