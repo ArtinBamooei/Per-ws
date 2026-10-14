@@ -3555,3 +3555,20 @@ html[data-theme="dark"] .top-glass-menu {
     0 12px 36px rgba(0,0,0,.10),
     inset 0 1px 0 rgba(255,255,255,.10) !important;
 }
+
+
+/* Refined hero animation: fewer decorative strokes, calmer motion, clearer focal point. */
+.hero3d::before,
+.hero3d::after { display: none !important; content: none !important; }
+.h3-net path { stroke-dasharray: 2 7; opacity: .42; animation-duration: 5.8s !important; }
+.h3-circuit { opacity: .38 !important; }
+.h3-circuit path { animation-duration: 6.5s !important; stroke-dasharray: 3 9 !important; }
+.h3-links path { opacity: .2 !important; }
+.h3-pulses circle { opacity: .78; }
+.h3-wave { opacity: .38 !important; stroke-width: .9 !important; }
+.h3-wave:nth-child(odd) { opacity: .24 !important; }
+.h3-nodes circle { animation-duration: 4.2s !important; }
+.hero3d-glow { animation-duration: 7.5s !important; }
+@media (prefers-reduced-motion: reduce) {
+  .h3-net path, .h3-circuit path, .h3-nodes circle, .h3-pins circle, .hero3d-glow { animation: none !important; }
+}
