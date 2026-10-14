@@ -3500,3 +3500,17 @@ html[data-theme="dark"] .top-glass-menu {
     0 10px 34px rgba(0,0,0,.12),
     inset 0 1px 0 rgba(255,255,255,.12) !important;
 }
+
+
+/* Keep the area above the floating glass navigation completely clear. */
+.site-header,
+.site-header.scrolled {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+.site-header::before,
+.site-header::after {
+  content: none !important;
+  display: none !important;
+}
