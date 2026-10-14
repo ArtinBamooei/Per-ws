@@ -2704,3 +2704,96 @@ html[data-theme="dark"] .contact-links .contact-link-github:hover .contact-brand
 html[data-theme="dark"] .contact-links .contact-link-github:focus-visible .contact-brand-icon {
   color: #f0f6fc;
 }
+
+
+/* Contact cards: restrained motion, clearer brand marks, less rendering work. */
+.contact-links .contact-method {
+  min-height: 142px;
+  grid-template-columns: 84px minmax(0, 1fr);
+  gap: 14px;
+  padding: 18px;
+  border-radius: 18px;
+  box-shadow: none;
+}
+.contact-links .contact-visual {
+  width: 76px;
+  height: 76px;
+  min-width: 76px;
+  border-radius: 19px;
+  display: grid;
+  place-items: center;
+  background: color-mix(in srgb, var(--contact-brand, var(--accent)) 7%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--contact-brand, var(--accent)) 16%, var(--border));
+  box-shadow: none;
+}
+.contact-links .contact-motion-art { display: none !important; }
+.contact-links .contact-brand-icon {
+  width: 54px;
+  height: 54px;
+  filter: none !important;
+  animation: none !important;
+}
+.contact-links .contact-visual-github .contact-brand-icon { width: 54px; height: 54px; }
+.contact-links .contact-visual-gmail .contact-brand-icon { width: 61px; height: 51px; }
+.contact-links .contact-visual-linkedin .contact-brand-icon { width: 55px; height: 55px; }
+.contact-links .contact-visual-telegram .contact-brand-icon { width: 55px; height: 55px; }
+.contact-links .contact-method-copy { padding-inline-end: 10px; }
+.contact-links .contact-method-copy small { font-size: 11px; letter-spacing: .08em; }
+.contact-links .contact-method-copy strong { font-size: 15px; line-height: 1.45; overflow-wrap: anywhere; }
+.contact-links .contact-method-copy > span { font-size: 12px; line-height: 1.5; }
+.contact-links .contact-method-status { font-size: 10px; }
+.contact-links .contact-method-placeholder { cursor: default; }
+.contact-links .contact-method-placeholder:hover,
+.contact-links .contact-method-placeholder:hover .contact-visual {
+  transform: none;
+  box-shadow: none;
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .contact-links a.contact-method:hover .contact-visual {
+    border-color: color-mix(in srgb, var(--contact-brand, var(--accent)) 38%, var(--border));
+    background: color-mix(in srgb, var(--contact-brand, var(--accent)) 10%, var(--surface));
+  }
+  .contact-links a.contact-method:hover .contact-brand-icon {
+    transform: translateY(-1px);
+  }
+}
+html[data-theme="dark"] .contact-links .contact-visual {
+  background: color-mix(in srgb, var(--contact-brand, var(--accent)) 12%, var(--surface));
+}
+@media (max-width: 540px) {
+  .contact-links .contact-method,
+  .contact-links .contact-method-placeholder {
+    min-height: 120px;
+    grid-template-columns: 66px minmax(0, 1fr);
+    padding: 14px;
+    gap: 10px;
+  }
+  .contact-links .contact-visual {
+    width: 62px;
+    height: 62px;
+    min-width: 62px;
+    border-radius: 16px;
+  }
+  .contact-links .contact-brand-icon,
+  .contact-links .contact-visual-github .contact-brand-icon,
+  .contact-links .contact-visual-linkedin .contact-brand-icon,
+  .contact-links .contact-visual-telegram .contact-brand-icon { width: 44px; height: 44px; }
+  .contact-links .contact-visual-gmail .contact-brand-icon { width: 49px; height: 41px; }
+  .contact-links .contact-method-copy strong { font-size: 13px; }
+  .contact-links .contact-method-copy > span { font-size: 11px; }
+}
+@media (max-width: 360px) {
+  .contact-links .contact-method,
+  .contact-links .contact-method-placeholder {
+    grid-template-columns: 54px minmax(0, 1fr);
+    min-height: 106px;
+    padding: 11px;
+    gap: 9px;
+  }
+  .contact-links .contact-visual { width: 52px; height: 52px; min-width: 52px; border-radius: 14px; }
+  .contact-links .contact-brand-icon,
+  .contact-links .contact-visual-github .contact-brand-icon,
+  .contact-links .contact-visual-linkedin .contact-brand-icon,
+  .contact-links .contact-visual-telegram .contact-brand-icon { width: 38px; height: 38px; }
+  .contact-links .contact-visual-gmail .contact-brand-icon { width: 43px; height: 36px; }
+}
