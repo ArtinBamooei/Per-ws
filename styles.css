@@ -3009,3 +3009,90 @@ html[data-theme="dark"] .contact-links .contact-visual {
   .contact-links .contact-method,
   .contact-links .contact-visual::before { animation: none !important; }
 }
+
+
+/* LinkedIn-only animation: a document panel slides in, lines scan into view, and a subtle blue selection sweep passes across it. */
+.contact-links .contact-visual-linkedin {
+  background:
+    radial-gradient(ellipse at 50% 85%, rgba(10, 102, 194, .19), transparent 62%),
+    linear-gradient(145deg, #f8fbff, #e7f2ff);
+}
+.contact-links .contact-visual-linkedin::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  left: 19px;
+  top: 19px;
+  width: 68px;
+  height: 72px;
+  border: 1px solid rgba(10, 102, 194, .18);
+  border-radius: 5px;
+  background: linear-gradient(180deg, rgba(255,255,255,.96), rgba(239,247,255,.9));
+  box-shadow: 0 5px 14px rgba(10, 102, 194, .11);
+  transform: translateY(8px) rotate(-5deg);
+  opacity: .9;
+  animation: linkedin-document-float 5.6s ease-in-out infinite;
+}
+.contact-links .contact-visual-linkedin .contact-context-resume {
+  z-index: 2;
+  inset: 25px 20px 20px 23px;
+  padding: 8px 7px;
+  border-left: 2px solid rgba(10, 102, 194, .6);
+  background: transparent;
+  animation: linkedin-resume-slide 5.6s ease-in-out infinite;
+}
+.contact-links .contact-visual-linkedin .context-doc-title {
+  color: #0a66c2;
+  font-size: 6px;
+  letter-spacing: .06em;
+  opacity: .9;
+  animation: linkedin-title-reveal 5.6s ease-in-out infinite;
+}
+.contact-links .contact-visual-linkedin .context-doc-line {
+  height: 2px;
+  margin: 5px 0;
+  background: #0a66c2;
+  opacity: .35;
+  transform-origin: left center;
+  animation: linkedin-line-reveal 5.6s ease-in-out infinite;
+}
+.contact-links .contact-visual-linkedin .context-doc-line:nth-child(3) { animation-delay: -.2s; }
+.contact-links .contact-visual-linkedin .context-doc-line:nth-child(4) { animation-delay: -.4s; }
+.contact-links .contact-visual-linkedin .context-doc-line:nth-child(5) { animation-delay: -.6s; }
+.contact-links .contact-visual-linkedin .contact-brand-icon {
+  z-index: 3;
+  width: 35px;
+  height: 35px;
+  align-self: end;
+  justify-self: end;
+  margin: 0 8px 8px 0;
+  filter: drop-shadow(0 2px 3px rgba(10, 102, 194, .2));
+  animation: linkedin-logo-pulse 4.8s ease-in-out infinite;
+}
+@keyframes linkedin-document-float {
+  0%, 100% { transform: translateY(7px) rotate(-5deg); }
+  50% { transform: translateY(-2px) rotate(-2deg); }
+}
+@keyframes linkedin-resume-slide {
+  0%, 12%, 100% { transform: translateX(-3px); opacity: .45; }
+  30%, 70% { transform: translateX(2px); opacity: 1; }
+}
+@keyframes linkedin-title-reveal {
+  0%, 10%, 100% { opacity: .35; }
+  35%, 75% { opacity: .95; }
+}
+@keyframes linkedin-line-reveal {
+  0%, 12%, 100% { transform: scaleX(.58); opacity: .16; }
+  38%, 76% { transform: scaleX(1); opacity: .52; }
+}
+@keyframes linkedin-logo-pulse {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-2px) scale(1.04); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .contact-links .contact-visual-linkedin::after,
+  .contact-links .contact-visual-linkedin .contact-context-resume,
+  .contact-links .contact-visual-linkedin .context-doc-title,
+  .contact-links .contact-visual-linkedin .context-doc-line,
+  .contact-links .contact-visual-linkedin .contact-brand-icon { animation: none !important; }
+}
