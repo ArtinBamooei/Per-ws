@@ -59,7 +59,7 @@ assert.match(css,/@media \(max-width: 540px\)[\s\S]*?\.contact-links\.contact-me
 assert.match(css,/html\[data-theme="dark"\] \.contact-links \.contact-visual/,"dark-mode contact card styles missing");
 assert.match(html,/contact-context-code[\s\S]*?git commit[\s\S]*?git push/,"GitHub code context animation missing");
 assert.match(html,/contact-context-mail[\s\S]*?context-mail-at/,"Gmail @ context animation missing");
-assert.match(html,/contact-context-resume[\s\S]*?CV \/ ARTICLE/,"LinkedIn CV/article context missing");
+assert.match(html,/contact-context-resume[\s\S]*?Academic network/,"LinkedIn CV/article context missing");
 assert.match(html,/contact-context-chat[\s\S]*?Message\.\.\./,"Telegram message context missing");
 assert.match(css,/@keyframes context-code-drift/,"GitHub code drift animation missing");
 assert.match(css,/@keyframes context-chat-drift/,"Telegram chat drift animation missing");
