@@ -14,7 +14,9 @@ export default [
         history: "readonly",
         console: "readonly",
         requestAnimationFrame: "readonly",
-        cancelAnimationFrame: "readonly"
+        cancelAnimationFrame: "readonly",
+        gsap: "readonly",
+        ScrollTrigger: "readonly"
       }
     },
     rules: {
