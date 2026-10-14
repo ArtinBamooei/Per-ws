@@ -1265,17 +1265,7 @@ html[dir="rtl"] .scroll-progress {
   transform: translateY(-2px);
   border-color: rgba(23,105,170,.35);
 }
-.skill-item::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 0;
-  height: 2px;
-  background: var(--accent);
-  transition: width .35s cubic-bezier(.22,1,.36,1);
-}
-.skill-item:hover::after { width: 100%; }
+/* Skill progress is shown only by .skill-meter; hover must never draw a full-width bar. */
 
 .timeline-marker {
   transition: box-shadow .3s ease, transform .3s ease;
@@ -1886,4 +1876,210 @@ html[data-theme="light"] .section:not(.hero) > .container:has(.intro-grid) { box
 @media (prefers-reduced-motion: reduce) {
  .skill-group, .project-card, .language-item { transition: none !important; }
  .skill-group:hover, .project-card:hover, .language-item:hover { transform: none; }
+}
+
+
+/* Skills preview refresh: editorial cards, clear grouping and honest proficiency meters. */
+#skills .skills-shell {
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 8% 0%, color-mix(in srgb, var(--accent) 5%, transparent), transparent 34%),
+    color-mix(in srgb, var(--surface) 96%, transparent);
+}
+#skills .section-heading-row {
+  align-items: flex-start;
+  gap: clamp(18px, 3vw, 36px);
+  margin-bottom: clamp(22px, 3vw, 34px);
+}
+#skills .section-heading-row > div:first-child { max-width: 720px; }
+#skills .section-heading-row h2 { max-width: 28ch; }
+#skills .section-heading-side {
+  align-self: center;
+  flex: 0 0 auto;
+}
+#skills .section-heading-side .text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 8px 13px;
+  border: 1px solid color-mix(in srgb, var(--accent) 20%, var(--border));
+  border-radius: 11px;
+  background: color-mix(in srgb, var(--accent) 5%, var(--surface));
+  font-size: 12px;
+  font-weight: 650;
+  transition: background-color .2s ease, border-color .2s ease, transform .2s ease;
+}
+#skills .section-heading-side .text-link:hover {
+  transform: translateY(-1px);
+  border-color: color-mix(in srgb, var(--accent) 42%, var(--border));
+  background: color-mix(in srgb, var(--accent) 9%, var(--surface));
+}
+#skills .skill-groups {
+  counter-reset: skill-group;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: stretch;
+  gap: clamp(12px, 1.6vw, 20px);
+}
+#skills .skill-group {
+  counter-increment: skill-group;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: clamp(18px, 2vw, 25px);
+  border: 1px solid color-mix(in srgb, var(--border) 90%, var(--accent));
+  border-radius: 21px;
+  background:
+    linear-gradient(155deg, color-mix(in srgb, var(--surface) 99%, transparent), color-mix(in srgb, var(--accent) 3.5%, var(--surface)));
+  box-shadow: 0 10px 28px rgba(13, 35, 58, .045);
+  transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease;
+}
+#skills .skill-group::before {
+  inset-inline-start: 22px;
+  width: 52px;
+  height: 3px;
+  opacity: .9;
+}
+#skills .skill-group h3 {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin: 7px 0 10px;
+  font-size: clamp(16px, 1.4vw, 19px);
+  line-height: 1.35;
+  letter-spacing: -.025em;
+}
+#skills .skill-group h3::before {
+  content: "0" counter(skill-group);
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 36px;
+  width: 36px;
+  height: 36px;
+  border: 1px solid color-mix(in srgb, var(--accent) 23%, var(--border));
+  border-radius: 11px;
+  background: color-mix(in srgb, var(--accent) 7%, var(--surface));
+  color: var(--accent);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .04em;
+  font-variant-numeric: tabular-nums;
+}
+#skills .skill-group > p {
+  min-height: 3.4em;
+  max-width: 32ch;
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1.75;
+}
+#skills .skill-list {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px;
+  margin-top: 22px;
+}
+#skills .skill-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 9px;
+  min-width: 0;
+  min-height: 48px;
+  margin: 0;
+  padding: 9px 10px 13px;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--border) 80%, transparent);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--surface) 78%, transparent);
+  font-size: 12px;
+  transition: transform .18s ease, border-color .18s ease, background-color .18s ease;
+}
+/* Do not use a second decorative underline: it obscures the real level-based meter. */
+#skills .skill-item::after { content: none !important; display: none !important; }
+#skills .skill-item > span:not(.skill-meter) {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+}
+#skills .skill-level {
+  flex: 0 0 auto;
+  max-width: 54%;
+  padding: 4px 7px;
+  overflow-wrap: normal;
+  border: 1px solid color-mix(in srgb, var(--accent) 18%, var(--border));
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+  color: var(--text-secondary);
+  font-size: 10px;
+  line-height: 1.3;
+}
+#skills .skill-meter {
+  z-index: 0;
+  left: 10px;
+  right: 10px;
+  bottom: 5px;
+  height: 3px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--text-secondary) 15%, transparent);
+  pointer-events: none;
+}
+#skills .skill-meter span {
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent) 58%, #8b5cf6));
+  transition: transform .8s cubic-bezier(.22, 1, .36, 1);
+}
+#skills .skill-group.is-visible .skill-meter span { transform: scaleX(1); }
+html[dir="rtl"] #skills .skill-meter,
+html[dir="rtl"] #skills .skill-meter span { transform-origin: right; }
+html[dir="ltr"] #skills .skill-meter,
+html[dir="ltr"] #skills .skill-meter span { transform-origin: left; }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  #skills .skill-group:hover {
+    transform: translateY(-3px);
+    border-color: color-mix(in srgb, var(--accent) 38%, var(--border));
+    box-shadow: 0 17px 36px rgba(13, 35, 58, .085);
+  }
+  #skills .skill-item:hover {
+    transform: translateY(-1px);
+    border-color: color-mix(in srgb, var(--accent) 34%, var(--border));
+    background: color-mix(in srgb, var(--accent) 4%, var(--surface));
+  }
+}
+html[data-theme="dark"] #skills .skill-group {
+  background:
+    linear-gradient(155deg, color-mix(in srgb, var(--surface) 97%, transparent), color-mix(in srgb, var(--accent) 5%, var(--surface)));
+  box-shadow: 0 10px 28px rgba(0, 0, 0, .13);
+}
+html[data-theme="dark"] #skills .skill-item {
+  border-color: color-mix(in srgb, var(--border) 90%, transparent);
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+}
+html[data-theme="dark"] #skills .skill-level {
+  color: var(--text-primary);
+}
+@media (max-width: 980px) {
+  #skills .skill-groups { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  #skills .skill-group:last-child { grid-column: 1 / -1; }
+  #skills .skill-group:last-child .skill-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 640px) {
+  #skills .section-heading-row { flex-direction: column; align-items: stretch; }
+  #skills .section-heading-side { align-self: flex-start; }
+  #skills .skill-groups { grid-template-columns: minmax(0, 1fr); }
+  #skills .skill-group:last-child { grid-column: auto; }
+  #skills .skill-group:last-child .skill-list { grid-template-columns: minmax(0, 1fr); }
+  #skills .skill-group > p { min-height: 0; }
+  #skills .skill-group { padding: 20px 17px 18px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #skills .skill-group,
+  #skills .skill-item,
+  #skills .section-heading-side .text-link { transition: none !important; }
+  #skills .skill-group:hover,
+  #skills .skill-item:hover,
+  #skills .section-heading-side .text-link:hover { transform: none !important; }
+  #skills .skill-meter span { transition: none !important; }
 }
