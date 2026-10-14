@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import assert from "node:assert/strict";
 const html=fs.readFileSync("index.html","utf8"), projects=fs.readFileSync("projects.html","utf8"), js=fs.readFileSync("script.js","utf8"), css=fs.readFileSync("styles.css","utf8"), boot=fs.readFileSync("theme-init.js","utf8"), sitemap=fs.readFileSync("sitemap.xml","utf8");
-const version="20261014-35";
+const version="20261014-36";
 for(const [name,source] of [["index.html",html],["projects.html",projects]]){
  assert.match(source,/Content-Security-Policy/, `${name}: CSP missing`);
  assert.match(source,/object-src 'none'/, `${name}: object embedding not blocked`);
@@ -36,12 +36,21 @@ assert.doesNotMatch(html,/Academic average placeholder|Placeholder academic stat
 assert.match(html,/href="https:\/\/github\.com\/ArtinBamooei"[^>]*target="_blank"[^>]*rel="noopener noreferrer"/,"GitHub contact link missing or unsafe");
 
 assert.equal((html.match(/class="contact-row contact-method/g)||[]).length,4,"exactly four contact method cards are required");
-assert.equal((html.match(/class="contact-brand-icon"/g)||[]).length,4,"each contact method must have a custom inline SVG brand icon");
+assert.equal((html.match(/class="contact-brand-icon(?:\s|")/g)||[]).length,4,"each contact method must have a custom inline SVG brand icon");
 for(const brand of ["GitHub","Gmail","LinkedIn","Telegram"]) assert.ok(html.includes(brand), "missing contact method "+brand);
-assert.match(html,/contact-icon-gmail[\s\S]*?viewBox="0 0 48 40"/,"Gmail logo SVG missing or malformed");
-assert.match(html,/contact-icon-linkedin[\s\S]*?viewBox="0 0 48 48"/,"LinkedIn logo SVG missing or malformed");
-assert.match(html,/contact-icon-telegram[\s\S]*?viewBox="0 0 48 48"/,"Telegram logo SVG missing or malformed");
+assert.match(html,/contact-visual-gmail[\s\S]*?<svg class="contact-brand-icon contact-brand-icon-mail" viewBox="0 0 48 40"/,"Gmail logo SVG missing or malformed");
+assert.match(html,/contact-visual-linkedin[\s\S]*?<svg class="contact-brand-icon contact-brand-icon-linkedin" viewBox="0 0 48 48"/,"LinkedIn logo SVG missing or malformed");
+assert.match(html,/contact-visual-telegram[\s\S]*?<svg class="contact-brand-icon contact-brand-icon-telegram" viewBox="0 0 48 48"/,"Telegram logo SVG missing or malformed");
 assert.match(html,/data-i18n-aria="contactMethodsLabel"/,"contact grid accessible label missing");
+assert.equal((html.match(/class="contact-motion-art"/g)||[]).length,4,"each contact method needs its own large motion illustration");
+assert.match(html,/contact-visual-github[\s\S]*?viewBox="0 0 120 120"/,"GitHub motion scene missing");
+assert.match(html,/contact-visual-gmail[\s\S]*?viewBox="0 0 120 120"/,"Gmail motion scene missing");
+assert.match(html,/contact-visual-linkedin[\s\S]*?viewBox="0 0 120 120"/,"LinkedIn motion scene missing");
+assert.match(html,/contact-visual-telegram[\s\S]*?viewBox="0 0 120 120"/,"Telegram motion scene missing");
+assert.match(css,/\.contact-links \.contact-visual\s*\{[\s\S]*?width:\s*108px;[\s\S]*?height:\s*108px;/,"large animated stage dimensions missing");
+for(const animation of ["contact-orbit","contact-node-pulse","contact-mail-float","contact-linkedin-scan","contact-telegram-float"]) assert.match(css,new RegExp("@keyframes "+animation+"\\b"),"missing contact animation "+animation);
+assert.match(css,/@media \(prefers-reduced-motion: reduce\)[\s\S]*?contact-motion-art[\s\S]*?animation: none !important;/,"contact animations must respect reduced motion");
+
 assert.doesNotMatch(html,/href="(?:mailto:|https?:\/\/)(?:YOUR|ADD_|your\.|add\.)/i,"fake placeholder contact URL must not be clickable");
 assert.equal((html.match(/class="[^"]*\bcontact-method-placeholder\b/g)||[]).length,3,"unconfigured external contacts must be clearly marked as placeholders");
 assert.match(css,/\.contact-links\.contact-method-grid\s*\{[\s\S]*?grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/,"desktop contact grid missing");
