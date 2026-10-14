@@ -388,6 +388,59 @@ function setupSkillMeters() {
   });
 }
 
+function setupGsapAnimations() {
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduceMotion || !window.gsap || !window.ScrollTrigger) return false;
+
+  try {
+    gsap.registerPlugin(ScrollTrigger);
+    const items = gsap.utils.toArray(".reveal");
+    if (!items.length) return false;
+
+    document.documentElement.classList.add("gsap-motion");
+    const mm = gsap.matchMedia();
+
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
+      items.forEach((element) => {
+        const parent = element.parentElement;
+        const peers = parent ? Array.from(parent.children).filter(child => child.classList.contains("reveal")) : [];
+        const peerIndex = Math.max(0, peers.indexOf(element));
+        const delay = peers.length > 1 ? Math.min(peerIndex * 0.055, 0.165) : 0;
+
+        gsap.fromTo(element,
+          { autoAlpha: 0, y: 16 },
+          {
+            autoAlpha: 1,
+            y: 0,
+            duration: 0.68,
+            delay,
+            ease: "power2.out",
+            overwrite: "auto",
+            clearProps: "transform",
+            scrollTrigger: {
+              trigger: element,
+              start: "top 91%",
+              once: true,
+              invalidateOnRefresh: true
+            }
+          }
+        );
+      });
+
+      return () => {
+        gsap.killTweensOf(items);
+        gsap.set(items, { clearProps: "opacity,visibility,transform" });
+      };
+    });
+
+    window.addEventListener("load", () => ScrollTrigger.refresh(), { once: true });
+    return true;
+  } catch (error) {
+    document.documentElement.classList.remove("gsap-motion");
+    return false;
+  }
+}
+
 function setupReveal() {
   const items = qsa(".reveal:not(.is-visible)");
   if (!("IntersectionObserver" in window)) { items.forEach(item => item.classList.add("is-visible")); return; }
@@ -477,7 +530,7 @@ document.addEventListener("DOMContentLoaded", () => {
   setupLanguages();
   setupNav();
   setupSkillMeters();
-  setupReveal();
+  if (!setupGsapAnimations()) setupReveal();
   setupHeroAnimations();
   setupCreativeMotion();
 });
