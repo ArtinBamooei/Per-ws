@@ -2797,3 +2797,134 @@ html[data-theme="dark"] .contact-links .contact-visual {
   .contact-links .contact-visual-telegram .contact-brand-icon { width: 38px; height: 38px; }
   .contact-links .contact-visual-gmail .contact-brand-icon { width: 43px; height: 36px; }
 }
+
+
+/* Platform-specific context motion: faint, clipped, and transform-only. */
+.contact-links .contact-visual {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.contact-links .contact-context-art {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+  opacity: .7;
+  color: var(--contact-brand, var(--accent));
+  z-index: 0;
+}
+.contact-links .contact-brand-icon {
+  position: relative;
+  z-index: 2;
+  flex: 0 0 auto;
+}
+.contact-links .contact-context-code {
+  padding: 8px 5px;
+  font: 500 7px/1.65 ui-monospace, SFMono-Regular, Consolas, monospace;
+  background: linear-gradient(90deg, transparent 18%, color-mix(in srgb, var(--contact-brand) 5%, transparent) 100%);
+}
+.contact-links .context-code-line {
+  display: block;
+  width: max-content;
+  white-space: nowrap;
+  opacity: .55;
+  animation: context-code-drift 7s linear infinite;
+}
+.contact-links .context-code-line:nth-child(2) { animation-delay: -2.2s; }
+.contact-links .context-code-line:nth-child(3) { animation-delay: -4.5s; }
+.contact-links .context-code-line:nth-child(4) { animation-delay: -1s; }
+.contact-links .context-code-line i { font-style: normal; opacity: .6; }
+.contact-links .contact-context-mail { display: grid; place-items: center; }
+.contact-links .context-mail-at {
+  position: absolute;
+  inset-inline-start: 7px;
+  top: 8px;
+  font: 600 18px/1 ui-sans-serif, system-ui, sans-serif;
+  opacity: .5;
+  animation: context-symbol-float 5.5s ease-in-out infinite;
+}
+.contact-links .context-mail-at-small { inset-inline-start: auto; inset-inline-end: 8px; top: auto; bottom: 7px; font-size: 12px; animation-delay: -2.5s; }
+.contact-links .context-mail-line {
+  position: absolute;
+  inset-inline-start: 9px;
+  bottom: 18px;
+  height: 2px;
+  width: 25px;
+  border-radius: 4px;
+  background: currentColor;
+  opacity: .28;
+  animation: context-mail-drift 5s ease-in-out infinite;
+}
+.contact-links .context-mail-line:nth-child(3) { bottom: 12px; width: 17px; animation-delay: -2s; }
+.contact-links .contact-context-resume { padding: 9px 7px; }
+.contact-links .context-doc-title {
+  display: block;
+  font: 600 6px/1.3 ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: .04em;
+  margin-bottom: 5px;
+  opacity: .65;
+  animation: context-doc-drift 6.5s ease-in-out infinite;
+}
+.contact-links .context-doc-line {
+  display: block;
+  height: 2px;
+  width: 21px;
+  margin: 4px 0;
+  border-radius: 3px;
+  background: currentColor;
+  opacity: .27;
+  animation: context-doc-drift 6.5s ease-in-out infinite;
+}
+.contact-links .context-doc-long { width: 32px; }
+.contact-links .context-doc-short { width: 14px; }
+.contact-links .context-doc-line:nth-child(3) { animation-delay: -2s; }
+.contact-links .context-doc-line:nth-child(4) { animation-delay: -4s; }
+.contact-links .context-chat-bubble {
+  position: absolute;
+  display: block;
+  max-width: 46px;
+  padding: 3px 5px;
+  border: 1px solid color-mix(in srgb, var(--contact-brand) 28%, transparent);
+  border-radius: 6px 6px 6px 2px;
+  background: color-mix(in srgb, var(--contact-brand) 8%, var(--surface));
+  font: 500 6px/1.2 ui-sans-serif, system-ui, sans-serif;
+  opacity: .62;
+  white-space: nowrap;
+  animation: context-chat-drift 6s ease-in-out infinite;
+}
+.contact-links .context-chat-one { inset-inline-start: 6px; top: 12px; }
+.contact-links .context-chat-two { inset-inline-end: 4px; top: 34px; animation-delay: -2s; }
+.contact-links .context-chat-three { inset-inline-start: 10px; bottom: 8px; animation-delay: -4s; }
+@keyframes context-code-drift {
+  0% { transform: translateY(8px); opacity: .15; }
+  18%, 72% { opacity: .55; }
+  100% { transform: translateY(-12px); opacity: .12; }
+}
+@keyframes context-symbol-float {
+  0%, 100% { transform: translateY(2px); opacity: .35; }
+  50% { transform: translateY(-4px); opacity: .62; }
+}
+@keyframes context-mail-drift {
+  0%, 100% { transform: translateX(0); opacity: .2; }
+  50% { transform: translateX(5px); opacity: .4; }
+}
+@keyframes context-doc-drift {
+  0%, 100% { transform: translateY(2px); opacity: .2; }
+  50% { transform: translateY(-2px); opacity: .48; }
+}
+@keyframes context-chat-drift {
+  0%, 100% { transform: translateY(2px); opacity: .28; }
+  50% { transform: translateY(-2px); opacity: .66; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .contact-links .contact-context-art *,
+  .contact-links .contact-context-art { animation: none !important; }
+  .contact-links .context-code-line,
+  .contact-links .context-mail-at,
+  .contact-links .context-mail-line,
+  .contact-links .context-doc-title,
+  .contact-links .context-doc-line,
+  .contact-links .context-chat-bubble { opacity: .3; }
+}
