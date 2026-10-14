@@ -3532,3 +3532,26 @@ html[data-theme="dark"] .top-glass-menu {
     margin-bottom: -74px !important;
   }
 }
+
+
+/* Slightly more transparent liquid-glass navigation, keeping labels readable. */
+.top-glass-menu {
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.28), rgba(255,255,255,.045) 46%, rgba(255,255,255,.16)),
+    color-mix(in srgb, var(--surface) 22%, transparent) !important;
+  border-color: rgba(255,255,255,.22) !important;
+  box-shadow:
+    0 12px 36px rgba(35,55,80,.07),
+    inset 0 1px 0 rgba(255,255,255,.42) !important;
+  backdrop-filter: blur(42px) saturate(185%);
+  -webkit-backdrop-filter: blur(42px) saturate(185%);
+}
+html[data-theme="dark"] .top-glass-menu {
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.085), rgba(255,255,255,.012) 48%, rgba(130,170,210,.045)),
+    rgba(15,25,38,.20) !important;
+  border-color: rgba(255,255,255,.09) !important;
+  box-shadow:
+    0 12px 36px rgba(0,0,0,.10),
+    inset 0 1px 0 rgba(255,255,255,.10) !important;
+}
