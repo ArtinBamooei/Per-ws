@@ -3344,3 +3344,42 @@ html[data-theme="dark"] .contact-links .contact-visual {
     transform: none;
   }
 }
+
+
+/* Center the LinkedIn mark without sacrificing the surrounding network artwork. */
+.contact-links .contact-visual-linkedin .contact-brand-icon {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 5;
+  width: 30px;
+  height: 30px;
+  margin: 0;
+  padding: 4px;
+  box-sizing: content-box;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, .88);
+  box-shadow: 0 3px 10px rgba(10, 102, 194, .12);
+  transform: translate(-50%, -50%);
+  animation: linkedin-logo-center-pulse 5.2s ease-in-out infinite;
+}
+@keyframes linkedin-logo-center-pulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, calc(-50% - 2px)) scale(1.035); }
+}
+@media (max-width: 540px) {
+  .contact-links .contact-visual-linkedin .contact-brand-icon {
+    left: 50%;
+    top: 50%;
+    width: 28px;
+    height: 28px;
+    margin: 0;
+    transform: translate(-50%, -50%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .contact-links .contact-visual-linkedin .contact-brand-icon {
+    animation: none !important;
+    transform: translate(-50%, -50%);
+  }
+}
