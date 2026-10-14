@@ -3514,3 +3514,21 @@ html[data-theme="dark"] .top-glass-menu {
   content: none !important;
   display: none !important;
 }
+
+
+/* Let the hero begin at the top of the page behind the floating navigation.
+   The previous sticky header reserved a dark-colored strip above the hero. */
+.site-header,
+.site-header.scrolled {
+  margin-bottom: -88px !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+@media (max-width: 760px) {
+  .site-header,
+  .site-header.scrolled {
+    margin-bottom: -74px !important;
+  }
+}
