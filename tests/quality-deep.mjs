@@ -66,6 +66,15 @@ assert.doesNotMatch(css,/\.skill-item:hover::after\s*\{\s*width:\s*100%\s*;/,"sk
 assert.match(css,/#skills \.skill-item::after\s*\{\s*content:\s*none !important;\s*display:\s*none !important;\s*\}/,"duplicate hover underline must be disabled");
 assert.match(css,/\.skill-group\.is-visible \.skill-meter span\s*\{\s*transform:\s*scaleX\(1\)/,"proficiency meter reveal rule missing");
 assert.match(js,/function setupSkillMeters\(\)/,"proficiency meter setup missing");
+assert.equal((main.match(/class="course-grade-item"/g)||[]).length,10,"Selected highlights must provide ten course-grade slots");
+assert.match(main,/id="transcript-title"/,"transcript title and heading association missing");
+assert.match(main,/data-i18n="transcriptTitle"/,"transcript title translation missing");
+assert.match(main,/data-i18n="courseNamePlaceholder"/,"course-name placeholder missing");
+assert.match(main,/data-i18n="gradePlaceholder"/,"grade placeholder missing");
+assert.match(main,/data-i18n-aria="transcriptAriaLabel"/,"transcript list needs an accessible label");
+assert.doesNotMatch(main,/data-dynamic="highlight-[0-3]"/,"old generic academic highlights must be removed");
+assert.match(css,/#education \.course-grade-grid\s*\{[\s\S]*?grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/,"desktop transcript two-column grid missing");
+assert.match(css,/@media \(max-width: 760px\)[\s\S]*?#education \.course-grade-grid \{ grid-template-columns: minmax\(0, 1fr\); \}/,"mobile transcript single-column layout missing");
 assert.match(main, /class="section-card-shell skills-shell"/, "skills card shell missing");
 assert.match(main, /class="section-card-shell languages-layout"/, "language card shell missing");
 assert.match(main, /class="section-card-shell publications-shell"/, "publication card shell missing");
