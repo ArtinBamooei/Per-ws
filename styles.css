@@ -3591,3 +3591,14 @@ html[data-theme="dark"] .top-glass-menu {
 /* Eight wave paths remain the hero's focal layer; keep them fine and evenly weighted. */
 .h3-wave { opacity: .48 !important; stroke-width: 1.05 !important; stroke-linecap: round; }
 .h3-wave:nth-child(odd) { opacity: .34 !important; }
+
+
+/* GSAP owns reveal timing when available; preserve the existing observer fallback otherwise. */
+.gsap-motion .reveal { transition: none !important; }
+@media (prefers-reduced-motion: reduce) {
+  .gsap-motion .reveal {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+  }
+}
