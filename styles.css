@@ -2693,3 +2693,14 @@ html[data-theme="dark"] .contact-links .contact-visual-gmail .contact-brand-icon
   .contact-links .contact-motion-art .art-scan-line,
   .contact-links .contact-brand-icon { animation: none !important; }
 }
+
+
+/* Brand mark colors stay faithful on hover; animate the surrounding artwork instead. */
+.contact-links .contact-link-github:hover .contact-brand-icon,
+.contact-links .contact-link-github:focus-visible .contact-brand-icon {
+  color: #202b37;
+}
+html[data-theme="dark"] .contact-links .contact-link-github:hover .contact-brand-icon,
+html[data-theme="dark"] .contact-links .contact-link-github:focus-visible .contact-brand-icon {
+  color: #f0f6fc;
+}
