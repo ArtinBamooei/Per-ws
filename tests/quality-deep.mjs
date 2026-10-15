@@ -55,7 +55,9 @@ assert.match(css, /prefers-reduced-motion:\s*reduce/, "reduced-motion CSS missin
 assert.match(js, /prefers-reduced-motion/, "motion JS ignores reduced-motion preference");
 assert.match(js, /function setupNav\(\)/, "primary navigation setup missing");
 assert.match(main, /class="top-glass-menu"/, "centered glass navigation missing");
-assert.doesNotMatch(main, /data-menu-toggle|data-mobile-nav/, "obsolete hamburger navigation remains");
+assert.match(main, /data-menu-toggle[^>]*aria-expanded="false"[^>]*aria-controls="mobile-nav"/, "accessible mobile menu toggle missing");
+assert.match(main, /<nav class="mobile-nav" id="mobile-nav"[^>]*hidden/, "mobile navigation must start closed");
+assert.match(js, /event\.key === "Escape"/, "mobile navigation cannot be dismissed with Escape");
 assert.match(main, /class="skip-link"/, "skip link missing");
 assert.match(css, /:focus-visible/, "keyboard focus style missing");
 assert.match(css, /\.language-item::before/, "creative language card motif missing");
