@@ -572,14 +572,17 @@ document.addEventListener("DOMContentLoaded", () => {
  const root=document.getElementById('hero-visual'), stack=document.getElementById('hero3d-stack');
  if(!root||!stack)return;
  const waves=Array.from(root.querySelectorAll('.h3-wave')), reduce=window.matchMedia('(prefers-reduced-motion: reduce)'), hover=window.matchMedia('(hover: hover) and (pointer: fine)');
- let tx=0,ty=0,cx=0,cy=0,visible=true,frame=0,last=0;
+ const visualScale=()=>window.matchMedia('(max-width: 760px)').matches?1.02:window.matchMedia('(max-width: 1100px)').matches?1.08:1.15;
+ let scale=visualScale(),tx=0,ty=0,cx=0,cy=0,visible=true,frame=0,last=0;
+ const setBaseTransform=()=>{stack.style.transform='scale('+scale+')'};
+ window.addEventListener('resize',()=>{scale=visualScale();if(reduce.matches)setBaseTransform()},{passive:true});
  const observer='IntersectionObserver' in window?new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;if(visible&&!reduce.matches&&!frame)frame=requestAnimationFrame(loop)},{threshold:.05}):null;
  if(observer)observer.observe(root);
  root.addEventListener('pointermove',e=>{if(reduce.matches||!hover.matches)return;const r=root.getBoundingClientRect();tx=Math.max(-.5,Math.min(.5,(e.clientX-r.left)/r.width-.5));ty=Math.max(-.5,Math.min(.5,(e.clientY-r.top)/r.height-.5))},{passive:true});
  root.addEventListener('pointerleave',()=>{tx=0;ty=0},{passive:true});
  function wave(time){waves.forEach((p,i)=>{let d='';for(let x=110;x<=490;x+=8){const env=Math.sin((x-110)/380*Math.PI),phase=i*.34,y=300+(i-3.5)*3.1+env*11*Math.sin(x*.017-time*.0008+phase);d+=(x===110?'M':'L')+x+' '+y.toFixed(1)+' '}p.setAttribute('d',d)})}
- function loop(time){frame=0;if(reduce.matches||!visible)return;cx+=(tx-cx)*.075;cy+=(ty-cy)*.075;root.style.setProperty('--h3x',(cx*2).toFixed(3));root.style.setProperty('--h3y',(cy*2).toFixed(3));stack.style.transform=hover.matches?'perspective(900px) rotateX('+(-cy*7).toFixed(2)+'deg) rotateY('+(cx*10).toFixed(2)+'deg)':'';if(time-last>40){wave(time);last=time}frame=requestAnimationFrame(loop)}
- function motionChange(){if(frame)cancelAnimationFrame(frame);frame=0;if(reduce.matches){tx=ty=cx=cy=0;stack.style.transform='none';root.style.setProperty('--h3x','0');root.style.setProperty('--h3y','0');wave(0)}else if(visible)frame=requestAnimationFrame(loop)}
+ function loop(time){frame=0;if(reduce.matches||!visible)return;cx+=(tx-cx)*.075;cy+=(ty-cy)*.075;root.style.setProperty('--h3x',(cx*2).toFixed(3));root.style.setProperty('--h3y',(cy*2).toFixed(3));stack.style.transform=hover.matches?'perspective(900px) rotateX('+(-cy*7).toFixed(2)+'deg) rotateY('+(cx*10).toFixed(2)+'deg) scale('+scale+')':'scale('+scale+')';if(time-last>40){wave(time);last=time}frame=requestAnimationFrame(loop)}
+ function motionChange(){if(frame)cancelAnimationFrame(frame);frame=0;if(reduce.matches){tx=ty=cx=cy=0;setBaseTransform();root.style.setProperty('--h3x','0');root.style.setProperty('--h3y','0');wave(0)}else if(visible)frame=requestAnimationFrame(loop)}
  if(reduce.addEventListener)reduce.addEventListener('change',motionChange);else if(reduce.addListener)reduce.addListener(motionChange);
- wave(0);if(!reduce.matches)frame=requestAnimationFrame(loop)
+ wave(0);if(reduce.matches)setBaseTransform();else frame=requestAnimationFrame(loop)
 })();
