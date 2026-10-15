@@ -4885,3 +4885,37 @@ html[data-theme="light"] .h3-enter.h3-bottom .h3-plate { fill-opacity: .17 !impo
 }
 .h3-ingestion-db, .h3-ingestion-api, .h3-ingestion-iot,
 .h3-ingestion-stream, .h3-ingestion-cloud { filter: none !important; }
+
+
+/* Final clarity pass: readable ETL geometry and sharp custom source-system logos. */
+.h3-etl-label { display: none !important; }
+.h3-pipeline-flow {
+  fill: none;
+  stroke: var(--h3-wave-a);
+  stroke-width: 1.1;
+  stroke-linecap: round;
+  stroke-dasharray: 2 5;
+  opacity: .9;
+  filter: none;
+}
+.h3-pipeline-secondary { opacity: .48; }
+.h3-icon-set { stroke: var(--h3-edge-a); stroke-width: 1.65; }
+.h3-icon-set .h3-ingestion-links {
+  fill: none;
+  stroke: color-mix(in srgb, var(--h3-edge-a) 36%, transparent);
+  stroke-width: .9;
+  stroke-dasharray: 2 5;
+  opacity: .62;
+  filter: none;
+}
+.h3-logo {
+  stroke: var(--h3-edge-a);
+  stroke-width: 1.7;
+  vector-effect: non-scaling-stroke;
+  filter: none !important;
+}
+.h3-logo-database { fill: color-mix(in srgb, var(--h3-wave-a) 9%, transparent); }
+.h3-logo-api { fill: color-mix(in srgb, var(--h3-wave-a) 7%, transparent); }
+.h3-logo-iot { fill: color-mix(in srgb, var(--h3-wave-b) 8%, transparent); }
+.h3-logo-stream, .h3-logo-cloud, .h3-logo-git, .h3-logo-ai, .h3-logo-code { fill: none; }
+.h3-ingestion-hub { filter: none; stroke-width: 1; }
