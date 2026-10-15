@@ -4631,3 +4631,111 @@ html[data-theme="light"] .h3-enter .h3-plate {
   filter: url(#h3-glass-depth) drop-shadow(0 0 8px rgba(25,105,190,.12));
 }
 html[data-theme="light"] .h3-data-axis { opacity: .78; }
+
+
+/* Precision correction: make the glass optically transparent and the SVG elements visibly sit on the planes. */
+#h3-fill stop:first-child { stop-opacity: .055 !important; }
+#h3-fill stop:last-child { stop-opacity: .018 !important; }
+.h3-enter .h3-plate {
+  fill-opacity: .38 !important;
+  stroke: rgba(0, 200, 255, .12);
+  filter: url(#h3-glass-depth) drop-shadow(0 0 9px rgba(0, 150, 255, .10));
+}
+.h3-enter .h3-edge {
+  fill: none;
+  stroke: var(--h3-edge-a);
+  stroke-width: 1.65;
+  opacity: .98;
+  filter: drop-shadow(0 0 5px rgba(0, 200, 255, .72));
+}
+.h3-data-axis {
+  fill: none;
+  stroke: url(#h3-stem);
+  stroke-width: 2.8;
+  stroke-linecap: round;
+  stroke-dasharray: 18 14;
+  stroke-dashoffset: 0;
+  opacity: 1;
+  pointer-events: none;
+  filter: drop-shadow(0 0 4px #00d4ff) drop-shadow(0 0 12px rgba(0,212,255,.82));
+  animation: h3-data-flow 1.6s linear infinite;
+}
+.h3-axis-pulse {
+  fill: #e8ffff;
+  stroke: #00d4ff;
+  stroke-width: 1;
+  pointer-events: none;
+  filter: drop-shadow(0 0 4px #00d4ff) drop-shadow(0 0 9px rgba(0,212,255,.9));
+}
+.h3-ingestion-db,
+.h3-ingestion-api,
+.h3-ingestion-iot,
+.h3-ingestion-stream,
+.h3-ingestion-cloud {
+  filter: drop-shadow(3px 5px 5px rgba(0,0,0,.78))
+          drop-shadow(0 0 3px color-mix(in srgb, var(--h3-core-mid) 36%, transparent));
+}
+.h3-ingestion-links {
+  opacity: .52;
+  stroke: var(--h3-edge-a);
+  stroke-width: 1.1;
+}
+.h3-warehouse > g {
+  filter: drop-shadow(4px 6px 6px rgba(0,0,0,.78))
+          drop-shadow(0 0 3px color-mix(in srgb, var(--h3-core-mid) 34%, transparent));
+}
+.h3-warehouse-top {
+  fill: color-mix(in srgb, var(--h3-face-a) 34%, transparent);
+  stroke: var(--h3-edge-a);
+  stroke-width: 1.05;
+}
+.h3-warehouse-body {
+  fill: color-mix(in srgb, var(--h3-face-b) 24%, transparent);
+  stroke: var(--h3-edge-a);
+  stroke-width: 1.05;
+}
+.h3-warehouse-band {
+  fill: none;
+  stroke: var(--h3-edge-a);
+  stroke-width: 1.05;
+  opacity: .9;
+}
+.h3-pipeline-node {
+  fill: color-mix(in srgb, var(--h3-core-mid) 48%, transparent);
+  stroke: var(--h3-core-hot);
+  stroke-width: 1.35;
+  filter: drop-shadow(0 0 3px rgba(0,212,255,.48));
+}
+.h3-pipeline-flow {
+  fill: none;
+  stroke: var(--h3-wave-a);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  opacity: .88;
+}
+.h3-pipeline-secondary { opacity: .46; }
+.h3-orbit-rings {
+  stroke: var(--h3-wave-a);
+  stroke-width: 1;
+  opacity: .32;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: h3-orbit-spin 18s linear infinite;
+}
+.h3-orbit-rings ellipse:nth-child(2) { stroke: var(--h3-wave-b); opacity: .62; }
+.h3-orbit-rings ellipse:nth-child(3) { opacity: .4; }
+.h3-core-hex {
+  fill: color-mix(in srgb, var(--h3-core-mid) 44%, transparent);
+  stroke: var(--h3-core-hot);
+  stroke-width: 1.7;
+  filter: drop-shadow(0 0 6px var(--h3-core-mid));
+}
+@keyframes h3-orbit-spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes h3-data-flow {
+  to { stroke-dashoffset: -64; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .h3-data-axis, .h3-axis-pulse, .h3-orbit-rings { animation: none !important; }
+}
