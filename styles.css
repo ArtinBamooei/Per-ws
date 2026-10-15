@@ -4532,3 +4532,102 @@ html[data-theme="light"] .h3-warehouse-body { fill: color-mix(in srgb, #8ab8ee 4
   filter: url(#h3-glass-depth)
           drop-shadow(0 0 10px rgba(0, 150, 255, .22));
 }
+
+
+/* Hologram redesign: near-clear glass, richer symbols, animated data axis, and a real processing core. */
+#h3-fill stop:first-child { stop-opacity: .12 !important; }
+#h3-fill stop:last-child { stop-opacity: .035 !important; }
+.h3-enter .h3-plate {
+  fill-opacity: .7;
+  backdrop-filter: blur(10px);
+  filter: url(#h3-glass-depth)
+          drop-shadow(0 0 10px rgba(0, 150, 255, .13));
+}
+.h3-enter .h3-edge {
+  stroke: var(--h3-edge-a);
+  stroke-width: 1.65;
+  opacity: .98;
+  filter: drop-shadow(0 0 5px rgba(0, 190, 255, .65));
+}
+.h3-data-axis {
+  fill: none;
+  stroke: url(#h3-stem);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-dasharray: 15 18;
+  opacity: .95;
+  filter: drop-shadow(0 0 4px #00d4ff) drop-shadow(0 0 10px rgba(0,212,255,.7));
+  animation: h3-data-flow 1.8s linear infinite;
+}
+@keyframes h3-data-flow {
+  to { stroke-dashoffset: -66; }
+}
+.h3-ingestion-cloud {
+  stroke: var(--h3-edge-a);
+  stroke-width: 1.35;
+  fill: color-mix(in srgb, var(--h3-face-a) 20%, transparent);
+  filter: drop-shadow(3px 4px 4px rgba(0,0,0,.58))
+          drop-shadow(0 0 3px color-mix(in srgb, var(--h3-core-mid) 34%, transparent));
+}
+.h3-ingestion-db,
+.h3-ingestion-api,
+.h3-ingestion-iot,
+.h3-ingestion-stream {
+  filter: drop-shadow(3px 4px 4px rgba(0,0,0,.58))
+          drop-shadow(0 0 3px color-mix(in srgb, var(--h3-core-mid) 34%, transparent));
+}
+.h3-warehouse > g {
+  filter: drop-shadow(4px 6px 5px rgba(0,0,0,.68))
+          drop-shadow(0 0 3px color-mix(in srgb, var(--h3-core-mid) 30%, transparent));
+}
+.h3-warehouse-top { fill: color-mix(in srgb, var(--h3-face-a) 55%, transparent); }
+.h3-warehouse-body { fill: color-mix(in srgb, var(--h3-face-b) 44%, transparent); }
+.h3-warehouse-band { stroke-width: 1.35; }
+.h3-orbit-rings {
+  stroke: var(--h3-wave-a);
+  stroke-width: 1;
+  opacity: .34;
+  filter: drop-shadow(0 0 3px color-mix(in srgb, var(--h3-wave-a) 40%, transparent));
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: h3-orbit-breathe 7s ease-in-out infinite alternate;
+}
+.h3-orbit-rings ellipse:nth-child(2) { stroke: var(--h3-wave-b); opacity: .72; }
+.h3-orbit-rings ellipse:nth-child(3) { opacity: .55; }
+.h3-core-hex {
+  fill: color-mix(in srgb, var(--h3-core-mid) 65%, transparent);
+  stroke: var(--h3-core-hot);
+  stroke-width: 1.6;
+  filter: drop-shadow(0 0 5px var(--h3-core-mid));
+}
+.h3-core-ring {
+  fill: none;
+  stroke: var(--h3-core-hot);
+  stroke-width: 1.35;
+}
+.h3-core-dot {
+  fill: #fff;
+  filter: drop-shadow(0 0 5px #00d4ff);
+}
+.h3-pipeline-flow {
+  stroke: var(--h3-wave-a);
+  stroke-width: 1.45;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 2px rgba(0,190,255,.28));
+}
+.h3-pipeline-secondary { stroke: var(--h3-wave-b); opacity: .55; }
+.h3-pipeline-node {
+  transform: none;
+  filter: drop-shadow(2px 3px 3px rgba(0,0,0,.45));
+}
+@keyframes h3-orbit-breathe {
+  from { opacity: .24; }
+  to { opacity: .48; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .h3-data-axis, .h3-orbit-rings { animation: none !important; }
+}
+html[data-theme="light"] .h3-enter .h3-plate {
+  filter: url(#h3-glass-depth) drop-shadow(0 0 8px rgba(25,105,190,.12));
+}
+html[data-theme="light"] .h3-data-axis { opacity: .78; }
