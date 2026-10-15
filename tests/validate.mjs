@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import assert from "node:assert/strict";
 const html=fs.readFileSync("index.html","utf8"), projects=fs.readFileSync("projects.html","utf8"), js=fs.readFileSync("script.js","utf8"), css=fs.readFileSync("styles.css","utf8"), boot=fs.readFileSync("theme-init.js","utf8"), sitemap=fs.readFileSync("sitemap.xml","utf8");
-const version="20261015-61";
+const version="20261015-63";
 for(const [name,source] of [["index.html",html],["projects.html",projects]]){
  assert.match(source,/Content-Security-Policy/, `${name}: CSP missing`);
  assert.match(source,/object-src 'none'/, `${name}: object embedding not blocked`);
@@ -15,6 +15,10 @@ for(const [name,source] of [["index.html",html],["projects.html",projects]]){
  assert.ok(source.includes(`theme-init.js?v=${version}`),`${name}: theme cache version mismatch`);
  assert.ok(source.includes(`styles.css?v=${version}`),`${name}: CSS cache version mismatch`);
  assert.ok(source.includes(`script.js?v=${version}`),`${name}: JS cache version mismatch`);
+ assert.match(source, /data-i18n="visualTagline"/, `${name}: localized hero tagline missing`);
+ assert.match(source, /data-i18n="visualAnalyze"/, `${name}: localized Analyze label missing`);
+ assert.match(source, /data-i18n="visualBuild"/, `${name}: localized Build label missing`);
+ assert.match(source, /data-i18n="visualImprove"/, `${name}: localized Improve label missing`);
  assert.match(source,/rel="canonical"/,`${name}: canonical URL missing`);
  assert.match(source,/rel="icon"/,`${name}: favicon missing`);
  assert.match(source,/class="skip-link"/,`${name}: skip link missing`);
