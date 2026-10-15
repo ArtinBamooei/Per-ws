@@ -49,6 +49,12 @@ assert.match(js, /localStorage\.setItem\(["']portfolio-language["']/, "language 
 assert.match(js, /localStorage\.setItem\(["']portfolio-theme["']/, "theme persistence missing");
 assert.match(js, /history\.replaceState/, "language URL synchronization missing");
 assert.match(boot, /queryLanguage/, "pre-paint language bootstrap missing");
+assert.match(boot, /root\\.dir = language === "FA" \\? "rtl" : "ltr"/, "pre-paint RTL direction assignment missing");
+assert.match(boot, /root\\.lang = language === "FA" \\? "fa" : language\\.toLowerCase\\(\\)/, "pre-paint language assignment missing");
+for (const key of ["heroVisualLabel", "visualData", "visualTagline", "visualAnalyze", "visualBuild", "visualImprove", "brandHomeLabel", "academicFocusLabel"]) {
+  assert.match(main, new RegExp("data-i18n(?:-aria)?=\\\\\"" + key + "\\\\\""), "localized hero/accessibility key missing in HTML: " + key);
+  assert.equal((js.match(new RegExp("\\\\b" + key + ":" ,"g")) || []).length, 3, "hero/accessibility translation must exist in all locales: " + key);
+}
 assert.match(js, /document\.documentElement\.dir\s*=\s*currentLanguage === "FA" \? "rtl" : "ltr"/, "RTL/LTR switching missing");
 assert.match(css, /html\[dir="rtl"\]/, "RTL CSS missing");
 assert.match(css, /prefers-reduced-motion:\s*reduce/, "reduced-motion CSS missing");
