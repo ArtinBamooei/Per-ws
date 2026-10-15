@@ -3953,3 +3953,14 @@ html[data-theme="light"] .h3-pulses circle { fill: #174b92; }
   .h3-pulses { display: none; }
   .hero3d-glow { animation: none !important; }
 }
+
+
+/* Let the hero's side columns mirror naturally for Persian RTL. */
+.hero3d-steps { padding-left: 0; padding-inline-start: 14px; }
+.hero3d-steps::before { left: auto; inset-inline-start: 2px; }
+@media (max-width: 1100px) {
+  .hero3d-steps { padding-inline-start: 10px; }
+}
+@media (max-width: 760px) {
+  .hero3d-steps { padding-inline-start: 0; }
+}
