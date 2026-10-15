@@ -4119,6 +4119,8 @@ html[data-theme="light"] {
 }
 .h3-core-halo {
   opacity: .84;
+  transform-box: fill-box;
+  transform-origin: center;
   animation: h3-core-breathe 3.2s ease-in-out infinite;
 }
 .h3-core-ring {
