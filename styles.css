@@ -3818,3 +3818,57 @@ html[data-theme="light"] .h3-wave:nth-child(odd) { opacity: .62 !important; }
 @media (prefers-reduced-motion: reduce) {
   .hero3d .h3-pulses circle { display: none; }
 }
+
+
+/* Final hero visual pass: reduce decorative noise and strengthen isometric depth. */
+.hero3d {
+  grid-template-columns: minmax(96px, 1fr) minmax(260px, 3.1fr) minmax(104px, 1fr);
+  gap: 12px;
+}
+.hero3d-stack {
+  transform: scale(1.16);
+  filter: drop-shadow(0 12px 16px rgba(4, 14, 31, .16));
+}
+.h3-net,
+.h3-circuit,
+.h3-pins,
+.h3-links,
+.h3-pulses {
+  display: none !important;
+}
+.h3-wave { opacity: .78 !important; stroke-width: 1.2 !important; }
+.h3-wave:nth-child(odd) { opacity: .56 !important; }
+.hero3d-steps li { color: var(--hero-label); }
+.hero3d-sub { color: var(--hero-muted); }
+html[data-theme="light"] .hero3d {
+  border-color: rgba(48, 78, 118, .36);
+  box-shadow: 0 20px 44px rgba(25, 48, 80, .14), inset 0 1px rgba(255, 255, 255, .92);
+}
+html[data-theme="light"] .hero3d-stack {
+  filter: drop-shadow(0 13px 17px rgba(31, 53, 85, .19));
+}
+html[data-theme="light"] .hero3d-glow {
+  opacity: .92;
+  background: radial-gradient(closest-side, rgba(42, 102, 186, .24), transparent);
+}
+html[data-theme="light"] .h3-wave { opacity: .9 !important; stroke-width: 1.25 !important; }
+html[data-theme="light"] .h3-wave:nth-child(odd) { opacity: .68 !important; }
+@media (max-width: 1100px) {
+  .hero3d { grid-template-columns: minmax(82px, .9fr) minmax(220px, 2.7fr) minmax(92px, .9fr); gap: 7px; }
+  .hero3d-stack { transform: scale(1.08); }
+}
+@media (max-width: 760px) {
+  .hero3d { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .hero3d-stack { transform: scale(1.04); filter: drop-shadow(0 8px 12px rgba(4, 14, 31, .13)); }
+  html[data-theme="light"] .hero3d-stack { filter: drop-shadow(0 9px 13px rgba(31, 53, 85, .16)); }
+  .hero3d-left { justify-content: space-between; }
+  .hero3d-steps { justify-content: center; }
+}
+@media (max-width: 380px) {
+  .hero3d-stack { transform: none; }
+  .hero3d-left { align-items: flex-start; flex-direction: column; gap: 5px; }
+  .hero3d-tag, .hero3d-sub { max-width: 100%; text-align: start; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero3d-stack { filter: none; }
+}
