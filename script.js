@@ -1,6 +1,6 @@
 const I18N = {
   EN: {
-    navLabel:"Primary navigation", mobileNavLabel:"Mobile navigation", languageSelection:"Language selection", navHome:"Home", navAbout:"About / Intro", navEducation:"Education", navSkills:"Skills", navLanguages:"Languages", navProjects:"Projects", navPublications:"Publications", navContact:"Contact",
+    navLabel:"Primary navigation", mobileNavLabel:"Mobile navigation", menuToggle:"Toggle navigation menu", languageSelection:"Language selection", navHome:"Home", navAbout:"About / Intro", navEducation:"Education", navSkills:"Skills", navLanguages:"Languages", navProjects:"Projects", navPublications:"Publications", navContact:"Contact",
     skip:"Skip to main content", brandSubtitle:"Computer Science · Data · AI", heroEyebrow:"Computer Science / Academic Portfolio", visualData:"DATA / GRAPH / SIGNAL", heroPosition:"Computer Science · Data · AI",
     heroDescription:"A concise academic portfolio for a Computer Science student working across data analysis, machine learning, data engineering and applied technical projects.", viewWork:"View selected work", academicContact:"Academic contact", university:"Shiraz Azad University", dataFocus:"Data & AI focus",
     profile:"Profile", introduction:"Introduction", introTitle:"Focused on computing with data.", introLead:"I study Computer Science and Information Technology, with a growing focus on data analysis, machine learning and data engineering. This portfolio documents selected projects, current skills and academic interests.",
@@ -41,7 +41,7 @@ caseIntro:"Project case studies",
         caseStudy:"Case study", notes:"Notes", technicalNote:"Technical note", presentation:"Presentation", research:"Research", dataEngineering:"Data / Engineering", machineLearning:"Machine Learning", analytics:"Analytics"
   },
   DE: {
-    navLabel:"Hauptnavigation", mobileNavLabel:"Mobile Navigation", languageSelection:"Sprachauswahl", navHome:"Startseite", navAbout:"Profil", navEducation:"Ausbildung", navSkills:"Kenntnisse", navLanguages:"Sprachen", navProjects:"Projekte", navPublications:"Publikationen", navContact:"Kontakt",
+    navLabel:"Hauptnavigation", mobileNavLabel:"Mobile Navigation", menuToggle:"Navigationsmenü umschalten", languageSelection:"Sprachauswahl", navHome:"Startseite", navAbout:"Profil", navEducation:"Ausbildung", navSkills:"Kenntnisse", navLanguages:"Sprachen", navProjects:"Projekte", navPublications:"Publikationen", navContact:"Kontakt",
     skip:"Zum Hauptinhalt", brandSubtitle:"Informatik · Daten · KI", heroEyebrow:"Informatik / Akademisches Portfolio", visualData:"DATEN / GRAPH / SIGNAL", heroPosition:"Informatik · Daten · KI",
     heroDescription:"Ein kompaktes akademisches Portfolio eines Informatikstudenten mit Schwerpunkt auf Datenanalyse, maschinellem Lernen, Data Engineering und angewandten technischen Projekten.", viewWork:"Ausgewählte Arbeiten", academicContact:"Akademischer Kontakt", university:"Islamische Azad-Universität Shiraz", dataFocus:"Fokus: Daten & KI",
     profile:"Profil", introduction:"Einleitung", introTitle:"Fokussiert auf Computing mit Daten.", introLead:"Ich studiere Informatik und Informationstechnologie und konzentriere mich zunehmend auf Datenanalyse, maschinelles Lernen und Data Engineering. Dieses Portfolio dokumentiert ausgewählte Projekte, aktuelle Kenntnisse und akademische Interessen.",
@@ -82,7 +82,7 @@ caseIntro:"Projekt-Fallstudien",
         caseStudy:"Fallstudie", notes:"Notizen", technicalNote:"Technische Notiz", presentation:"Präsentation", research:"Forschung", dataEngineering:"Daten / Engineering", machineLearning:"Maschinelles Lernen", analytics:"Analytik"
   },
   FA: {
-    navLabel:"ناوبری اصلی", mobileNavLabel:"ناوبری موبایل", languageSelection:"انتخاب زبان", navHome:"خانه", navAbout:"معرفی", navEducation:"تحصیلات", navSkills:"مهارت‌ها", navLanguages:"زبان‌ها", navProjects:"پروژه‌ها", navPublications:"مقالات", navContact:"ارتباط",
+    navLabel:"ناوبری اصلی", mobileNavLabel:"ناوبری موبایل", menuToggle:"باز و بسته کردن منوی ناوبری", languageSelection:"انتخاب زبان", navHome:"خانه", navAbout:"معرفی", navEducation:"تحصیلات", navSkills:"مهارت‌ها", navLanguages:"زبان‌ها", navProjects:"پروژه‌ها", navPublications:"مقالات", navContact:"ارتباط",
     skip:"رفتن به محتوای اصلی", brandSubtitle:"علوم کامپیوتر · داده · هوش مصنوعی", heroEyebrow:"علوم کامپیوتر / پورتفولیوی آکادمیک", visualData:"داده / گراف / سیگنال", heroPosition:"علوم کامپیوتر · داده · هوش مصنوعی",
     heroDescription:"پورتفولیوی آکادمیک یک دانشجوی علوم کامپیوتر با تمرکز بر تحلیل داده، یادگیری ماشین، مهندسی داده و پروژه‌های فنی کاربردی.", viewWork:"مشاهده پروژه‌های منتخب", academicContact:"ارتباط آکادمیک", university:"دانشگاه آزاد شیراز", dataFocus:"تمرکز: داده و هوش مصنوعی",
     profile:"پروفایل", introduction:"معرفی", introTitle:"تمرکز بر محاسبات و داده.", introLead:"در رشته علوم کامپیوتر و فناوری اطلاعات تحصیل می‌کنم و تمرکزم را بر تحلیل داده، یادگیری ماشین و مهندسی داده توسعه می‌دهم. این پورتفولیو پروژه‌های منتخب، مهارت‌های فعلی و علایق آکادمیکم را مستند می‌کند.",
@@ -498,19 +498,52 @@ function setupCreativeMotion() {
 function setupNav() {
   const header = qs("[data-header]");
   const links = qsa(".desktop-nav .nav-link");
+  const mobileLinks = qsa(".mobile-nav .nav-link");
+  const allLinks = [...links, ...mobileLinks];
   const sections = qsa("main section[id]");
+  const menuButton = qs("[data-menu-toggle]");
+  const mobileNav = qs("#mobile-nav");
   if (!header) return;
+
+  const setMenuOpen = (open) => {
+    if (!menuButton || !mobileNav) return;
+    menuButton.setAttribute("aria-expanded", String(open));
+    mobileNav.hidden = !open;
+    mobileNav.classList.toggle("is-open", open);
+  };
+
+  if (menuButton && mobileNav) {
+    menuButton.addEventListener("click", () => {
+      setMenuOpen(menuButton.getAttribute("aria-expanded") !== "true");
+    });
+    mobileNav.addEventListener("click", (event) => {
+      if (event.target.closest("a")) setMenuOpen(false);
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && menuButton.getAttribute("aria-expanded") === "true") {
+        setMenuOpen(false);
+        menuButton.focus();
+      }
+    });
+    document.addEventListener("click", (event) => {
+      if (!header.contains(event.target)) setMenuOpen(false);
+    });
+    const desktopQuery = window.matchMedia("(min-width: 1201px)");
+    const closeOnDesktop = (event) => { if (event.matches) setMenuOpen(false); };
+    if (desktopQuery.addEventListener) desktopQuery.addEventListener("change", closeOnDesktop);
+    else desktopQuery.addListener(closeOnDesktop);
+  }
 
   const updateHeader = () => header.classList.toggle("scrolled", window.scrollY > 12);
   updateHeader();
   window.addEventListener("scroll", updateHeader, { passive: true });
 
-  if ("IntersectionObserver" in window && links.length && sections.length) {
+  if ("IntersectionObserver" in window && allLinks.length && sections.length) {
     const navObserver = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (!entry.isIntersecting) return;
         const target = "#" + entry.target.id;
-        links.forEach(link => {
+        allLinks.forEach(link => {
           const active = link.getAttribute("href") === target;
           link.classList.toggle("is-active", active);
           if (active) link.setAttribute("aria-current", "location");
