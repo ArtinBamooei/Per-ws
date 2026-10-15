@@ -4919,3 +4919,17 @@ html[data-theme="light"] .h3-enter.h3-bottom .h3-plate { fill-opacity: .17 !impo
 .h3-logo-iot { fill: color-mix(in srgb, var(--h3-wave-b) 8%, transparent); }
 .h3-logo-stream, .h3-logo-cloud, .h3-logo-git, .h3-logo-ai, .h3-logo-code { fill: none; }
 .h3-ingestion-hub { filter: none; stroke-width: 1; }
+
+
+/* Keep short connector segments continuous all the way to their endpoint nodes. */
+.h3-pipeline-flow {
+  stroke-dasharray: none !important;
+  animation: none !important;
+  stroke-width: 1.15;
+  opacity: .82;
+}
+.h3-icon-set .h3-ingestion-links {
+  stroke-dasharray: none;
+  stroke-width: .8;
+  opacity: .46;
+}
