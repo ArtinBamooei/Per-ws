@@ -4490,3 +4490,45 @@ html[data-theme="light"] .h3-warehouse-body { fill: color-mix(in srgb, #8ab8ee 4
 .h3-reflection {
   display: none !important;
 }
+
+
+/* Regression recovery: preserve crisp detail and restore the cylinders' proportions. */
+.h3-enter.h3-top {
+  opacity: 1;
+  filter: blur(0);
+}
+.h3-enter.h3-mid {
+  opacity: 1;
+  filter: blur(0);
+}
+.h3-enter.h3-bottom {
+  opacity: .7;
+  filter: blur(1.5px);
+}
+/* Keep SVG symbols upright in their own geometry; avoid flattening transforms. */
+.h3-ingestion-db,
+.h3-ingestion-api,
+.h3-ingestion-iot {
+  filter: drop-shadow(3px 3px 4px rgba(0, 0, 0, .58))
+          drop-shadow(0 0 2px color-mix(in srgb, var(--h3-core-mid) 25%, transparent));
+}
+.h3-warehouse > g {
+  filter: drop-shadow(3px 3px 4px rgba(0, 0, 0, .58))
+          drop-shadow(0 0 2px color-mix(in srgb, var(--h3-core-mid) 25%, transparent));
+}
+.h3-pipeline-node,
+.h3-pipeline-port,
+.h3-ingestion-hub {
+  filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, .58));
+}
+/* Clear rim lighting on all three glass planes. SVG uses stroke rather than box-shadow. */
+.h3-edge {
+  stroke: var(--h3-edge-a);
+  stroke-width: 1.5;
+  opacity: .96;
+  filter: drop-shadow(0 0 5px rgba(0, 150, 255, .48));
+}
+.h3-enter .h3-plate {
+  filter: url(#h3-glass-depth)
+          drop-shadow(0 0 10px rgba(0, 150, 255, .22));
+}
