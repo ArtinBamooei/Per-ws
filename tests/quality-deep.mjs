@@ -49,11 +49,7 @@ assert.match(js, /localStorage\.setItem\(["']portfolio-language["']/, "language 
 assert.match(js, /localStorage\.setItem\(["']portfolio-theme["']/, "theme persistence missing");
 assert.match(js, /history\.replaceState/, "language URL synchronization missing");
 assert.match(boot, /queryLanguage/, "pre-paint language bootstrap missing");
-assert.match(boot, /root\\.dir = language === "FA" \\? "rtl" : "ltr"/, "pre-paint RTL direction assignment missing");
-assert.match(boot, /root\\.lang = language === "FA" \\? "fa" : language\\.toLowerCase\\(\\)/, "pre-paint language assignment missing");
 for (const key of ["heroVisualLabel", "visualData", "visualTagline", "visualAnalyze", "visualBuild", "visualImprove", "brandHomeLabel", "academicFocusLabel"]) {
-  assert.match(main, new RegExp("data-i18n(?:-aria)?=\\\\\"" + key + "\\\\\""), "localized hero/accessibility key missing in HTML: " + key);
-  assert.equal((js.match(new RegExp("\\\\b" + key + ":" ,"g")) || []).length, 3, "hero/accessibility translation must exist in all locales: " + key);
 }
 assert.match(js, /document\.documentElement\.dir\s*=\s*currentLanguage === "FA" \? "rtl" : "ltr"/, "RTL/LTR switching missing");
 assert.match(css, /html\[dir="rtl"\]/, "RTL CSS missing");
@@ -122,3 +118,18 @@ assert.ok(Buffer.byteLength(css, "utf8") < 200000, "CSS payload exceeds 200 KB")
 assert.ok(Buffer.byteLength(js, "utf8") < 150000, "JS payload exceeds 150 KB");
 assert.doesNotMatch(js, /innerHTML|outerHTML|insertAdjacentHTML|document\.write\s*\(/, "unsafe HTML sink introduced");
 console.log("Deep quality audit: PASS (responsive semantics, local assets/fragments, language/theme persistence, RTL, reduced motion, keyboard navigation, case-study completeness and payload budgets).");
+
+
+/* Hero visual: localized copy, early language direction, theme-aware depth and reduced motion. */
+assert.match(boot, /root\.dir\s*=\s*language === "FA"\s*\?\s*"rtl"\s*:\s*"ltr"/, "pre-paint RTL direction assignment missing");
+assert.match(boot, /root\.lang\s*=\s*language === "FA"\s*\?\s*"fa"\s*:\s*language\.toLowerCase\(\)/, "pre-paint language assignment missing");
+for (const key of ["heroVisualLabel", "visualData", "visualTagline", "visualAnalyze", "visualBuild", "visualImprove", "brandHomeLabel", "academicFocusLabel"]) {
+  assert.ok(main.includes('data-i18n="' + key + '"') || main.includes('data-i18n-aria="' + key + '"'), "localized hero/accessibility key missing in HTML: " + key);
+  assert.equal(js.split("\n").filter(line => line.includes(key + ":")).length, 3, "hero/accessibility translation must exist in all locales: " + key);
+}
+assert.match(css, /--hero-fill-top/, "theme-aware SVG fill variables missing");
+assert.match(css, /html\[data-theme="light"\] \.hero3d/, "light-theme hero surface missing");
+assert.match(css, /drop-shadow\(0 10px 11px rgba\(34, 57, 88, \.15\)\)/, "light-theme isometric layer shadows missing");
+assert.match(css, /\.h3-links \{ display: none !important; \}/, "unnecessary vertical connection clutter should be removed");
+assert.match(css, /\.hero3d-stack svg animateMotion \{ display: none; \}/, "SVG motion should be disabled for reduced-motion users");
+assert.match(js, /visualScale/, "responsive hero graphic scale missing");
