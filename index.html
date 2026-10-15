@@ -124,18 +124,21 @@
                   <g class="h3-circuit" transform="translate(0 18)"><rect x="-34" y="-34" width="68" height="68" rx="6" transform="translate(300 436) scale(1 .5) rotate(45)"/><path d="M225 415 262 434 M375 415 338 434 M300 470 300 458"/></g>
                   <g class="h3-pins" transform="translate(0 18)" filter="url(#h3-glow)"><circle cx="225" cy="415" r="3.2"/><circle cx="255" cy="442" r="3.2"/><circle cx="300" cy="470" r="3.6"/><circle cx="345" cy="442" r="3.2"/><circle cx="375" cy="415" r="3.2"/></g>
                 </g></g></g>
-                <g class="h3-links"><path d="M255 330V442 M300 335V470 M345 330V442"/></g>
-                <g class="h3-link-nodes" filter="url(#h3-glow)"><circle cx="255" cy="330" r="2.5"/><circle cx="255" cy="442" r="2.8"/><circle cx="300" cy="335" r="2.6"/><circle cx="300" cy="470" r="3"/><circle cx="345" cy="330" r="2.5"/><circle cx="345" cy="442" r="2.8"/></g>
-                <g class="h3-pulses" filter="url(#h3-glow)"><circle r="2.4"><animateMotion dur="4.2s" repeatCount="indefinite" path="M255 330V442"/></circle><circle r="2.7"><animateMotion dur="4.8s" begin="-1.8s" repeatCount="indefinite" path="M300 335V470"/></circle><circle r="2.4"><animateMotion dur="4.4s" begin="-2.6s" repeatCount="indefinite" path="M345 330V442"/></circle></g>
                 <g class="h3-enter h3-mid"><g class="h3-par h3-p2"><g class="h3-float h3-f2">
                   <rect class="h3-edge" x="-130" y="-130" width="260" height="260" rx="30" transform="translate(300 312) scale(1 .5) rotate(45)"/><rect class="h3-plate" x="-130" y="-130" width="260" height="260" rx="30" transform="translate(300 300) scale(1 .5) rotate(45)"/>
-                  <path class="h3-rim h3-rim-mid" d="M300 208 170 300 300 392"/>
                   <rect class="h3-mid-sheen" x="-130" y="-130" width="260" height="260" rx="30" transform="translate(300 300) scale(1 .5) rotate(45)"/>
-                  <g class="h3-orbit-rotate">
-                    <ellipse class="h3-orbit h3-orbit-outer" cx="300" cy="300" rx="73" ry="29"/>
-                    <ellipse class="h3-orbit" cx="300" cy="300" rx="59" ry="23"/>
-                    <ellipse class="h3-orbit h3-orbit-inner" cx="300" cy="300" rx="43" ry="16"/>
-                    <circle class="h3-orbit-satellite" r="2.5"><animateMotion dur="8s" repeatCount="indefinite" path="M 227,300 A 73,29 0 1,0 373,300 A 73,29 0 1,0 227,300"/></circle>
+                  <g class="h3-pipeline" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path class="h3-pipeline-flow" d="M207 278H226L239 290H257 M257 290H272L282 300 M318 300H334L345 286H365 M345 286H376L389 274H402"/>
+                    <path class="h3-pipeline-flow h3-pipeline-secondary" d="M226 322H246L258 311H278 M322 311H339L352 326H375"/>
+                    <path class="h3-pipeline-flow h3-pipeline-secondary" d="M258 311L270 300 M339 311L334 300"/>
+                    <rect class="h3-pipeline-node" x="220" y="272" width="12" height="12" rx="3"/>
+                    <rect class="h3-pipeline-node" x="251" y="284" width="12" height="12" rx="3"/>
+                    <rect class="h3-pipeline-node" x="270" y="294" width="12" height="12" rx="3"/>
+                    <rect class="h3-pipeline-node" x="328" y="294" width="12" height="12" rx="3"/>
+                    <rect class="h3-pipeline-node" x="359" y="280" width="12" height="12" rx="3"/>
+                    <rect class="h3-pipeline-node" x="370" y="320" width="12" height="12" rx="3"/>
+                    <circle class="h3-pipeline-port" cx="207" cy="278" r="2.4"/>
+                    <circle class="h3-pipeline-port" cx="402" cy="274" r="2.4"/>
                   </g>
                   <g class="h3-core" filter="url(#h3-core-glow)"><circle class="h3-core-halo" cx="300" cy="300" r="24" fill="url(#h3-core-gradient)"/><circle class="h3-core-ring" cx="300" cy="300" r="8"/><circle class="h3-core-dot" cx="300" cy="300" r="3.2"/></g>
                 </g></g></g>
@@ -143,8 +146,25 @@
                   <rect class="h3-edge" x="-130" y="-130" width="260" height="260" rx="30" transform="translate(300 182) scale(1 .5) rotate(45)"/><rect class="h3-plate" x="-130" y="-130" width="260" height="260" rx="30" transform="translate(300 170) scale(1 .5) rotate(45)"/>
                   <rect class="h3-top-texture" x="-130" y="-130" width="260" height="260" rx="30" transform="translate(300 170) scale(1 .5) rotate(45)"/>
                   <path class="h3-rim h3-rim-top" d="M300 78 116 170 300 262"/>
-                  <g class="h3-net" transform="translate(0 -18)"><path d="M300 105 232 135 250 175 310 182 350 205 M300 105 360 140 350 205 M232 135 190 172 M360 140 405 150 400 190 350 205"/></g>
-                  <g class="h3-nodes" transform="translate(0 -18)" filter="url(#h3-glow)"><circle cx="300" cy="105" r="4.5"/><circle cx="232" cy="135" r="4.5"/><circle cx="360" cy="140" r="4.5"/><circle cx="190" cy="172" r="3.5"/><circle cx="310" cy="182" r="6" class="h3-hot"/><circle cx="350" cy="205" r="4.5"/><circle cx="400" cy="190" r="3.5"/></g>
+                  <g class="h3-ingestion" transform="translate(0 -18)" stroke-linecap="round" stroke-linejoin="round">
+                    <g class="h3-ingestion-links" fill="none">
+                      <path d="M204 150 236 163 258 181 286 201"/>
+                      <path d="M300 113V148L300 178 300 201"/>
+                      <path d="M392 148 363 164 342 182 314 201"/>
+                      <path d="M244 124 266 143 286 176"/>
+                    </g>
+                    <g class="h3-ingestion-db" transform="translate(204 145)">
+                      <ellipse cx="0" cy="0" rx="11" ry="4.5"/><path d="M-11 0V13C-11 19 11 19 11 13V0"/><path d="M-11 6C-11 12 11 12 11 6"/>
+                    </g>
+                    <g class="h3-ingestion-api" transform="translate(300 108)">
+                      <rect x="-9" y="-7" width="18" height="14" rx="3"/><path d="M-4 -1H4M-4 3H2"/>
+                    </g>
+                    <g class="h3-ingestion-iot" transform="translate(392 143)">
+                      <rect x="-7" y="-10" width="14" height="20" rx="3"/><circle cx="0" cy="5.5" r="1"/><path d="M-3 -13Q0 -16 3 -13M-11 -7Q-15 0 -11 7M11 -7Q15 0 11 7"/>
+                    </g>
+                    <g class="h3-ingestion-stream" transform="translate(245 122)" fill="none"><path d="M-8 0Q-4 -5 0 0T8 0M-8 5Q-4 0 0 5T8 5"/></g>
+                    <circle class="h3-ingestion-hub" cx="300" cy="201" r="3.2"/>
+                  </g>
                 </g></g></g>
               </svg>
             </div>
