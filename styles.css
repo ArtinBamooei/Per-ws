@@ -3602,3 +3602,27 @@ html[data-theme="dark"] .top-glass-menu {
     transform: none !important;
   }
 }
+
+
+/* Localized hero labels: keep the decorative scene LTR while each label follows its own script. */
+.hero3d-tag[dir="auto"],
+.hero3d-sub[dir="auto"],
+.hero3d-steps [dir="auto"] {
+  unicode-bidi: plaintext;
+}
+.hero3d-steps li { letter-spacing: .055em; }
+html[dir="rtl"] .hero3d-tag[dir="auto"] {
+  direction: rtl;
+  text-align: right;
+  white-space: normal;
+  letter-spacing: 0;
+}
+html[dir="rtl"] .hero3d-sub[dir="auto"] {
+  direction: rtl;
+  text-align: right;
+  letter-spacing: 0;
+}
+html[dir="rtl"] .hero3d-steps [dir="auto"] {
+  direction: rtl;
+  letter-spacing: 0;
+}
