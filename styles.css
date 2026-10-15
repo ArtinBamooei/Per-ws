@@ -4269,3 +4269,68 @@ html[data-theme="light"] .h3-orbit-satellite { fill: #fff; stroke: #2879c8; }
 @media (prefers-reduced-motion: reduce) {
   .h3-ingestion, .h3-pipeline, .h3-warehouse { animation: none !important; }
 }
+
+
+/* Realism pass: dimensional icons, restrained depth-of-field, and glass reflections. */
+.h3-ingestion-db,
+.h3-ingestion-api,
+.h3-ingestion-iot,
+.h3-ingestion-stream,
+.h3-pipeline-node,
+.h3-warehouse {
+  filter: drop-shadow(0 5px 4px rgba(0, 0, 0, .34))
+          drop-shadow(0 0 2px color-mix(in srgb, var(--h3-core-mid) 18%, transparent));
+}
+.h3-ingestion-db {
+  fill: color-mix(in srgb, var(--h3-face-a) 40%, transparent);
+}
+.h3-ingestion-api,
+.h3-ingestion-iot,
+.h3-pipeline-node {
+  fill: url(#h3-fill);
+}
+.h3-warehouse { opacity: .9; }
+.h3-warehouse-top {
+  fill: color-mix(in srgb, var(--h3-face-a) 62%, transparent);
+  stroke: var(--h3-rim-color);
+  stroke-width: 1.1;
+}
+.h3-warehouse-body {
+  fill: url(#h3-fill);
+  stroke: var(--h3-edge-b);
+  stroke-width: 1.05;
+}
+.h3-warehouse-band { opacity: .9; }
+.h3-glass-highlight {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 1.15;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: .2;
+  filter: drop-shadow(0 0 2px rgba(255,255,255,.18));
+  pointer-events: none;
+}
+.h3-highlight-top { opacity: .22; }
+.h3-highlight-mid { opacity: .16; }
+.h3-highlight-bottom { opacity: .1; }
+/* Keep the processing plane crisp; only the distant layers receive very subtle optical softness. */
+.h3-enter.h3-top { opacity: .9; filter: blur(.25px); }
+.h3-enter.h3-bottom { opacity: .72; filter: blur(.65px); }
+.h3-enter.h3-mid { opacity: 1; filter: none; }
+.h3-enter.h3-top .h3-ingestion { filter: none; }
+.h3-enter.h3-bottom .h3-warehouse { filter: drop-shadow(0 5px 4px rgba(0,0,0,.38)); }
+/* The central plane uses only its intentional DAG paths; suppress any legacy X-shaped rim. */
+.h3-enter.h3-mid .h3-rim,
+.h3-enter.h3-mid .h3-orbit,
+.h3-enter.h3-mid .h3-orbit-rotate,
+.h3-enter.h3-mid .h3-core-links,
+.h3-enter.h3-mid .h3-links {
+  display: none !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .h3-enter.h3-top,
+  .h3-enter.h3-bottom { filter: none; }
+}
+html[data-theme="light"] .h3-glass-highlight { stroke: #fff; opacity: .28; }
+html[data-theme="light"] .h3-warehouse-body { fill: color-mix(in srgb, #8ab8ee 48%, transparent); }
