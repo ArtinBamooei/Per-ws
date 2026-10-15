@@ -237,9 +237,21 @@ function localizeNumbers() {
 
 function applyStaticLanguage() {
   const dict = I18N[currentLanguage];
+  const languageCode = currentLanguage === "FA" ? "fa" : currentLanguage.toLowerCase();
+  document.documentElement.lang = languageCode;
+  document.documentElement.dir = currentLanguage === "FA" ? "rtl" : "ltr";
+
   qsa("[data-i18n]").forEach(el => {
     const key = el.dataset.i18n;
-    if (dict[key] !== undefined) el.textContent = dict[key];
+    if (dict[key] === undefined) return;
+
+    // Update the text node rather than textContent so decorative inline SVGs
+    // and arrow spans survive language changes.
+    const textNode = [...el.childNodes].find(node => node.nodeType === Node.TEXT_NODE);
+    if (textNode) textNode.textContent = dict[key];
+    else el.textContent = dict[key];
+
+    el.setAttribute("lang", languageCode);
   });
   qsa("[data-i18n-aria]").forEach(el => {
     const key = el.dataset.i18nAria;
