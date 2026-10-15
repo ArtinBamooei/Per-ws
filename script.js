@@ -1,7 +1,7 @@
 const I18N = {
   EN: {
     navLabel:"Primary navigation", mobileNavLabel:"Mobile navigation", menuToggle:"Toggle navigation menu", languageSelection:"Language selection", navHome:"Home", navAbout:"About / Intro", navEducation:"Education", navSkills:"Skills", navLanguages:"Languages", navProjects:"Projects", navPublications:"Publications", navContact:"Contact",
-    skip:"Skip to main content", brandSubtitle:"Computer Science · Data · AI", heroEyebrow:"Computer Science / Academic Portfolio", visualData:"DATA / GRAPH / SIGNAL", heroPosition:"Computer Science · Data · AI",
+    skip:"Skip to main content", brandSubtitle:"Computer Science · Data · AI", heroEyebrow:"Computer Science / Academic Portfolio", visualData:"DATA / AI / CS", visualTagline:"Turning data into meaningful insights.", visualAnalyze:"ANALYZE", visualBuild:"BUILD", visualImprove:"IMPROVE", heroVisualLabel:"Animated data visualization", heroPosition:"Computer Science · Data · AI",
     heroDescription:"A concise academic portfolio for a Computer Science student working across data analysis, machine learning, data engineering and applied technical projects.", viewWork:"View selected work", academicContact:"Academic contact", university:"Shiraz Azad University", dataFocus:"Data & AI focus",
     profile:"Profile", introduction:"Introduction", introTitle:"Focused on computing with data.", introLead:"I study Computer Science and Information Technology, with a growing focus on data analysis, machine learning and data engineering. This portfolio documents selected projects, current skills and academic interests.",
     interestData:"Data Science", interestML:"Machine Learning", interestDE:"Data Engineering", interestAI:"Applied AI",
@@ -42,7 +42,7 @@ caseIntro:"Project case studies",
   },
   DE: {
     navLabel:"Hauptnavigation", mobileNavLabel:"Mobile Navigation", menuToggle:"Navigationsmenü umschalten", languageSelection:"Sprachauswahl", navHome:"Startseite", navAbout:"Profil", navEducation:"Ausbildung", navSkills:"Kenntnisse", navLanguages:"Sprachen", navProjects:"Projekte", navPublications:"Publikationen", navContact:"Kontakt",
-    skip:"Zum Hauptinhalt", brandSubtitle:"Informatik · Daten · KI", heroEyebrow:"Informatik / Akademisches Portfolio", visualData:"DATEN / GRAPH / SIGNAL", heroPosition:"Informatik · Daten · KI",
+    skip:"Zum Hauptinhalt", brandSubtitle:"Informatik · Daten · KI", heroEyebrow:"Informatik / Akademisches Portfolio", visualData:"DATEN · KI", visualTagline:"Daten in aussagekräftige Erkenntnisse verwandeln.", visualAnalyze:"ANALYSIEREN", visualBuild:"ENTWICKELN", visualImprove:"VERBESSERN", heroVisualLabel:"Animierte Datenvisualisierung", heroPosition:"Informatik · Daten · KI",
     heroDescription:"Ein kompaktes akademisches Portfolio eines Informatikstudenten mit Schwerpunkt auf Datenanalyse, maschinellem Lernen, Data Engineering und angewandten technischen Projekten.", viewWork:"Ausgewählte Arbeiten", academicContact:"Akademischer Kontakt", university:"Islamische Azad-Universität Shiraz", dataFocus:"Fokus: Daten & KI",
     profile:"Profil", introduction:"Einleitung", introTitle:"Fokussiert auf Computing mit Daten.", introLead:"Ich studiere Informatik und Informationstechnologie und konzentriere mich zunehmend auf Datenanalyse, maschinelles Lernen und Data Engineering. Dieses Portfolio dokumentiert ausgewählte Projekte, aktuelle Kenntnisse und akademische Interessen.",
     interestData:"Data Science", interestML:"Maschinelles Lernen", interestDE:"Data Engineering", interestAI:"Angewandte KI",
@@ -83,7 +83,7 @@ caseIntro:"Projekt-Fallstudien",
   },
   FA: {
     navLabel:"ناوبری اصلی", mobileNavLabel:"ناوبری موبایل", menuToggle:"باز و بسته کردن منوی ناوبری", languageSelection:"انتخاب زبان", navHome:"خانه", navAbout:"معرفی", navEducation:"تحصیلات", navSkills:"مهارت‌ها", navLanguages:"زبان‌ها", navProjects:"پروژه‌ها", navPublications:"مقالات", navContact:"ارتباط",
-    skip:"رفتن به محتوای اصلی", brandSubtitle:"علوم کامپیوتر · داده · هوش مصنوعی", heroEyebrow:"علوم کامپیوتر / پورتفولیوی آکادمیک", visualData:"داده / گراف / سیگنال", heroPosition:"علوم کامپیوتر · داده · هوش مصنوعی",
+    skip:"رفتن به محتوای اصلی", brandSubtitle:"علوم کامپیوتر · داده · هوش مصنوعی", heroEyebrow:"علوم کامپیوتر / پورتفولیوی آکادمیک", visualData:"داده · هوش مصنوعی", visualTagline:"تبدیل داده به بینش‌های معنادار.", visualAnalyze:"تحلیل", visualBuild:"ساخت", visualImprove:"بهبود", heroVisualLabel:"نمایش تصویری داده‌ها", heroPosition:"علوم کامپیوتر · داده · هوش مصنوعی",
     heroDescription:"پورتفولیوی آکادمیک یک دانشجوی علوم کامپیوتر با تمرکز بر تحلیل داده، یادگیری ماشین، مهندسی داده و پروژه‌های فنی کاربردی.", viewWork:"مشاهده پروژه‌های منتخب", academicContact:"ارتباط آکادمیک", university:"دانشگاه آزاد شیراز", dataFocus:"تمرکز: داده و هوش مصنوعی",
     profile:"پروفایل", introduction:"معرفی", introTitle:"تمرکز بر محاسبات و داده.", introLead:"در رشته علوم کامپیوتر و فناوری اطلاعات تحصیل می‌کنم و تمرکزم را بر تحلیل داده، یادگیری ماشین و مهندسی داده توسعه می‌دهم. این پورتفولیو پروژه‌های منتخب، مهارت‌های فعلی و علایق آکادمیکم را مستند می‌کند.",
     interestData:"علم داده", interestML:"یادگیری ماشین", interestDE:"مهندسی داده", interestAI:"هوش مصنوعی کاربردی",
