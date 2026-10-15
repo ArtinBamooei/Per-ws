@@ -14,8 +14,7 @@
 
   root.dataset.theme = theme;
 
-  if (["EN", "DE", "FA"].includes(language)) {
-    root.lang = language === "FA" ? "fa" : language.toLowerCase();
-    root.dir = language === "FA" ? "rtl" : "ltr";
-  }
+  if (![ "EN", "DE", "FA" ].includes(language)) language = "EN";
+  root.lang = language === "FA" ? "fa" : language.toLowerCase();
+  root.dir = language === "FA" ? "rtl" : "ltr";
 })();
