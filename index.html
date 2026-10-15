@@ -26,14 +26,14 @@
   <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com; connect-src 'self'; form-action 'self'; frame-src 'none'; media-src 'self'; manifest-src 'self'; worker-src 'none'; upgrade-insecure-requests;">
   <meta name="referrer" content="strict-origin-when-cross-origin">
-  <script src="./theme-init.js?v=20261015-64"></script>
+  <script src="./theme-init.js?v=20261015-65"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./styles.css?v=20261015-64">
+  <link rel="stylesheet" href="./styles.css?v=20261015-65">
     <script defer src="./vendor/gsap.min.js?v=3.15.0" ></script>
     <script defer src="./vendor/ScrollTrigger.min.js?v=3.15.0" ></script>
-    <script defer src="./script.js?v=20261015-64"></script>
+    <script defer src="./script.js?v=20261015-65"></script>
 </head>
 <body>
   <a class="skip-link" href="#main" data-i18n="skip">Skip to main content</a>
@@ -112,6 +112,7 @@
                   <pattern id="h3-grid" width="18" height="18" patternUnits="userSpaceOnUse"><path d="M18 0H0V18" fill="none" stroke="var(--h3-grid-line)" stroke-width=".7"/></pattern>
                   <filter id="h3-glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
                   <filter id="h3-core-glow" x="-120%" y="-120%" width="340%" height="340%"><feGaussianBlur stdDeviation="7" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+                  <filter id="h3-glass-depth" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur in="SourceAlpha" stdDeviation="5" result="blur"/><feOffset in="blur" dx="0" dy="1" result="offsetBlur"/><feComposite in="offsetBlur" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="innerShadow"/><feColorMatrix in="innerShadow" type="matrix" values="0 0 0 0 0 0 0 0 0 0.45 0 0 0 0 0.9 0 0 0 .32 0" result="coloredShadow"/><feMerge><feMergeNode in="SourceGraphic"/><feMergeNode in="coloredShadow"/></feMerge></filter>
                   <clipPath id="h3-clip"><rect x="-130" y="-130" width="260" height="260" rx="30" transform="translate(300 300) scale(1 .5) rotate(45)"/></clipPath>
                   <clipPath id="h3-clip-bottom"><rect x="-130" y="-130" width="260" height="260" rx="30" transform="translate(300 430) scale(1 .5) rotate(45)"/></clipPath>
                 </defs>
@@ -121,8 +122,8 @@
                   <rect class="h3-bottom-sheen" x="-130" y="-130" width="260" height="260" rx="30" transform="translate(300 430) scale(1 .5) rotate(45)"/>
                   <path class="h3-glass-highlight h3-highlight-bottom" d="M300 338 170 430"/>
                   <g class="h3-reflection" clip-path="url(#h3-clip-bottom)"><path d="M195 397 Q250 420 300 430 T405 458 M210 420 Q258 443 300 449 T390 478 M235 385 Q275 406 315 409 T385 434"/></g>
-                  <path class="h3-rim h3-rim-bottom" d="M300 338 170 430 300 522"/>
-                  <g class="h3-circuit" transform="translate(0 18)"><rect x="-34" y="-34" width="68" height="68" rx="6" transform="translate(300 436) scale(1 .5) rotate(45)"/><path d="M225 415 262 434 M375 415 338 434 M300 470 300 458"/></g>
+
+
                   <g class="h3-pins" transform="translate(0 18)" filter="url(#h3-glow)"><circle cx="225" cy="415" r="3.2"/><circle cx="255" cy="442" r="3.2"/><circle cx="300" cy="470" r="3.6"/><circle cx="345" cy="442" r="3.2"/><circle cx="375" cy="415" r="3.2"/></g>
                   <g class="h3-warehouse" stroke-linecap="round" stroke-linejoin="round">
                     <g transform="translate(254 414)"><ellipse class="h3-warehouse-top" cx="0" cy="0" rx="12" ry="4.5"/><path class="h3-warehouse-body" d="M-12 0V12C-12 18 12 18 12 12V0"/><path class="h3-warehouse-band" d="M-12 6C-12 12 12 12 12 6"/></g>
@@ -153,7 +154,7 @@
                   <rect class="h3-edge" x="-130" y="-130" width="260" height="260" rx="30" transform="translate(300 182) scale(1 .5) rotate(45)"/><rect class="h3-plate" x="-130" y="-130" width="260" height="260" rx="30" transform="translate(300 170) scale(1 .5) rotate(45)"/>
                   <rect class="h3-top-texture" x="-130" y="-130" width="260" height="260" rx="30" transform="translate(300 170) scale(1 .5) rotate(45)"/>
                   <path class="h3-glass-highlight h3-highlight-top" d="M300 78 116 170"/>
-                  <path class="h3-rim h3-rim-top" d="M300 78 116 170 300 262"/>
+
                   <g class="h3-ingestion" transform="translate(0 -18)" stroke-linecap="round" stroke-linejoin="round">
                     <g class="h3-ingestion-links" fill="none">
                       <path d="M204 150 236 163 258 181 286 201"/>
