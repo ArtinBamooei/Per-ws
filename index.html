@@ -26,14 +26,14 @@
   <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com; connect-src 'self'; form-action 'self'; frame-src 'none'; media-src 'self'; manifest-src 'self'; worker-src 'none'; upgrade-insecure-requests;">
   <meta name="referrer" content="strict-origin-when-cross-origin">
-  <script src="./theme-init.js?v=20261015-59"></script>
+  <script src="./theme-init.js?v=20261015-60"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./styles.css?v=20261015-59">
-    <script defer src="./vendor/gsap.min.js" integrity="sha384-XmJ9SoHtVOHoQUcKvFAzVXwdkKo1Ie3bhmSoIAkcdsHGaIrVJIkmozyq0FJeb/Ly" crossorigin="anonymous"></script>
-    <script defer src="./vendor/ScrollTrigger.min.js" integrity="sha384-wl5TeDVvOWt30Pbf8aSo2ZrzsOjddu3avOBvHe+p+OhJt9gP6w9YXmDkN5DK2/dF" crossorigin="anonymous"></script>
-    <script defer src="./script.js?v=20261015-59"></script>
+  <link rel="stylesheet" href="./styles.css?v=20261015-60">
+    <script defer src="./vendor/gsap.min.js?v=3.15.0" ></script>
+    <script defer src="./vendor/ScrollTrigger.min.js?v=3.15.0" ></script>
+    <script defer src="./script.js?v=20261015-60"></script>
 </head>
 <body>
   <a class="skip-link" href="#main" data-i18n="skip">Skip to main content</a>
@@ -41,7 +41,7 @@
   <header class="site-header" data-header>
     <div class="container nav-shell">
       <div class="top-glass-menu">
-        <a class="brand" href="#home" aria-label="Artin Bamooei home">
+        <a class="brand" href="#home" aria-label="Artin Bamooei home" data-i18n-aria="brandHomeLabel">
           <span class="brand-mark" aria-hidden="true">AB</span>
           <span class="brand-copy"><strong>Artin Bamooei</strong><small>Computer Science · Data · AI</small></span>
         </a>
@@ -94,7 +94,7 @@
             <a class="button button-primary" href="#projects" data-i18n="viewWork">View selected work <svg aria-hidden="true" viewBox="0 0 20 20"><path d="M4 10h11M10 5l5 5-5 5"/></svg></a>
             <a class="button button-secondary" href="#contact" data-i18n="academicContact">Academic contact</a>
           </div>
-          <div class="hero-meta" aria-label="Academic focus"><span data-i18n="university">Shiraz Azad University</span><span class="dot"></span><span data-i18n="dataFocus">Data &amp; AI focus</span></div>
+          <div class="hero-meta" aria-label="Academic focus" data-i18n-aria="academicFocusLabel"><span data-i18n="university">Shiraz Azad University</span><span class="dot"></span><span data-i18n="dataFocus">Data &amp; AI focus</span></div>
         </div>
 
         <div class="hero-visual-wrap reveal reveal-delay">
