@@ -4181,3 +4181,32 @@ html[data-theme="light"] .hero3d-glow { opacity: .52; }
   .h3-f1, .h3-f2, .h3-f3 { animation: none !important; transform: none !important; }
   .hero3d-glow { animation: none !important; }
 }
+
+
+/* Final polish for the live holographic hero: cleaner orbital core and glass sheen. */
+.h3-mid-sheen,
+.h3-bottom-sheen {
+  fill: url(#h3-top-sheen);
+  pointer-events: none;
+}
+.h3-mid-sheen { opacity: .38; }
+.h3-bottom-sheen { opacity: .2; }
+.h3-orbit-outer {
+  stroke-width: 1.15;
+  stroke-dasharray: none;
+  opacity: .72;
+  filter: drop-shadow(0 0 2px color-mix(in srgb, var(--h3-wave-a) 35%, transparent));
+}
+.h3-orbit-satellite {
+  fill: var(--h3-core-hot);
+  stroke: var(--h3-core-mid);
+  stroke-width: 1;
+  filter: drop-shadow(0 0 4px var(--h3-core-mid));
+}
+.h3-orbit-rotate { transform-box: view-box; transform-origin: 300px 300px; }
+html[data-theme="light"] .h3-mid-sheen { opacity: .48; }
+html[data-theme="light"] .h3-bottom-sheen { opacity: .27; }
+html[data-theme="light"] .h3-orbit-satellite { fill: #fff; stroke: #2879c8; }
+@media (prefers-reduced-motion: reduce) {
+  .h3-orbit-satellite animateMotion { display: none; }
+}
