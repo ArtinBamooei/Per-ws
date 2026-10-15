@@ -4426,11 +4426,13 @@ html[data-theme="light"] .h3-warehouse-body { fill: color-mix(in srgb, #8ab8ee 4
 .h3-ingestion-iot,
 .h3-pipeline-node,
 .h3-warehouse > g {
+  filter: drop-shadow(0 5px 4px rgba(0, 0, 0, .62))
+          drop-shadow(0 0 2px color-mix(in srgb, var(--h3-core-mid) 32%, transparent));
+}
+.h3-pipeline-node {
   transform-box: fill-box;
   transform-origin: center;
   transform: rotate(-45deg) scaleY(.78);
-  filter: drop-shadow(0 5px 4px rgba(0, 0, 0, .62))
-          drop-shadow(0 0 2px color-mix(in srgb, var(--h3-core-mid) 32%, transparent));
 }
 .h3-ingestion-stream {
   filter: drop-shadow(0 0 4px color-mix(in srgb, var(--h3-wave-a) 52%, transparent));
