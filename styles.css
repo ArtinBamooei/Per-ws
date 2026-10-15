@@ -4739,3 +4739,103 @@ html[data-theme="light"] .h3-data-axis { opacity: .78; }
 @media (prefers-reduced-motion: reduce) {
   .h3-data-axis, .h3-axis-pulse, .h3-orbit-rings { animation: none !important; }
 }
+
+
+/* 2026-10-15: refined ETL and storage flow; replace the orbiting dot with a minimal axis. */
+.h3-data-axis {
+  stroke: color-mix(in srgb, var(--h3-wave-a) 62%, transparent);
+  stroke-width: 1.05;
+  stroke-dasharray: 2 7;
+  opacity: .62;
+  filter: none;
+  animation: h3-data-flow 4.8s linear infinite;
+}
+@keyframes h3-data-flow { to { stroke-dashoffset: -36; } }
+.h3-axis-pulse { display: none !important; }
+.h3-edge {
+  stroke: color-mix(in srgb, var(--h3-edge-a) 36%, transparent);
+  stroke-width: .85;
+  opacity: .55;
+  filter: none;
+}
+.h3-enter .h3-plate {
+  fill-opacity: .24 !important;
+  stroke: none;
+  filter: drop-shadow(0 0 5px rgba(0, 150, 255, .055));
+}
+.h3-enter.h3-bottom {
+  opacity: .52;
+  filter: none;
+}
+.h3-enter.h3-bottom .h3-plate { fill-opacity: .13 !important; }
+.h3-enter.h3-bottom .h3-bottom-grid { opacity: .08; }
+.h3-enter.h3-bottom .h3-warehouse { opacity: .92; }
+.h3-storage-feeds {
+  stroke: var(--h3-wave-a);
+  stroke-width: .85;
+  stroke-dasharray: 1.5 5;
+  opacity: .8;
+}
+.h3-storage-feed {
+  fill: none;
+  stroke: var(--h3-wave-a);
+  stroke-width: .85;
+  stroke-dasharray: 1.5 5;
+  stroke-dashoffset: 0;
+  filter: drop-shadow(0 0 1.5px color-mix(in srgb, var(--h3-wave-a) 28%, transparent));
+}
+.h3-storage-hub {
+  fill: var(--h3-core-hot);
+  stroke: var(--h3-wave-a);
+  stroke-width: .8;
+  filter: drop-shadow(0 0 3px var(--h3-wave-a));
+}
+.h3-warehouse-top {
+  fill: color-mix(in srgb, var(--h3-face-a) 24%, transparent);
+  stroke: color-mix(in srgb, var(--h3-edge-a) 62%, transparent);
+  stroke-width: .85;
+}
+.h3-warehouse-body {
+  fill: color-mix(in srgb, var(--h3-face-b) 16%, transparent);
+  stroke: color-mix(in srgb, var(--h3-edge-a) 58%, transparent);
+  stroke-width: .8;
+}
+.h3-warehouse-band {
+  stroke: color-mix(in srgb, var(--h3-wave-a) 65%, transparent);
+  stroke-width: .8;
+  opacity: .72;
+}
+.h3-etl-stage {
+  fill: color-mix(in srgb, var(--h3-face-a) 20%, transparent);
+  stroke: color-mix(in srgb, var(--h3-edge-a) 70%, transparent);
+  stroke-width: .9;
+}
+.h3-etl-stage-active {
+  fill: color-mix(in srgb, var(--h3-core-mid) 12%, transparent);
+  stroke: var(--h3-wave-a);
+  stroke-width: 1.05;
+}
+.h3-etl-glyph {
+  fill: none;
+  stroke: var(--h3-edge-a);
+  stroke-width: 1.05;
+}
+.h3-etl-label {
+  fill: var(--h3-wave-b);
+  font-family: Arial, sans-serif;
+  font-size: 5.6px;
+  font-weight: 600;
+  letter-spacing: .75px;
+  opacity: .68;
+}
+.h3-etl-label-active { fill: var(--h3-wave-a); opacity: .95; }
+.h3-pipeline-flow {
+  stroke-dasharray: 3 6;
+  animation: h3-pipeline-flowing 2.4s linear infinite;
+}
+@keyframes h3-pipeline-flowing { to { stroke-dashoffset: -36; } }
+@media (prefers-reduced-motion: reduce) {
+  .h3-data-axis, .h3-pipeline-flow, .h3-storage-feed { animation: none !important; }
+}
+html[data-theme="light"] .h3-enter.h3-bottom { opacity: .68; }
+html[data-theme="light"] .h3-enter.h3-bottom .h3-plate { fill-opacity: .17 !important; }
