@@ -24,17 +24,16 @@
   <link rel="alternate" hreflang="fa" href="https://artinbamooei.github.io/Per-ws/?lang=fa">
   <link rel="alternate" hreflang="x-default" href="https://artinbamooei.github.io/Per-ws/">
   <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' https://fonts.googleapis.com; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com; connect-src 'self'; form-action 'self'; frame-src 'none'; media-src 'self'; manifest-src 'self'; worker-src 'none'; upgrade-insecure-requests;">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com; connect-src 'self'; form-action 'self'; frame-src 'none'; media-src 'self'; manifest-src 'self'; worker-src 'none'; upgrade-insecure-requests;">
   <meta name="referrer" content="strict-origin-when-cross-origin">
-  <script src="./theme-init.js?v=20261015-58"></script>
+  <script src="./theme-init.js?v=20261015-59"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./styles.css?v=20261015-58">
-  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-    <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js" integrity="sha384-XmJ9SoHtVOHoQUcKvFAzVXwdkKo1Ie3bhmSoIAkcdsHGaIrVJIkmozyq0FJeb/Ly" crossorigin="anonymous"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollTrigger.min.js" integrity="sha384-wl5TeDVvOWt30Pbf8aSo2ZrzsOjddu3avOBvHe+p+OhJt9gP6w9YXmDkN5DK2/dF" crossorigin="anonymous"></script>
-    <script defer src="./script.js?v=20261015-58"></script>
+  <link rel="stylesheet" href="./styles.css?v=20261015-59">
+    <script defer src="./vendor/gsap.min.js" integrity="sha384-XmJ9SoHtVOHoQUcKvFAzVXwdkKo1Ie3bhmSoIAkcdsHGaIrVJIkmozyq0FJeb/Ly" crossorigin="anonymous"></script>
+    <script defer src="./vendor/ScrollTrigger.min.js" integrity="sha384-wl5TeDVvOWt30Pbf8aSo2ZrzsOjddu3avOBvHe+p+OhJt9gP6w9YXmDkN5DK2/dF" crossorigin="anonymous"></script>
+    <script defer src="./script.js?v=20261015-59"></script>
 </head>
 <body>
   <a class="skip-link" href="#main" data-i18n="skip">Skip to main content</a>
@@ -99,8 +98,8 @@
         </div>
 
         <div class="hero-visual-wrap reveal reveal-delay">
-          <section class="hero3d" id="hero-visual" dir="ltr" aria-label="Animated data visualization">
-            <div class="hero3d-side hero3d-left"><p class="hero3d-tag">DATA / AI / CS</p><p class="hero3d-sub">Turning data into<br>meaningful insights.</p></div>
+          <section class="hero3d" id="hero-visual" dir="ltr" aria-label="Animated data visualization" data-i18n-aria="heroVisualLabel">
+            <div class="hero3d-side hero3d-left"><p class="hero3d-tag" dir="auto" data-i18n="visualData">DATA / AI / CS</p><p class="hero3d-sub" dir="auto"><span data-i18n="visualTagline">Turning data into meaningful insights.</span></p></div>
             <div class="hero3d-stack" id="hero3d-stack" aria-hidden="true"><div class="hero3d-glow"></div>
               <svg viewBox="0 0 600 600" focusable="false">
                 <defs>
@@ -128,7 +127,7 @@
                 </g></g></g>
               </svg>
             </div>
-            <ul class="hero3d-side hero3d-steps"><li><i></i>ANALYZE</li><li><i></i>BUILD</li><li><i></i>IMPROVE</li></ul>
+            <ul class="hero3d-side hero3d-steps"><li><i aria-hidden="true"></i><span dir="auto" data-i18n="visualAnalyze">ANALYZE</span></li><li><i aria-hidden="true"></i><span dir="auto" data-i18n="visualBuild">BUILD</span></li><li><i aria-hidden="true"></i><span dir="auto" data-i18n="visualImprove">IMPROVE</span></li></ul>
           </section>
         </div>
       </div>
