@@ -4397,3 +4397,67 @@ html[data-theme="light"] .h3-warehouse-body { fill: color-mix(in srgb, #8ab8ee 4
   .h3-enter.h3-top,
   .h3-enter.h3-bottom { filter: none; }
 }
+
+
+/* Naturalization pass: remove legacy diagonals and give each plane optical depth. */
+.h3-enter .h3-plate {
+  filter: url(#h3-glass-depth)
+          drop-shadow(0 0 9px color-mix(in srgb, var(--h3-wave-a) 24%, transparent));
+}
+.h3-enter .h3-edge {
+  stroke-width: 1.25;
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, .38));
+}
+.h3-enter.h3-top {
+  opacity: .8;
+  filter: blur(1px);
+}
+.h3-enter.h3-mid {
+  opacity: 1;
+  filter: blur(0);
+}
+.h3-enter.h3-bottom {
+  opacity: .5;
+  filter: blur(3px);
+}
+/* Icons follow the diamond plane rather than facing the viewer like flat stickers. */
+.h3-ingestion-db,
+.h3-ingestion-api,
+.h3-ingestion-iot,
+.h3-pipeline-node,
+.h3-warehouse > g {
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: rotate(-45deg) scaleY(.78);
+  filter: drop-shadow(0 5px 4px rgba(0, 0, 0, .62))
+          drop-shadow(0 0 2px color-mix(in srgb, var(--h3-core-mid) 32%, transparent));
+}
+.h3-ingestion-stream {
+  filter: drop-shadow(0 0 4px color-mix(in srgb, var(--h3-wave-a) 52%, transparent));
+}
+.h3-pipeline-node {
+  fill: url(#h3-fill);
+  stroke: var(--h3-rim-color);
+}
+.h3-warehouse-top {
+  fill: color-mix(in srgb, var(--h3-face-a) 80%, transparent);
+  stroke: var(--h3-rim-color);
+}
+.h3-warehouse-body {
+  fill: color-mix(in srgb, var(--h3-face-b) 82%, transparent);
+}
+.h3-glass-highlight {
+  stroke-width: 1.4;
+  opacity: .2;
+  filter: drop-shadow(0 0 2px rgba(255,255,255,.25));
+}
+.h3-highlight-top { opacity: .2; }
+.h3-highlight-mid { opacity: .2; }
+.h3-highlight-bottom { opacity: .2; }
+@media (prefers-reduced-motion: reduce) {
+  .h3-enter.h3-top,
+  .h3-enter.h3-mid,
+  .h3-enter.h3-bottom {
+    filter: none;
+  }
+}
