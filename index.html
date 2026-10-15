@@ -26,14 +26,14 @@
   <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com; connect-src 'self'; form-action 'self'; frame-src 'none'; media-src 'self'; manifest-src 'self'; worker-src 'none'; upgrade-insecure-requests;">
   <meta name="referrer" content="strict-origin-when-cross-origin">
-  <script src="./theme-init.js?v=20261015-69"></script>
+  <script src="./theme-init.js?v=20261015-70"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./styles.css?v=20261015-69">
+  <link rel="stylesheet" href="./styles.css?v=20261015-70">
     <script defer src="./vendor/gsap.min.js?v=3.15.0" ></script>
     <script defer src="./vendor/ScrollTrigger.min.js?v=3.15.0" ></script>
-    <script defer src="./script.js?v=20261015-69"></script>
+    <script defer src="./script.js?v=20261015-70"></script>
 </head>
 <body>
   <a class="skip-link" href="#main" data-i18n="skip">Skip to main content</a>
@@ -126,29 +126,36 @@
 
 
                   <g class="h3-pins" transform="translate(0 18)" filter="url(#h3-glow)"><circle cx="225" cy="415" r="3.2"/><circle cx="255" cy="442" r="3.2"/><circle cx="300" cy="470" r="3.6"/><circle cx="345" cy="442" r="3.2"/><circle cx="375" cy="415" r="3.2"/></g>
+                  <g class="h3-storage-feeds" fill="none" stroke-linecap="round" aria-hidden="true">
+                    <path class="h3-storage-feed" d="M250 414 Q265 437 300 462"><animate attributeName="stroke-dashoffset" values="0;-24" dur="2.4s" repeatCount="indefinite"/></path>
+                    <path class="h3-storage-feed" d="M300 434 V462"><animate attributeName="stroke-dashoffset" values="0;-24" dur="2.4s" begin="-.8s" repeatCount="indefinite"/></path>
+                    <path class="h3-storage-feed" d="M350 414 Q335 437 300 462"><animate attributeName="stroke-dashoffset" values="0;-24" dur="2.4s" begin="-1.6s" repeatCount="indefinite"/></path>
+                  </g>
                   <g class="h3-warehouse" stroke-linecap="round" stroke-linejoin="round">
-                    <g transform="translate(250 414) rotate(-45) scale(1.42 .92)"><ellipse class="h3-warehouse-top" cx="0" cy="0" rx="12" ry="4.5"/><path class="h3-warehouse-body" d="M-12 0V12C-12 18 12 18 12 12V0"/><path class="h3-warehouse-band" d="M-12 6C-12 12 12 12 12 6"/><path class="h3-warehouse-band" d="M-12 11C-12 17 12 17 12 11"/></g>
-                    <g transform="translate(300 434) rotate(-45) scale(1.48 .92)"><ellipse class="h3-warehouse-top" cx="0" cy="0" rx="14" ry="5"/><path class="h3-warehouse-body" d="M-14 0V14C-14 21 14 21 14 14V0"/><path class="h3-warehouse-band" d="M-14 7C-14 14 14 14 14 7"/><path class="h3-warehouse-band" d="M-14 13C-14 20 14 20 14 13"/></g>
-                    <g transform="translate(350 414) rotate(-45) scale(1.42 .92)"><ellipse class="h3-warehouse-top" cx="0" cy="0" rx="12" ry="4.5"/><path class="h3-warehouse-body" d="M-12 0V12C-12 18 12 18 12 12V0"/><path class="h3-warehouse-band" d="M-12 6C-12 12 12 12 12 6"/><path class="h3-warehouse-band" d="M-12 11C-12 17 12 17 12 11"/></g>
+                    <g transform="translate(250 414) rotate(-45) scale(1.42 .92)"><ellipse class="h3-warehouse-top" cx="0" cy="0" rx="12" ry="4.5"/><path class="h3-warehouse-body" d="M-12 0V12C-12 18 12 18 12 12V0"/><path class="h3-warehouse-band" d="M-12 6C-12 12 12 12 12 6"/></g>
+                    <g transform="translate(300 434) rotate(-45) scale(1.48 .92)"><ellipse class="h3-warehouse-top" cx="0" cy="0" rx="14" ry="5"/><path class="h3-warehouse-body" d="M-14 0V14C-14 21 14 21 14 14V0"/><path class="h3-warehouse-band" d="M-14 7C-14 14 14 14 14 7"/></g>
+                    <g transform="translate(350 414) rotate(-45) scale(1.42 .92)"><ellipse class="h3-warehouse-top" cx="0" cy="0" rx="12" ry="4.5"/><path class="h3-warehouse-body" d="M-12 0V12C-12 18 12 18 12 12V0"/><path class="h3-warehouse-band" d="M-12 6C-12 12 12 12 12 6"/></g>
+                    <circle class="h3-storage-hub" cx="300" cy="462" r="2.3"/>
                   </g>
                 </g></g></g>
                 <g class="h3-enter h3-mid"><g class="h3-par h3-p2"><g class="h3-float h3-f2">
                   <rect class="h3-edge" x="-130" y="-130" width="260" height="260" rx="30" transform="translate(300 312) scale(1 .5) rotate(45)"/><rect class="h3-plate" x="-130" y="-130" width="260" height="260" rx="30" transform="translate(300 300) scale(1 .5) rotate(45)"/>
                   
                   
-                  <g class="h3-pipeline" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                    <path class="h3-pipeline-flow" d="M207 278 C226 278 232 286 251 290 S278 300 288 300"/>
-                    <path class="h3-pipeline-flow" d="M312 300 C331 300 340 286 359 286 S388 274 402 274"/>
-                    <path class="h3-pipeline-flow h3-pipeline-secondary" d="M226 322 C245 322 255 311 270 311 S282 306 288 303"/>
-                    <path class="h3-pipeline-flow h3-pipeline-secondary" d="M312 303 C328 308 343 326 370 326"/>
-                    <circle class="h3-pipeline-node" cx="226" cy="278" r="5.5"/>
-                    <circle class="h3-pipeline-node" cx="257" cy="290" r="5.5"/>
-                    <circle class="h3-pipeline-node" cx="276" cy="300" r="5.5"/>
-                    <circle class="h3-pipeline-node" cx="334" cy="300" r="5.5"/>
-                    <circle class="h3-pipeline-node" cx="365" cy="286" r="5.5"/>
-                    <circle class="h3-pipeline-node" cx="376" cy="326" r="5.5"/>
-                    <circle class="h3-pipeline-port" cx="207" cy="278" r="2.4"/>
-                    <circle class="h3-pipeline-port" cx="402" cy="274" r="2.4"/>
+                  <g class="h3-pipeline" stroke-linecap="round" stroke-linejoin="round">
+                    <path class="h3-pipeline-flow" d="M224 300H267 M333 300H376"/>
+                    <path class="h3-pipeline-flow h3-pipeline-secondary" d="M267 300L276 295 M367 295L376 300"/>
+                    <rect class="h3-etl-stage" x="218" y="283" width="49" height="34" rx="8"/>
+                    <rect class="h3-etl-stage h3-etl-stage-active" x="276" y="281" width="48" height="38" rx="9"/>
+                    <rect class="h3-etl-stage" x="333" y="283" width="49" height="34" rx="8"/>
+                    <path class="h3-etl-glyph" d="M230 293V307 M226 303L230 307 234 303 M242 293H254 M242 298H251"/>
+                    <path class="h3-etl-glyph" d="M288 292H312 M288 299H308 M288 306H304"/>
+                    <path class="h3-etl-glyph" d="M346 293H369 M346 299H365 M346 305H361"/>
+                    <text class="h3-etl-label" x="242.5" y="328" text-anchor="middle">EXTRACT</text>
+                    <text class="h3-etl-label h3-etl-label-active" x="300" y="330" text-anchor="middle">TRANSFORM</text>
+                    <text class="h3-etl-label" x="357.5" y="328" text-anchor="middle">LOAD</text>
+                    <circle class="h3-pipeline-port" cx="207" cy="300" r="2.2"/>
+                    <circle class="h3-pipeline-port" cx="393" cy="300" r="2.2"/>
                   </g>
                   <g class="h3-orbit-rings" fill="none" stroke-linecap="round" aria-hidden="true">
                     <ellipse cx="300" cy="300" rx="37" ry="13" transform="rotate(-25 300 300)"/>
@@ -191,8 +198,7 @@
                     <circle class="h3-ingestion-hub" cx="300" cy="201" r="3.2"/>
                   </g>
                 </g></g></g>
-                <path class="h3-data-axis" d="M300 112V488" aria-hidden="true"/>
-                <circle class="h3-axis-pulse" cx="300" cy="0" r="3" aria-hidden="true"><animate attributeName="cy" values="112;488;112" dur="2.6s" repeatCount="indefinite"/></circle>
+                <path class="h3-data-axis" d="M300 170V430" aria-hidden="true"/>
               </svg>
             </div>
             <ul class="hero3d-side hero3d-steps"><li><i aria-hidden="true"></i><span dir="auto" data-i18n="visualAnalyze">ANALYZE</span></li><li><i aria-hidden="true"></i><span dir="auto" data-i18n="visualBuild">BUILD</span></li><li><i aria-hidden="true"></i><span dir="auto" data-i18n="visualImprove">IMPROVE</span></li></ul>
