@@ -584,7 +584,7 @@ document.addEventListener("DOMContentLoaded", () => {
  const root=document.getElementById('hero-visual'), stack=document.getElementById('hero3d-stack');
  if(!root||!stack)return;
  const waves=Array.from(root.querySelectorAll('.h3-wave')), reduce=window.matchMedia('(prefers-reduced-motion: reduce)'), hover=window.matchMedia('(hover: hover) and (pointer: fine)');
- const visualScale=()=>window.matchMedia('(max-width: 760px)').matches?1.02:window.matchMedia('(max-width: 1100px)').matches?1.08:1.15;
+ const visualScale=()=>window.matchMedia('(max-width: 760px)').matches?1.08:window.matchMedia('(max-width: 1100px)').matches?1.18:1.28;
  let scale=visualScale(),tx=0,ty=0,cx=0,cy=0,visible=true,frame=0,last=0;
  const setBaseTransform=()=>{stack.style.transform='scale('+scale+')'};
  window.addEventListener('resize',()=>{scale=visualScale();if(reduce.matches)setBaseTransform()},{passive:true});
