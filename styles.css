@@ -3809,3 +3809,12 @@ html[data-theme="light"] .h3-wave:nth-child(odd) { opacity: .62 !important; }
   .hero3d-stack svg animateMotion { display: none; }
   .h3-net path, .h3-circuit path { animation: none !important; }
 }
+
+/* Avoid the graphic's labels looking cramped in German or Persian. */
+.hero3d-tag { max-width: 15ch; white-space: normal; line-height: 1.5; }
+@media (max-width: 360px) {
+  .hero3d-steps li { font-size: 9px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero3d .h3-pulses circle { display: none; }
+}
