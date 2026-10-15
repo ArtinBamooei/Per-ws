@@ -22,6 +22,8 @@ for (const [name, html] of pages) {
   assert.match(html, /form-action 'self'/, name + ": form-action missing");
   assert.match(html, /name="referrer" content="strict-origin-when-cross-origin"/, name + ": referrer policy missing");
   assert.doesNotMatch(html, /unsafe-inline|unsafe-eval/, name + ": unsafe CSP exception");
+  assert.doesNotMatch(html, /<script\\b[^>]*src="https?:\\/\\//i, name + ": externally hosted scripts must be self-hosted");
+  assert.doesNotMatch(html, /cdn\\.jsdelivr\\.net/, name + ": external JS CDN should not be required");
   assert.doesNotMatch(html, /<script\b[^>]*>\s*[^<]/i, name + ": inline script content conflicts with CSP");
   assert.doesNotMatch(html, /<[^>]+\s+on[a-z]+\s*=/i, name + ": inline event handler conflicts with CSP");
 
