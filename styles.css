@@ -4210,3 +4210,62 @@ html[data-theme="light"] .h3-orbit-satellite { fill: #fff; stroke: #2879c8; }
 @media (prefers-reduced-motion: reduce) {
   .h3-orbit-satellite animateMotion { display: none; }
 }
+
+
+/* Data-engineering visual story: ingestion -> processing -> storage. */
+.h3-ingestion { display: inline; }
+.h3-ingestion-links path {
+  stroke: var(--h3-stem-a);
+  stroke-width: .9;
+  stroke-dasharray: 2 4;
+  opacity: .36;
+}
+.h3-ingestion-db,
+.h3-ingestion-api,
+.h3-ingestion-iot,
+.h3-ingestion-stream {
+  fill: color-mix(in srgb, var(--h3-face-a) 22%, transparent);
+  stroke: var(--h3-edge-a);
+  stroke-width: 1.15;
+  opacity: .82;
+  filter: drop-shadow(0 0 2px color-mix(in srgb, var(--h3-core-mid) 25%, transparent));
+}
+.h3-ingestion-stream { stroke: var(--h3-wave-a); }
+.h3-ingestion-hub {
+  fill: var(--h3-core-hot);
+  stroke: var(--h3-core-mid);
+  stroke-width: 1.1;
+  filter: drop-shadow(0 0 3px var(--h3-core-mid));
+}
+.h3-pipeline { display: inline; }
+.h3-pipeline-flow {
+  stroke: var(--h3-wave-a);
+  stroke-width: 1.25;
+  opacity: .76;
+  filter: drop-shadow(0 0 1.5px color-mix(in srgb, var(--h3-wave-a) 25%, transparent));
+}
+.h3-pipeline-secondary { stroke: var(--h3-wave-b); stroke-width: 1; opacity: .46; }
+.h3-pipeline-node {
+  fill: color-mix(in srgb, var(--h3-face-a) 48%, transparent);
+  stroke: var(--h3-edge-a);
+  stroke-width: 1;
+}
+.h3-pipeline-port { fill: var(--h3-core-hot); stroke: var(--h3-core-mid); stroke-width: .9; }
+.h3-warehouse { display: inline; opacity: .86; }
+.h3-warehouse-top {
+  fill: color-mix(in srgb, var(--h3-face-a) 48%, transparent);
+  stroke: var(--h3-edge-a);
+  stroke-width: 1;
+}
+.h3-warehouse-body {
+  fill: color-mix(in srgb, var(--h3-face-b) 56%, transparent);
+  stroke: var(--h3-edge-a);
+  stroke-width: 1;
+}
+.h3-warehouse-band { fill: none; stroke: var(--h3-wave-a); stroke-width: .9; opacity: .76; }
+/* Explicitly remove legacy cross/connector geometry; preserve the new directed DAG. */
+.h3-core-links, .h3-links, .h3-link-nodes, .h3-pulses, .h3-orbit-rotate { display: none !important; }
+.h3-rim-mid { display: none !important; }
+@media (prefers-reduced-motion: reduce) {
+  .h3-ingestion, .h3-pipeline, .h3-warehouse { animation: none !important; }
+}
