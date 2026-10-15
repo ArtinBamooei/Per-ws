@@ -4463,3 +4463,30 @@ html[data-theme="light"] .h3-warehouse-body { fill: color-mix(in srgb, #8ab8ee 4
     filter: none;
   }
 }
+
+
+/* Final audit: make storage drums read as discs, remove crossing reflections,
+   and give every foreground symbol a consistent lower-right contact shadow. */
+.h3-warehouse > g {
+  filter: drop-shadow(4px 4px 5px rgba(0, 0, 0, .72))
+          drop-shadow(0 0 2px color-mix(in srgb, var(--h3-core-mid) 26%, transparent));
+}
+.h3-warehouse-body {
+  stroke-linejoin: round;
+}
+.h3-ingestion-db,
+.h3-ingestion-api,
+.h3-ingestion-iot,
+.h3-ingestion-stream,
+.h3-pipeline-node,
+.h3-pipeline-port,
+.h3-ingestion-hub {
+  filter: drop-shadow(3px 3px 5px rgba(0, 0, 0, .72))
+          drop-shadow(0 0 2px color-mix(in srgb, var(--h3-core-mid) 24%, transparent));
+}
+/* The middle plane keeps only its directed zigzag DAG; remove non-pipeline diagonals. */
+.h3-highlight-mid,
+.h3-highlight-bottom,
+.h3-reflection {
+  display: none !important;
+}
