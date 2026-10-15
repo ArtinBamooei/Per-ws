@@ -3971,3 +3971,211 @@ html[data-theme="light"] .h3-pulses circle { fill: #174b92; }
 .hero3d-steps::before { left: auto; inset-inline-start: 2px; }
 @media (max-width: 1100px) { .hero3d-steps { padding-inline-start: 10px; } }
 @media (max-width: 760px) { .hero3d-steps { padding-inline-start: 0; } }
+
+
+/* Hero hologram lighting and layered texture pass. */
+:root {
+  --h3-edge-a: #d8e8ff;
+  --h3-edge-b: #426fc1;
+  --h3-face-a: #9ac8ff;
+  --h3-face-b: #304e92;
+  --h3-wave-a: #387ed9;
+  --h3-wave-b: #7b66d8;
+  --h3-stem-a: #9ed4ff;
+  --h3-stem-b: #477fe0;
+  --h3-stem-c: #263c83;
+  --h3-sheen: #f7fbff;
+  --h3-core-hot: #ffffff;
+  --h3-core-mid: #83d8ff;
+  --h3-core-cool: #426eff;
+  --h3-grid-line: #568ed3;
+  --h3-rim-color: #e8f6ff;
+}
+html[data-theme="dark"] {
+  --h3-edge-a: #c6ddff;
+  --h3-edge-b: #526bdf;
+  --h3-face-a: #598dff;
+  --h3-face-b: #1e2c78;
+  --h3-wave-a: #3fa0ff;
+  --h3-wave-b: #9a6bff;
+  --h3-stem-a: #95d9ff;
+  --h3-stem-b: #527dff;
+  --h3-stem-c: #252f84;
+  --h3-sheen: #c5ddff;
+  --h3-core-hot: #ffffff;
+  --h3-core-mid: #86dfff;
+  --h3-core-cool: #466dff;
+  --h3-grid-line: #80a9ff;
+  --h3-rim-color: #d9f1ff;
+}
+html[data-theme="light"] {
+  --h3-edge-a: #4e8bce;
+  --h3-edge-b: #284f9c;
+  --h3-face-a: #b7d9ff;
+  --h3-face-b: #7191c9;
+  --h3-wave-a: #2879c8;
+  --h3-wave-b: #6e58bc;
+  --h3-stem-a: #4a9bd8;
+  --h3-stem-b: #376ec2;
+  --h3-stem-c: #304d98;
+  --h3-sheen: #ffffff;
+  --h3-core-hot: #ffffff;
+  --h3-core-mid: #4cbbf0;
+  --h3-core-cool: #315fd0;
+  --h3-grid-line: #4d7bb3;
+  --h3-rim-color: #f3faff;
+}
+.h3-top-texture {
+  fill: url(#h3-top-sheen);
+  opacity: .72;
+  pointer-events: none;
+}
+.h3-rim {
+  fill: none;
+  stroke: var(--h3-rim-color);
+  stroke-width: 1.35;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: .64;
+  filter: drop-shadow(0 0 2px color-mix(in srgb, var(--h3-rim-color) 46%, transparent));
+  pointer-events: none;
+}
+.h3-rim-top { opacity: .74; }
+.h3-rim-mid { opacity: .52; }
+.h3-rim-bottom { opacity: .36; }
+.h3-net path {
+  stroke: var(--h3-edge-a);
+  stroke-width: .8;
+  stroke-dasharray: none;
+  opacity: .22;
+  animation: none;
+}
+.h3-nodes circle { stroke: color-mix(in srgb, var(--h3-edge-a) 42%, transparent); stroke-width: .65; }
+.h3-nodes circle:nth-child(4n) { opacity: .46; }
+.h3-nodes circle:nth-child(3n) { r: 3.2px; }
+.h3-nodes .h3-hot { r: 6px; filter: drop-shadow(0 0 4px var(--h3-core-mid)); }
+.h3-bottom-grid {
+  fill: url(#h3-grid);
+  stroke: none;
+  opacity: .2;
+  pointer-events: none;
+}
+.h3-reflection {
+  fill: none;
+  stroke: var(--h3-wave-a);
+  stroke-width: 1;
+  stroke-linecap: round;
+  opacity: .12;
+  filter: blur(.35px);
+}
+.h3-circuit { stroke: var(--h3-edge-a); }
+.h3-links path {
+  stroke: url(#h3-stem);
+  stroke-width: 1.25;
+  stroke-dasharray: none;
+  opacity: .62;
+  filter: drop-shadow(0 0 2px color-mix(in srgb, var(--h3-stem-a) 40%, transparent));
+}
+.h3-link-nodes circle {
+  fill: var(--h3-stem-a);
+  stroke: var(--h3-stem-b);
+  stroke-width: .8;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: h3-node-pulse 3.8s ease-in-out infinite;
+}
+.h3-link-nodes circle:nth-child(3n) { animation-delay: -1.7s; }
+.h3-core-links {
+  fill: none;
+  stroke: var(--h3-wave-a);
+  stroke-width: .9;
+  stroke-linecap: round;
+  opacity: .25;
+  filter: drop-shadow(0 0 2px color-mix(in srgb, var(--h3-wave-a) 20%, transparent));
+}
+.h3-orbit-rotate {
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+  animation: h3-orbit-rotation 20s linear infinite;
+}
+.h3-orbit {
+  fill: none;
+  stroke: var(--h3-wave-a);
+  stroke-width: 1;
+  stroke-dasharray: 2 7;
+  opacity: .62;
+}
+.h3-orbit-inner {
+  stroke: var(--h3-wave-b);
+  stroke-dasharray: 1 9;
+  opacity: .48;
+}
+.h3-orbit-trace {
+  fill: none;
+  stroke: var(--h3-stem-a);
+  stroke-width: 1.1;
+  stroke-linecap: round;
+  opacity: .72;
+}
+.h3-core-halo {
+  opacity: .84;
+  animation: h3-core-breathe 3.2s ease-in-out infinite;
+}
+.h3-core-ring {
+  fill: none;
+  stroke: var(--h3-core-mid);
+  stroke-width: 1.25;
+  opacity: .9;
+}
+.h3-core-dot {
+  fill: var(--h3-core-hot);
+  stroke: var(--h3-core-mid);
+  stroke-width: .8;
+  filter: drop-shadow(0 0 5px var(--h3-core-mid));
+}
+.h3-bottom { filter: blur(.3px); }
+.h3-f1 { --h3fy: -5px; }
+.h3-f2 { --h3fy: 0px; animation: none !important; }
+.h3-f3 { --h3fy: 3px; }
+.hero3d-glow {
+  width: 74%;
+  height: 34%;
+  opacity: .44;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--h3-core-mid) 35%, transparent), transparent);
+}
+@keyframes h3-orbit-rotation { to { transform: rotate(360deg); } }
+@keyframes h3-node-pulse { 0%, 100% { opacity: .65; transform: scale(.9); } 50% { opacity: 1; transform: scale(1.22); } }
+@keyframes h3-core-breathe { 0%, 100% { opacity: .62; transform: scale(.86); } 50% { opacity: 1; transform: scale(1.14); } }
+
+html[data-theme="light"] .h3-plate {
+  filter: drop-shadow(0 12px 15px rgba(25, 58, 100, .17));
+}
+html[data-theme="light"] .h3-edge { stroke: var(--h3-edge-b); opacity: .72; }
+html[data-theme="light"] .h3-net path { opacity: .2; }
+html[data-theme="light"] .h3-rim { opacity: .82; }
+html[data-theme="light"] .h3-rim-mid { opacity: .64; }
+html[data-theme="light"] .h3-rim-bottom { opacity: .48; }
+html[data-theme="light"] .h3-bottom-grid { opacity: .23; }
+html[data-theme="light"] .h3-reflection { opacity: .15; }
+html[data-theme="light"] .h3-orbit { opacity: .74; }
+html[data-theme="light"] .h3-orbit-inner { opacity: .62; }
+html[data-theme="light"] .h3-core-links { opacity: .34; }
+html[data-theme="light"] .h3-core-halo { opacity: .9; }
+html[data-theme="light"] .h3-link-nodes circle { fill: var(--h3-stem-b); stroke: #d9f0ff; }
+html[data-theme="light"] .hero3d-glow { opacity: .52; }
+
+@media (max-width: 760px) {
+  .h3-rim-bottom { opacity: .24; }
+  .h3-core-links { opacity: .2; }
+  .h3-orbit-rotate { animation-duration: 28s; }
+  .hero3d-glow { width: 88%; height: 30%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .h3-orbit-rotate,
+  .h3-link-nodes circle,
+  .h3-core-halo { animation: none !important; }
+  .h3-core-halo { opacity: .82; transform: none; }
+  .h3-pulses { display: none !important; }
+  .h3-f1, .h3-f2, .h3-f3 { animation: none !important; transform: none !important; }
+  .hero3d-glow { animation: none !important; }
+}
