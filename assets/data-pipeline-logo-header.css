@@ -1,8 +1,0 @@
-/* Header data-pipeline mark — integrate into the existing site header. */
-.site-logo-mark{display:block;width:44px;height:52px;flex:0 0 auto;overflow:visible}
-.site-logo-mark img{display:block;width:100%;height:100%;object-fit:contain}
-.site-logo-mark .logo-light{display:block}.site-logo-mark .logo-dark{display:none}
-[data-theme="dark"] .site-logo-mark .logo-light,.dark .site-logo-mark .logo-light{display:none}
-[data-theme="dark"] .site-logo-mark .logo-dark,.dark .site-logo-mark .logo-dark{display:block}
-@media(prefers-reduced-motion:reduce){.site-logo-mark *{animation:none!important;transition:none!important}}
-/* Suggested markup: <span class="site-logo-mark"><img class="logo-light" src="assets/data-pipeline-logo-light.svg" alt=""><img class="logo-dark" src="assets/data-pipeline-logo-dark.svg" alt=""></span> */
