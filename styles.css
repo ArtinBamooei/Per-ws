@@ -4935,34 +4935,23 @@ html[data-theme="light"] .h3-enter.h3-bottom .h3-plate { fill-opacity: .17 !impo
 }
 
 
-/* Animated three-layer data-pipeline header mark */
-.brand-mark.brand-mark-pipeline {
+
+/* Three-layer animated pipeline emblem belongs beside the hero tagline, not in the header. */
+.hero-pipeline-emblem {
+  width: clamp(108px, 14vw, 156px);
+  aspect-ratio: 220 / 260;
+  margin: 0 0 12px;
   position: relative;
-  display: block;
-  width: 44px;
-  height: 48px;
-  flex: 0 0 44px;
-  border: 0;
-  border-radius: 0;
-  overflow: visible;
-  background: transparent;
-  color: inherit;
+  filter: drop-shadow(0 8px 18px rgba(65, 148, 190, .10));
 }
-.brand-mark-pipeline img {
-  display: block;
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
+.hero-pipeline-emblem img { display:block; width:100%; height:100%; object-fit:contain; }
+.hero-pipeline-dark { display:none !important; }
+html[data-theme="dark"] .hero-pipeline-light { display:none !important; }
+html[data-theme="dark"] .hero-pipeline-dark { display:block !important; }
+.hero3d-side.hero3d-left { display:flex; flex-direction:column; align-items:flex-start; }
+@media(max-width:760px) {
+ .hero-pipeline-emblem { width: clamp(84px, 22vw, 112px); margin-bottom:8px; }
 }
-.brand-mark-pipeline .brand-logo-light { display: block; }
-.brand-mark-pipeline .brand-logo-dark { display: none; }
-html[data-theme="dark"] .brand-mark-pipeline .brand-logo-light { display: none; }
-html[data-theme="dark"] .brand-mark-pipeline .brand-logo-dark { display: block; }
-@media (max-width: 620px) {
-  .brand-mark.brand-mark-pipeline { width: 36px; height: 40px; flex-basis: 36px; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .brand-mark-pipeline img { animation: none !important; }
+@media(prefers-reduced-motion:reduce) {
+ .hero-pipeline-emblem * { animation:none!important; }
 }
