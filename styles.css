@@ -4933,3 +4933,36 @@ html[data-theme="light"] .h3-enter.h3-bottom .h3-plate { fill-opacity: .17 !impo
   stroke-width: .8;
   opacity: .46;
 }
+
+
+/* Animated three-layer data-pipeline header mark */
+.brand-mark.brand-mark-pipeline {
+  position: relative;
+  display: block;
+  width: 44px;
+  height: 48px;
+  flex: 0 0 44px;
+  border: 0;
+  border-radius: 0;
+  overflow: visible;
+  background: transparent;
+  color: inherit;
+}
+.brand-mark-pipeline img {
+  display: block;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.brand-mark-pipeline .brand-logo-light { display: block; }
+.brand-mark-pipeline .brand-logo-dark { display: none; }
+html[data-theme="dark"] .brand-mark-pipeline .brand-logo-light { display: none; }
+html[data-theme="dark"] .brand-mark-pipeline .brand-logo-dark { display: block; }
+@media (max-width: 620px) {
+  .brand-mark.brand-mark-pipeline { width: 36px; height: 40px; flex-basis: 36px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .brand-mark-pipeline img { animation: none !important; }
+}
