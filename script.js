@@ -639,7 +639,7 @@ document.addEventListener("DOMContentLoaded", () => {
   ].join("\n");
 
   var fragmentSource = [
-    "precision highp float;",
+    "precision mediump float;",
     "uniform float uDark;",
     "uniform float uTime;",
     "varying vec3 vNormal;",
