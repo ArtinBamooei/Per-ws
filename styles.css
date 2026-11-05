@@ -5031,7 +5031,7 @@ body {
     linear-gradient(color-mix(in srgb, var(--text-muted) 3.4%, transparent) 1px, transparent 1px),
     linear-gradient(180deg, var(--bg), color-mix(in srgb, var(--bg) 88%, var(--surface-secondary)));
   background-size: auto, auto, 56px 56px, 56px 56px, auto;
-  background-attachment: fixed;
+  background-attachment: scroll;
 }
 html[data-theme="dark"] body {
   background-image:
