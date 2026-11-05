@@ -99,8 +99,59 @@
 
         <div class="hero-visual-wrap reveal reveal-delay">
           <figure class="hero-pipeline-images" aria-label="Data pipeline visualization" data-i18n-aria="heroVisualLabel">
-            <img class="hero-pipeline-image hero-pipeline-image-light" src="./assets/hero-data-pipeline-light.jpg" alt="A layered data pipeline connecting analysis, processing and storage.">
-            <img class="hero-pipeline-image hero-pipeline-image-dark" src="./assets/hero-data-pipeline-dark.jpg" alt="A layered data pipeline connecting analysis, processing and storage.">
+            <div class="hero-pipeline-stack hero-pipeline-stack-light">
+              <span class="hero-pipeline-slice hero-pipeline-slice-top">
+                <img src="./assets/hero-data-pipeline-light.jpg" alt="A layered data pipeline connecting analysis, processing and storage." decoding="async" draggable="false">
+              </span>
+              <span class="hero-pipeline-slice hero-pipeline-slice-middle" aria-hidden="true">
+                <img src="./assets/hero-data-pipeline-light.jpg" alt="" decoding="async" draggable="false">
+              </span>
+              <span class="hero-pipeline-slice hero-pipeline-slice-bottom" aria-hidden="true">
+                <img src="./assets/hero-data-pipeline-light.jpg" alt="" decoding="async" draggable="false">
+              </span>
+            </div>
+            <div class="hero-pipeline-stack hero-pipeline-stack-dark" aria-hidden="true">
+              <span class="hero-pipeline-slice hero-pipeline-slice-top">
+                <img src="./assets/hero-data-pipeline-dark.jpg" alt="" decoding="async" draggable="false">
+              </span>
+              <span class="hero-pipeline-slice hero-pipeline-slice-middle">
+                <img src="./assets/hero-data-pipeline-dark.jpg" alt="" decoding="async" draggable="false">
+              </span>
+              <span class="hero-pipeline-slice hero-pipeline-slice-bottom">
+                <img src="./assets/hero-data-pipeline-dark.jpg" alt="" decoding="async" draggable="false">
+              </span>
+            </div>
+            <svg class="hero-pipeline-flow" viewBox="0 0 1122 1402" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+              <defs>
+                <filter id="hero-pipeline-soft-glow" x="-100%" y="-100%" width="300%" height="300%">
+                  <feGaussianBlur stdDeviation="2.4"></feGaussianBlur>
+                </filter>
+              </defs>
+              <g class="hero-pipeline-flow-glow">
+                <path class="hero-tube-pulse hero-tube-input hero-tube-input-1" pathLength="1" d="M 316 410 C 318 470 405 525 548 610"></path>
+                <path class="hero-tube-pulse hero-tube-input hero-tube-input-2" pathLength="1" d="M 500 420 C 500 490 530 552 555 612"></path>
+                <path class="hero-tube-pulse hero-tube-input hero-tube-input-3" pathLength="1" d="M 665 408 C 652 490 600 552 563 612"></path>
+                <path class="hero-tube-pulse hero-tube-input hero-tube-input-4" pathLength="1" d="M 820 410 C 804 485 690 555 570 612"></path>
+                <path class="hero-tube-pulse hero-tube-stem" pathLength="1" d="M 560 616 C 559 660 559 704 559 754"></path>
+                <path class="hero-tube-pulse hero-tube-mid-left" pathLength="1" d="M 238 872 C 340 872 438 872 548 872"></path>
+                <path class="hero-tube-pulse hero-tube-mid-right" pathLength="1" d="M 574 872 C 680 872 780 872 884 872"></path>
+                <path class="hero-tube-pulse hero-tube-lower-stem" pathLength="1" d="M 560 886 C 560 966 560 1045 560 1110"></path>
+                <path class="hero-tube-pulse hero-tube-output-left" pathLength="1" d="M 550 1110 C 505 1142 450 1175 386 1210"></path>
+                <path class="hero-tube-pulse hero-tube-output-right" pathLength="1" d="M 570 1110 C 625 1140 700 1176 786 1210"></path>
+              </g>
+              <g class="hero-pipeline-flow-core">
+                <path class="hero-tube-pulse hero-tube-input hero-tube-input-1" pathLength="1" d="M 316 410 C 318 470 405 525 548 610"></path>
+                <path class="hero-tube-pulse hero-tube-input hero-tube-input-2" pathLength="1" d="M 500 420 C 500 490 530 552 555 612"></path>
+                <path class="hero-tube-pulse hero-tube-input hero-tube-input-3" pathLength="1" d="M 665 408 C 652 490 600 552 563 612"></path>
+                <path class="hero-tube-pulse hero-tube-input hero-tube-input-4" pathLength="1" d="M 820 410 C 804 485 690 555 570 612"></path>
+                <path class="hero-tube-pulse hero-tube-stem" pathLength="1" d="M 560 616 C 559 660 559 704 559 754"></path>
+                <path class="hero-tube-pulse hero-tube-mid-left" pathLength="1" d="M 238 872 C 340 872 438 872 548 872"></path>
+                <path class="hero-tube-pulse hero-tube-mid-right" pathLength="1" d="M 574 872 C 680 872 780 872 884 872"></path>
+                <path class="hero-tube-pulse hero-tube-lower-stem" pathLength="1" d="M 560 886 C 560 966 560 1045 560 1110"></path>
+                <path class="hero-tube-pulse hero-tube-output-left" pathLength="1" d="M 550 1110 C 505 1142 450 1175 386 1210"></path>
+                <path class="hero-tube-pulse hero-tube-output-right" pathLength="1" d="M 570 1110 C 625 1140 700 1176 786 1210"></path>
+              </g>
+            </svg>
           </figure>
           
         </div>
