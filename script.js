@@ -416,21 +416,27 @@ function setupSmoothScroll() {
       autoRaf: false
     });
 
+    let frame = 0;
+    let updateLenis = null;
     window.__portfolioLenis = lenis;
+
+    const destroy = () => {
+      if (frame) cancelAnimationFrame(frame);
+      frame = 0;
+      if (updateLenis && window.gsap) {
+        window.gsap.ticker.remove(updateLenis);
+        updateLenis = null;
+      }
+      lenis.destroy();
+      if (window.__portfolioLenis === lenis) delete window.__portfolioLenis;
+    };
 
     if (window.gsap && window.ScrollTrigger) {
       lenis.on("scroll", window.ScrollTrigger.update);
-      const updateLenis = (time) => lenis.raf(time * 1000);
+      updateLenis = (time) => lenis.raf(time * 1000);
       window.gsap.ticker.add(updateLenis);
       window.gsap.ticker.lagSmoothing(0);
-
-      window.addEventListener("pagehide", () => {
-        window.gsap.ticker.remove(updateLenis);
-        lenis.destroy();
-        delete window.__portfolioLenis;
-      }, { once: true });
     } else {
-      let frame = 0;
       const raf = (time) => {
         frame = 0;
         if (document.hidden) return;
@@ -440,28 +446,27 @@ function setupSmoothScroll() {
       const start = () => {
         if (!document.hidden && !frame) frame = requestAnimationFrame(raf);
       };
-      const stop = () => {
-        if (frame) cancelAnimationFrame(frame);
-        frame = 0;
-      };
       document.addEventListener("visibilitychange", () => {
-        if (document.hidden) stop();
-        else start();
+        if (document.hidden) {
+          if (frame) cancelAnimationFrame(frame);
+          frame = 0;
+        } else {
+          start();
+        }
       });
-      window.addEventListener("pagehide", () => {
-        stop();
-        lenis.destroy();
-        delete window.__portfolioLenis;
-      }, { once: true });
       start();
     }
 
-    reduceMotion.addEventListener?.("change", (event) => {
-      if (event.matches) {
-        lenis.destroy();
-        delete window.__portfolioLenis;
-      }
-    });
+    window.addEventListener("pagehide", destroy, { once: true });
+    if (reduceMotion.addEventListener) {
+      reduceMotion.addEventListener("change", (event) => {
+        if (event.matches) destroy();
+      });
+    } else if (reduceMotion.addListener) {
+      reduceMotion.addListener((event) => {
+        if (event.matches) destroy();
+      });
+    }
   } catch (_error) {
     // Keep native browser scrolling if the smooth-scroll layer cannot initialize.
   }
