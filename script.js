@@ -632,7 +632,7 @@ document.addEventListener("DOMContentLoaded", () => {
     "  vec3 n=rotateY(rotateX(aNormal,uPitch),uYaw);",
     "  float perspective=4.25/(4.25-p.z);",
     "  p*=perspective;",
-    "  gl_Position=vec4(p.x*0.47/uAspect,p.y*0.79+0.025,p.z*0.10,1.0);",
+    "  gl_Position=vec4(p.x*0.56/uAspect,p.y*0.53+0.025,p.z*0.10,1.0);",
     "  vNormal=normalize(n);",
     "  vPosition=p;",
     "}"
@@ -677,7 +677,7 @@ document.addEventListener("DOMContentLoaded", () => {
     "  vec3 p=rotateY(rotateX(aPosition,uPitch),uYaw);",
     "  float perspective=4.25/(4.25-p.z);",
     "  p*=perspective;",
-    "  gl_Position=vec4(p.x*0.47/uAspect,p.y*0.79+0.025,p.z*0.10,1.0);",
+    "  gl_Position=vec4(p.x*0.56/uAspect,p.y*0.53+0.025,p.z*0.10,1.0);",
     "  gl_PointSize=uPointSize*perspective;",
     "  vDepth=perspective;",
     "}"
@@ -845,8 +845,8 @@ document.addEventListener("DOMContentLoaded", () => {
     var orbitPoints = [];
     for (var op = 0; op <= 240; op++) {
       var ot = (op / 240) * TAU;
-      var ox = Math.cos(ot) * (1.82 + oi * 0.12);
-      var oy = Math.sin(ot) * (0.73 + oi * 0.12);
+      var ox = Math.cos(ot) * (1.75 + oi * 0.10);
+      var oy = Math.sin(ot) * (0.66 + oi * 0.10);
       var oz = oi === 0 ? -0.53 : 0.38 * Math.sin(ot) - 0.15;
       orbitPoints.push(ox, oy, oz);
     }
