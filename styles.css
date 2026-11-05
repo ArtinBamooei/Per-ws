@@ -4978,3 +4978,18 @@ html[data-theme="dark"] .hero-pipeline-dark { display:block !important; }
 @media(prefers-reduced-motion:reduce) {
  .hero-pipeline-emblem * { animation:none!important; }
 }
+ 
+/* Hero illustration: visually remove the JPG backdrop in both themes. */
+.hero-pipeline-images {
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  mix-blend-mode: multiply;
+}
+.hero-pipeline-image {
+  filter: contrast(1.12) saturate(1.06);
+}
+html[data-theme="dark"] .hero-pipeline-images {
+  mix-blend-mode: screen;
+}
