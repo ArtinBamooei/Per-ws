@@ -598,3 +598,452 @@ document.addEventListener("DOMContentLoaded", () => {
  if(reduce.addEventListener)reduce.addEventListener('change',motionChange);else if(reduce.addListener)reduce.addListener(motionChange);
  wave(0);if(reduce.matches)setBaseTransform();else frame=requestAnimationFrame(loop)
 })();
+
+
+/* Premium WebGL Möbius sculpture for the hero. */
+(function initMobiusHero() {
+  "use strict";
+
+  var canvas = document.getElementById("mobius-canvas");
+  if (!canvas) return;
+
+  var host = canvas.parentElement;
+  var gl = canvas.getContext("webgl", {
+    alpha: true,
+    antialias: true,
+    depth: true,
+    premultipliedAlpha: false,
+    powerPreference: "low-power"
+  });
+  if (!gl) return;
+
+  var vertexSource = [
+    "attribute vec3 aPosition;",
+    "attribute vec3 aNormal;",
+    "uniform float uYaw;",
+    "uniform float uPitch;",
+    "uniform float uAspect;",
+    "varying vec3 vNormal;",
+    "varying vec3 vPosition;",
+    "vec3 rotateX(vec3 p, float a) { float c=cos(a), s=sin(a); return vec3(p.x, p.y*c-p.z*s, p.y*s+p.z*c); }",
+    "vec3 rotateY(vec3 p, float a) { float c=cos(a), s=sin(a); return vec3(p.x*c+p.z*s, p.y, -p.x*s+p.z*c); }",
+    "void main() {",
+    "  vec3 p=rotateY(rotateX(aPosition,uPitch),uYaw);",
+    "  vec3 n=rotateY(rotateX(aNormal,uPitch),uYaw);",
+    "  float perspective=4.25/(4.25-p.z);",
+    "  p*=perspective;",
+    "  gl_Position=vec4(p.x*0.47/uAspect,p.y*0.79+0.025,p.z*0.10,1.0);",
+    "  vNormal=normalize(n);",
+    "  vPosition=p;",
+    "}"
+  ].join("\n");
+
+  var fragmentSource = [
+    "precision highp float;",
+    "uniform float uDark;",
+    "uniform float uTime;",
+    "varying vec3 vNormal;",
+    "varying vec3 vPosition;",
+    "void main() {",
+    "  vec3 n=normalize(vNormal);",
+    "  vec3 viewDir=normalize(vec3(0.0,0.0,3.7)-vPosition);",
+    "  vec3 lightDir=normalize(vec3(-0.55,0.75,1.1));",
+    "  float diffuse=max(abs(dot(n,lightDir)),0.0);",
+    "  float fresnel=pow(1.0-max(abs(dot(n,viewDir)),0.0),2.8);",
+    "  vec3 halfDir=normalize(lightDir+viewDir);",
+    "  float spec=pow(max(abs(dot(n,halfDir)),0.0),34.0);",
+    "  float sheen=0.5+0.5*sin(vPosition.x*2.1-vPosition.y*1.5-uTime*0.16);",
+    "  vec3 lightBase=mix(vec3(0.24,0.39,0.55),vec3(0.72,0.84,0.93),0.24+diffuse*0.48);",
+    "  lightBase=mix(lightBase,vec3(0.55,0.79,0.92),fresnel*0.52+spec*0.24);",
+    "  vec3 darkBase=mix(vec3(0.025,0.075,0.14),vec3(0.13,0.34,0.54),0.22+diffuse*0.42);",
+    "  darkBase=mix(darkBase,vec3(0.35,0.72,0.91),fresnel*0.64+spec*0.25);",
+    "  vec3 color=mix(lightBase,darkBase,uDark);",
+    "  color+=mix(vec3(0.0,0.035,0.055),vec3(0.015,0.07,0.10),uDark)*sheen;",
+    "  float alpha=mix(0.91,0.94,uDark);",
+    "  gl_FragColor=vec4(color,alpha);",
+    "}"
+  ].join("\n");
+
+  var lineVertexSource = [
+    "attribute vec3 aPosition;",
+    "uniform float uYaw;",
+    "uniform float uPitch;",
+    "uniform float uAspect;",
+    "uniform float uPointSize;",
+    "varying float vDepth;",
+    "vec3 rotateX(vec3 p,float a){float c=cos(a),s=sin(a);return vec3(p.x,p.y*c-p.z*s,p.y*s+p.z*c);}",
+    "vec3 rotateY(vec3 p,float a){float c=cos(a),s=sin(a);return vec3(p.x*c+p.z*s,p.y,-p.x*s+p.z*c);}",
+    "void main(){",
+    "  vec3 p=rotateY(rotateX(aPosition,uPitch),uYaw);",
+    "  float perspective=4.25/(4.25-p.z);",
+    "  p*=perspective;",
+    "  gl_Position=vec4(p.x*0.47/uAspect,p.y*0.79+0.025,p.z*0.10,1.0);",
+    "  gl_PointSize=uPointSize*perspective;",
+    "  vDepth=perspective;",
+    "}"
+  ].join("\n");
+
+  var lineFragmentSource = [
+    "precision mediump float;",
+    "uniform vec3 uColor;",
+    "uniform float uAlpha;",
+    "uniform float uRoundPoint;",
+    "varying float vDepth;",
+    "void main(){",
+    "  if(uRoundPoint>0.5){",
+    "    vec2 q=gl_PointCoord-vec2(0.5);",
+    "    float d=length(q);",
+    "    if(d>0.5) discard;",
+    "    float soft=1.0-smoothstep(0.22,0.5,d);",
+    "    gl_FragColor=vec4(uColor,uAlpha*soft*vDepth);",
+    "  } else { gl_FragColor=vec4(uColor,uAlpha); }",
+    "}"
+  ].join("\n");
+
+  function compileShader(type, source) {
+    var shader = gl.createShader(type);
+    gl.shaderSource(shader, source);
+    gl.compileShader(shader);
+    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+      gl.deleteShader(shader);
+      return null;
+    }
+    return shader;
+  }
+
+  function makeProgram(vsSource, fsSource) {
+    var vs = compileShader(gl.VERTEX_SHADER, vsSource);
+    var fs = compileShader(gl.FRAGMENT_SHADER, fsSource);
+    if (!vs || !fs) return null;
+    var program = gl.createProgram();
+    gl.attachShader(program, vs);
+    gl.attachShader(program, fs);
+    gl.linkProgram(program);
+    gl.deleteShader(vs);
+    gl.deleteShader(fs);
+    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+      gl.deleteProgram(program);
+      return null;
+    }
+    return program;
+  }
+
+  var surfaceProgram = makeProgram(vertexSource, fragmentSource);
+  var lineProgram = makeProgram(lineVertexSource, lineFragmentSource);
+  if (!surfaceProgram || !lineProgram) return;
+
+  function locations(program, names) {
+    var result = {};
+    for (var i = 0; i < names.length; i++) {
+      var name = names[i];
+      result[name] = name.charAt(0) === "a"
+        ? gl.getAttribLocation(program, name)
+        : gl.getUniformLocation(program, name);
+    }
+    return result;
+  }
+
+  var surfaceLoc = locations(surfaceProgram, ["aPosition","aNormal","uYaw","uPitch","uAspect","uDark","uTime"]);
+  var lineLoc = locations(lineProgram, ["aPosition","uYaw","uPitch","uAspect","uPointSize","uColor","uAlpha","uRoundPoint"]);
+
+  var TAU = Math.PI * 2;
+  var majorRadius = 1.27;
+  var halfWidth = 0.43;
+  var uSegments = 184;
+  var vSegments = 36;
+  var positions = [];
+  var normals = [];
+  var indices = [];
+
+  function mobiusPoint(u, v) {
+    var twist = u * 0.5;
+    var radial = majorRadius + v * Math.cos(twist);
+    return [
+      radial * Math.cos(u),
+      radial * Math.sin(u),
+      v * Math.sin(twist)
+    ];
+  }
+
+  function mobiusNormal(u, v) {
+    var half = u * 0.5;
+    var c = Math.cos(half);
+    var s = Math.sin(half);
+    var radial = majorRadius + v * c;
+    var dRadial = -0.5 * v * s;
+    var du = [
+      dRadial * Math.cos(u) - radial * Math.sin(u),
+      dRadial * Math.sin(u) + radial * Math.cos(u),
+      0.5 * v * c
+    ];
+    var dv = [c * Math.cos(u), c * Math.sin(u), s];
+    var nx = du[1] * dv[2] - du[2] * dv[1];
+    var ny = du[2] * dv[0] - du[0] * dv[2];
+    var nz = du[0] * dv[1] - du[1] * dv[0];
+    var len = Math.sqrt(nx * nx + ny * ny + nz * nz) || 1;
+    return [nx / len, ny / len, nz / len];
+  }
+
+  for (var ui = 0; ui <= uSegments; ui++) {
+    var u = (ui / uSegments) * TAU;
+    for (var vi = 0; vi <= vSegments; vi++) {
+      var v = (vi / vSegments * 2 - 1) * halfWidth;
+      var point = mobiusPoint(u, v);
+      var normal = mobiusNormal(u, v);
+      positions.push(point[0], point[1], point[2]);
+      normals.push(normal[0], normal[1], normal[2]);
+    }
+  }
+
+  for (var iu = 0; iu < uSegments; iu++) {
+    for (var iv = 0; iv < vSegments; iv++) {
+      var a = iu * (vSegments + 1) + iv;
+      var b = a + vSegments + 1;
+      indices.push(a, b, a + 1, b, b + 1, a + 1);
+    }
+  }
+
+  var positionBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+
+  var normalBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normals), gl.STATIC_DRAW);
+
+  var indexBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+  gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW);
+
+  function createLineBuffer(points, mode) {
+    var buffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(points), gl.STATIC_DRAW);
+    return { buffer: buffer, count: points.length / 3, mode: mode || gl.LINE_STRIP };
+  }
+
+  var rails = [];
+  var railPhases = [-0.16, 0.0, 0.16];
+  for (var ri = 0; ri < railPhases.length; ri++) {
+    var railPoints = [];
+    for (var rp = 0; rp <= 360; rp++) {
+      var ru = (rp / 360) * TAU;
+      var rv = 0.34 * Math.cos(ru * 0.5 + railPhases[ri]);
+      var rPoint = mobiusPoint(ru, rv);
+      var rNormal = mobiusNormal(ru, rv);
+      railPoints.push(
+        rPoint[0] + rNormal[0] * 0.012,
+        rPoint[1] + rNormal[1] * 0.012,
+        rPoint[2] + rNormal[2] * 0.012
+      );
+    }
+    rails.push(createLineBuffer(railPoints, gl.LINE_STRIP));
+  }
+
+  var orbitLines = [];
+  for (var oi = 0; oi < 2; oi++) {
+    var orbitPoints = [];
+    for (var op = 0; op <= 240; op++) {
+      var ot = (op / 240) * TAU;
+      var ox = Math.cos(ot) * (1.82 + oi * 0.12);
+      var oy = Math.sin(ot) * (0.73 + oi * 0.12);
+      var oz = oi === 0 ? -0.53 : 0.38 * Math.sin(ot) - 0.15;
+      orbitPoints.push(ox, oy, oz);
+    }
+    orbitLines.push(createLineBuffer(orbitPoints, gl.LINE_STRIP));
+  }
+
+  var particleCount = 24;
+  var particleBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, particleBuffer);
+  gl.bufferData(gl.ARRAY_BUFFER, particleCount * 3 * 4, gl.DYNAMIC_DRAW);
+
+  var pointerX = 0;
+  var pointerY = 0;
+  var targetX = 0;
+  var targetY = 0;
+  var yaw = 0;
+  var pitch = 0.24;
+  var frameId = 0;
+  var inView = true;
+  var reduceMotion = window.matchMedia ? window.matchMedia("(prefers-reduced-motion: reduce)") : { matches: false };
+  var canHover = window.matchMedia ? window.matchMedia("(hover: hover) and (pointer: fine)") : { matches: false };
+  var width = 1;
+  var height = 1;
+  var aspect = 1;
+  var dark = document.documentElement.getAttribute("data-theme") === "dark";
+
+  function resize() {
+    var rect = host.getBoundingClientRect();
+    if (!rect.width || !rect.height) return;
+    var dpr = Math.min(window.devicePixelRatio || 1, 1.75);
+    width = Math.max(1, Math.round(rect.width * dpr));
+    height = Math.max(1, Math.round(rect.height * dpr));
+    aspect = rect.width / rect.height;
+    if (canvas.width !== width || canvas.height !== height) {
+      canvas.width = width;
+      canvas.height = height;
+      gl.viewport(0, 0, width, height);
+    }
+    render(0);
+  }
+
+  function bindLineBuffer(item) {
+    gl.bindBuffer(gl.ARRAY_BUFFER, item.buffer);
+    gl.enableVertexAttribArray(lineLoc.aPosition);
+    gl.vertexAttribPointer(lineLoc.aPosition, 3, gl.FLOAT, false, 0, 0);
+  }
+
+  function drawLine(item, color, alpha, pointSize, roundPoint) {
+    gl.useProgram(lineProgram);
+    bindLineBuffer(item);
+    gl.uniform1f(lineLoc.uYaw, yaw);
+    gl.uniform1f(lineLoc.uPitch, pitch);
+    gl.uniform1f(lineLoc.uAspect, aspect);
+    gl.uniform1f(lineLoc.uPointSize, pointSize || 1);
+    gl.uniform3fv(lineLoc.uColor, color);
+    gl.uniform1f(lineLoc.uAlpha, alpha);
+    gl.uniform1f(lineLoc.uRoundPoint, roundPoint ? 1 : 0);
+    gl.drawArrays(item.mode, 0, item.count);
+  }
+
+  function render(time) {
+    if (!gl || !surfaceProgram || !lineProgram) return;
+    gl.clearColor(0, 0, 0, 0);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    gl.enable(gl.DEPTH_TEST);
+    gl.depthFunc(gl.LEQUAL);
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+    gl.disable(gl.CULL_FACE);
+
+    var t = time || 0;
+    yaw = t * 0.075 + pointerX * 0.18;
+    pitch = 0.24 + Math.sin(t * 0.16) * 0.035 + pointerY * 0.10;
+
+    drawLine(orbitLines[0], dark ? [0.22,0.54,0.78] : [0.25,0.48,0.68], dark ? 0.13 : 0.17, 1, false);
+    drawLine(orbitLines[1], dark ? [0.25,0.65,0.89] : [0.33,0.59,0.77], dark ? 0.10 : 0.13, 1, false);
+
+    gl.useProgram(surfaceProgram);
+    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+    gl.enableVertexAttribArray(surfaceLoc.aPosition);
+    gl.vertexAttribPointer(surfaceLoc.aPosition, 3, gl.FLOAT, false, 0, 0);
+    gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
+    gl.enableVertexAttribArray(surfaceLoc.aNormal);
+    gl.vertexAttribPointer(surfaceLoc.aNormal, 3, gl.FLOAT, false, 0, 0);
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+    gl.uniform1f(surfaceLoc.uYaw, yaw);
+    gl.uniform1f(surfaceLoc.uPitch, pitch);
+    gl.uniform1f(surfaceLoc.uAspect, aspect);
+    gl.uniform1f(surfaceLoc.uDark, dark ? 1 : 0);
+    gl.uniform1f(surfaceLoc.uTime, t);
+    gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);
+
+    drawLine(rails[0], dark ? [0.34,0.70,0.91] : [0.36,0.58,0.76], dark ? 0.43 : 0.38, 1, false);
+    drawLine(rails[1], dark ? [0.60,0.84,0.96] : [0.56,0.71,0.82], dark ? 0.22 : 0.20, 1, false);
+    drawLine(rails[2], dark ? [0.29,0.62,0.84] : [0.30,0.51,0.70], dark ? 0.36 : 0.31, 1, false);
+
+    var particlePositions = [];
+    for (var pi = 0; pi < particleCount; pi++) {
+      var lane = pi % 3;
+      var phase = Math.floor(pi / 3) / 8;
+      var pu = ((t * 0.024 + phase + lane * 0.19) % 1) * TAU;
+      var pv = 0.34 * Math.cos(pu * 0.5 + railPhases[lane]);
+      var pp = mobiusPoint(pu, pv);
+      var pn = mobiusNormal(pu, pv);
+      particlePositions.push(
+        pp[0] + pn[0] * 0.026,
+        pp[1] + pn[1] * 0.026,
+        pp[2] + pn[2] * 0.026
+      );
+    }
+    gl.bindBuffer(gl.ARRAY_BUFFER, particleBuffer);
+    gl.bufferSubData(gl.ARRAY_BUFFER, 0, new Float32Array(particlePositions));
+    drawLine(
+      { buffer: particleBuffer, count: particleCount, mode: gl.POINTS },
+      dark ? [0.47,0.82,1.0] : [0.18,0.48,0.76],
+      dark ? 0.92 : 0.82,
+      Math.max(2.2, Math.min(4.2, width / 180)),
+      true
+    );
+  }
+
+  function schedule() {
+    if (frameId || reduceMotion.matches || !inView || document.hidden) return;
+    frameId = requestAnimationFrame(tick);
+  }
+
+  function tick(now) {
+    frameId = 0;
+    if (reduceMotion.matches || !inView || document.hidden) return;
+    pointerX += (targetX - pointerX) * 0.035;
+    pointerY += (targetY - pointerY) * 0.035;
+    render(now * 0.001);
+    schedule();
+  }
+
+  function stop() {
+    if (frameId) cancelAnimationFrame(frameId);
+    frameId = 0;
+  }
+
+  function motionChanged() {
+    stop();
+    if (reduceMotion.matches) {
+      pointerX = pointerY = targetX = targetY = 0;
+      render(0);
+    } else {
+      schedule();
+    }
+  }
+
+  if (canHover.matches) {
+    host.addEventListener("pointermove", function (event) {
+      var rect = host.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
+      targetX = Math.max(-1, Math.min(1, ((event.clientX - rect.left) / rect.width - 0.5) * 2));
+      targetY = Math.max(-1, Math.min(1, ((event.clientY - rect.top) / rect.height - 0.5) * 2));
+    }, { passive: true });
+    host.addEventListener("pointerleave", function () {
+      targetX = 0;
+      targetY = 0;
+    }, { passive: true });
+  }
+
+  var resizeObserver = window.ResizeObserver ? new ResizeObserver(resize) : null;
+  if (resizeObserver) resizeObserver.observe(host);
+  else window.addEventListener("resize", resize, { passive: true });
+
+  var visibilityObserver = window.IntersectionObserver ? new IntersectionObserver(function (entries) {
+    inView = !!(entries[0] && entries[0].isIntersecting);
+    if (inView) schedule();
+    else stop();
+  }, { threshold: 0.02 }) : null;
+  if (visibilityObserver) visibilityObserver.observe(host);
+
+  document.addEventListener("visibilitychange", function () {
+    if (document.hidden) stop();
+    else schedule();
+  });
+
+  if (reduceMotion.addEventListener) reduceMotion.addEventListener("change", motionChanged);
+  else if (reduceMotion.addListener) reduceMotion.addListener(motionChanged);
+
+  var themeObserver = window.MutationObserver ? new MutationObserver(function () {
+    dark = document.documentElement.getAttribute("data-theme") === "dark";
+    render(reduceMotion.matches ? 0 : performance.now() * 0.001);
+  }) : null;
+  if (themeObserver) themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+
+  canvas.addEventListener("webglcontextlost", function (event) {
+    event.preventDefault();
+    stop();
+    host.removeAttribute("data-webgl");
+  }, false);
+
+  host.setAttribute("data-webgl", "ready");
+  resize();
+  if (reduceMotion.matches) render(0);
+  else schedule();
+})();
+
