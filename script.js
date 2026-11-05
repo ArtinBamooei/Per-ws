@@ -400,6 +400,73 @@ function setupSkillMeters() {
   });
 }
 
+
+function setupSmoothScroll() {
+  const LenisClass = window.Lenis;
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  if (typeof LenisClass !== "function" || reduceMotion.matches) return;
+
+  try {
+    const lenis = new LenisClass({
+      lerp: 0.085,
+      wheelMultiplier: 0.82,
+      smoothWheel: true,
+      syncTouch: false,
+      anchors: true,
+      autoRaf: false
+    });
+
+    window.__portfolioLenis = lenis;
+
+    if (window.gsap && window.ScrollTrigger) {
+      lenis.on("scroll", window.ScrollTrigger.update);
+      const updateLenis = (time) => lenis.raf(time * 1000);
+      window.gsap.ticker.add(updateLenis);
+      window.gsap.ticker.lagSmoothing(0);
+
+      window.addEventListener("pagehide", () => {
+        window.gsap.ticker.remove(updateLenis);
+        lenis.destroy();
+        delete window.__portfolioLenis;
+      }, { once: true });
+    } else {
+      let frame = 0;
+      const raf = (time) => {
+        frame = 0;
+        if (document.hidden) return;
+        lenis.raf(time);
+        frame = requestAnimationFrame(raf);
+      };
+      const start = () => {
+        if (!document.hidden && !frame) frame = requestAnimationFrame(raf);
+      };
+      const stop = () => {
+        if (frame) cancelAnimationFrame(frame);
+        frame = 0;
+      };
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden) stop();
+        else start();
+      });
+      window.addEventListener("pagehide", () => {
+        stop();
+        lenis.destroy();
+        delete window.__portfolioLenis;
+      }, { once: true });
+      start();
+    }
+
+    reduceMotion.addEventListener?.("change", (event) => {
+      if (event.matches) {
+        lenis.destroy();
+        delete window.__portfolioLenis;
+      }
+    });
+  } catch (_error) {
+    // Keep native browser scrolling if the smooth-scroll layer cannot initialize.
+  }
+}
+
 function setupGsapAnimations() {
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (reduceMotion || !window.gsap || !window.ScrollTrigger) return false;
@@ -574,6 +641,7 @@ document.addEventListener("DOMContentLoaded", () => {
   setupTheme();
   setupLanguages();
   setupNav();
+  setupSmoothScroll();
   setupSkillMeters();
   if (!setupGsapAnimations()) setupReveal();
   setupHeroAnimations();
