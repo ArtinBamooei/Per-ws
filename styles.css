@@ -4930,3 +4930,63 @@ html[data-theme="light"] .h3-enter.h3-bottom .h3-plate { fill-opacity: .17 !impo
   stroke-width: .8;
   opacity: .46;
 }
+
+
+/* Restrained warm-orange accent to balance the blue identity. */
+:root {
+  --accent-warm: #e7652f;
+  --accent-warm-soft: rgba(231, 101, 47, .10);
+  --accent-warm-border: rgba(231, 101, 47, .30);
+}
+html[data-theme="dark"] {
+  --accent-warm: #ff9a68;
+  --accent-warm-soft: rgba(255, 154, 104, .12);
+  --accent-warm-border: rgba(255, 154, 104, .34);
+}
+
+/* Tiny, intentional orange signals — keep primary interaction blue. */
+.eyebrow-line {
+  background: var(--accent-warm);
+  opacity: .95;
+}
+.nav-link.is-active::after {
+  background: var(--accent-warm);
+}
+.section-index,
+.section-kicker span:first-child {
+  color: var(--accent-warm);
+}
+.timeline-marker {
+  border-color: var(--accent-warm);
+}
+.timeline-card::before {
+  background: linear-gradient(180deg, var(--accent-warm), var(--accent));
+  opacity: .66;
+}
+.skill-group:nth-child(even)::before {
+  background: var(--accent-warm);
+}
+.project-number {
+  color: var(--accent-warm);
+  border-color: var(--accent-warm-border);
+  background: var(--accent-warm-soft);
+}
+.publication-date {
+  color: var(--accent-warm);
+  border-color: var(--accent-warm-border);
+  background: var(--accent-warm-soft);
+}
+.language-item:nth-child(2)::after {
+  background: var(--accent-warm);
+  box-shadow: 0 0 0 5px var(--accent-warm-soft);
+}
+.language-meter span {
+  background: linear-gradient(90deg, var(--accent), var(--accent-warm));
+}
+html[dir="rtl"] .language-meter span {
+  background: linear-gradient(270deg, var(--accent), var(--accent-warm));
+}
+@media (prefers-reduced-motion: reduce) {
+  .nav-link.is-active::after { transition: none; }
+}
+
