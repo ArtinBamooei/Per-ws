@@ -247,7 +247,7 @@ function applyStaticLanguage() {
 
     // Update the text node rather than textContent so decorative inline SVGs
     // and arrow spans survive language changes.
-    const textNode = [...el.childNodes].find(node => node.nodeType === Node.TEXT_NODE);
+    const textNode = [...el.childNodes].find(node => node.nodeType === globalThis.Node.TEXT_NODE);
     if (textNode) textNode.textContent = dict[key];
     else el.textContent = dict[key];
 
@@ -447,7 +447,7 @@ function setupGsapAnimations() {
 
     window.addEventListener("load", () => ScrollTrigger.refresh(), { once: true });
     return true;
-  } catch (error) {
+  } catch (_error) {
     document.documentElement.classList.remove("gsap-motion");
     return false;
   }
