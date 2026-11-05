@@ -304,7 +304,7 @@ function setupTheme() {
     toggle.setAttribute("aria-pressed", String(isDark));
     syncThemeLabels();
     const themeColor = qs('meta[name="theme-color"]');
-    if (themeColor) themeColor.setAttribute("content", isDark ? "#0d1520" : "#f7f9fc");
+    if (themeColor) themeColor.setAttribute("content", isDark ? "#0b1420" : "#edf2f7");
     if (persist) {
       try { localStorage.setItem("portfolio-theme", activeTheme); } catch (_) {}
     }
