@@ -283,8 +283,8 @@ svg { vector-effect: non-scaling-stroke; }
 .hero-grid {
   min-height: min(680px, calc(100vh - 72px));
   display: grid;
-  grid-template-columns: 1.02fr .98fr;
-  gap: clamp(48px, 7vw, 96px);
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
   align-items: center;
 }
 .hero-copy { max-width: 620px; }
@@ -360,7 +360,6 @@ h1 {
 }
 .dot { width: 4px; height: 4px; border-radius: 50%; background: currentColor; }
 
-.hero-visual-wrap { display: flex; justify-content: flex-end; perspective: 1200px; }
 .hero-visual {
   width: min(100%, 590px); aspect-ratio: 1.03 / 1; position: relative; overflow: hidden;
   border: 1px solid color-mix(in srgb, var(--accent) 22%, var(--border)); border-radius: var(--radius-lg);
@@ -776,7 +775,7 @@ html[dir="rtl"] .contact-links { border-left: 0; border-right: 1px solid var(--b
   .nav-actions { gap: 7px; }
   .nav-shell { gap: 16px; }
   .brand { min-width: 200px; }
-  .hero-grid { grid-template-columns: 1fr 1fr; gap: 36px; }
+  .hero-grid { grid-template-columns: minmax(0, 1fr); gap: 0; }
   .skill-groups,
   .project-grid { grid-template-columns: repeat(2, 1fr); }
   .education-layout { grid-template-columns: 1fr; }
@@ -900,7 +899,7 @@ html[data-theme="light"] .theme-icon-moon,
 
 
 /* ---------- Structural hardening ---------- */
-:where(.hero-copy, .hero-visual-wrap, .intro-copy, .timeline-card, .highlights-card, .skill-group, .language-item, .project-card, .publication-copy, .contact-shell, .footer-shell) {
+:where(.hero-copy, .intro-copy, .timeline-card, .highlights-card, .skill-group, .language-item, .project-card, .publication-copy, .contact-shell, .footer-shell) {
   min-width: 0;
 }
 
@@ -1360,166 +1359,6 @@ html[dir="rtl"] .language-item:hover { transform: translateX(-5px); }
   .field-core-glow { opacity: .2; }
 }
 
-/* Layered data-pipeline hero: responsive three-tier artwork and restrained tube flow. */
-.hero-pipeline-images {
-  position: relative;
-  isolation: isolate;
-  display: block;
-  width: min(100%, 590px, 56svh);
-  aspect-ratio: 1122 / 1402;
-  margin: 0;
-  overflow: hidden;
-  border: 1px solid color-mix(in srgb, var(--accent) 24%, var(--border));
-  border-radius: var(--radius-lg);
-  background: var(--surface);
-  box-shadow: 0 18px 42px rgba(12, 28, 46, .12);
-}
-.hero-pipeline-stack {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
-.hero-pipeline-stack-dark { display: none; }
-html[data-theme="dark"] .hero-pipeline-stack-light { display: none; }
-html[data-theme="dark"] .hero-pipeline-stack-dark { display: block; }
-
-.hero-pipeline-slice {
-  position: absolute;
-  inset: 0;
-  display: block;
-  overflow: hidden;
-  pointer-events: none;
-}
-.hero-pipeline-slice img {
-  position: absolute;
-  inset: 0;
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: fill;
-  user-select: none;
-  -webkit-user-drag: none;
-  will-change: transform;
-}
-.hero-pipeline-slice-top { clip-path: inset(0 0 53.6% 0); }
-.hero-pipeline-slice-middle { clip-path: inset(46.3% 0 27.1% 0); }
-.hero-pipeline-slice-bottom { clip-path: inset(72.8% 0 0 0); }
-
-.hero-pipeline-stack-light .hero-pipeline-slice-top img {
-  animation: hero-tier-top-float 8.8s ease-in-out infinite;
-}
-.hero-pipeline-stack-light .hero-pipeline-slice-middle img {
-  animation: hero-tier-middle-float 9.6s ease-in-out -2.4s infinite;
-}
-.hero-pipeline-stack-light .hero-pipeline-slice-bottom img {
-  animation: hero-tier-bottom-float 10.4s ease-in-out -4.6s infinite;
-}
-.hero-pipeline-stack-dark .hero-pipeline-slice-top img {
-  animation: hero-tier-top-float 8.8s ease-in-out infinite;
-}
-.hero-pipeline-stack-dark .hero-pipeline-slice-middle img {
-  animation: hero-tier-middle-float 9.6s ease-in-out -2.4s infinite;
-}
-.hero-pipeline-stack-dark .hero-pipeline-slice-bottom img {
-  animation: hero-tier-bottom-float 10.4s ease-in-out -4.6s infinite;
-}
-
-.hero-pipeline-flow {
-  position: absolute;
-  z-index: 3;
-  inset: 0;
-  display: block;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-  pointer-events: none;
-}
-.hero-pipeline-flow-glow,
-.hero-pipeline-flow-core {
-  fill: none;
-  stroke: #55bfff;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-.hero-pipeline-flow-glow {
-  opacity: .34;
-  stroke-width: 5.2;
-  filter: url(#hero-pipeline-soft-glow);
-}
-.hero-pipeline-flow-core {
-  opacity: .72;
-  stroke: #8bdcff;
-  stroke-width: 1.8;
-}
-.hero-tube-pulse {
-  fill: none;
-  stroke-dasharray: .028 .972;
-  stroke-dashoffset: 1;
-  animation: hero-tube-data-flow 7.8s linear infinite;
-  animation-delay: var(--flow-delay, 0s);
-}
-.hero-tube-input-1 { --flow-delay: -0.4s; }
-.hero-tube-input-2 { --flow-delay: -1.1s; }
-.hero-tube-input-3 { --flow-delay: -1.8s; }
-.hero-tube-input-4 { --flow-delay: -2.5s; }
-.hero-tube-stem { --flow-delay: -2.9s; }
-.hero-tube-mid-left { --flow-delay: -3.6s; }
-.hero-tube-mid-right { --flow-delay: -4.1s; }
-.hero-tube-lower-stem { --flow-delay: -4.8s; }
-.hero-tube-output-left { --flow-delay: -5.5s; }
-.hero-tube-output-right { --flow-delay: -6.1s; }
-
-.hero-visual-wrap {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  min-width: 0;
-  width: 100%;
-}
-@keyframes hero-tier-top-float {
-  0%, 100% { transform: translate3d(0, 0, 0); }
-  50% { transform: translate3d(0, -1.15px, 0); }
-}
-@keyframes hero-tier-middle-float {
-  0%, 100% { transform: translate3d(0, 0, 0); }
-  50% { transform: translate3d(0, 1.05px, 0); }
-}
-@keyframes hero-tier-bottom-float {
-  0%, 100% { transform: translate3d(0, 0, 0); }
-  50% { transform: translate3d(0, -.8px, 0); }
-}
-@keyframes hero-tube-data-flow {
-  to { stroke-dashoffset: 0; }
-}
-
-@media (max-width: 1100px) {
-  .hero-pipeline-images { width: min(100%, 540px, 54svh); }
-}
-@media (max-width: 920px) {
-  .hero-visual-wrap { justify-content: center; }
-  .hero-pipeline-images { width: min(100%, 520px, 54svh); }
-}
-@media (max-width: 620px) {
-  .hero-pipeline-images {
-    width: min(100%, 460px, 52svh);
-    border-radius: var(--radius-md);
-  }
-  .hero-pipeline-flow-glow { opacity: .26; stroke-width: 4.4; }
-  .hero-pipeline-flow-core { stroke-width: 1.55; }
-}
-@media (max-width: 360px) {
-  .hero-pipeline-images { border-radius: 10px; }
-  .hero-tube-pulse { stroke-dasharray: .022 .978; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .hero-pipeline-slice img,
-  .hero-tube-pulse {
-    animation: none !important;
-    transform: none !important;
-  }
-}
-
 .hero3d{position:relative;min-height:540px;width:100%;overflow:hidden;display:grid;grid-template-columns:minmax(84px,1fr) minmax(230px,2.8fr) minmax(88px,1fr);align-items:center;gap:8px;padding:22px 12px;border:1px solid color-mix(in srgb,#6b86ff 28%,var(--border));border-radius:var(--radius-lg);background:radial-gradient(ellipse at 50% 54%,#14224b 0%,#0b1226 48%,#070b18 100%);color:#b9c2e6;isolation:isolate}
 .hero3d:before,.hero3d:after{content:"";position:absolute;width:90px;height:90px;opacity:.35;pointer-events:none;background-image:radial-gradient(#5b6cff 1.2px,transparent 1.4px);background-size:18px 18px}
 .hero3d:before{top:26px;left:20px}.hero3d:after{bottom:26px;right:20px}
@@ -1716,7 +1555,7 @@ html[dir="rtl"] a.project-card-link:hover .project-open,html[dir="rtl"] a.projec
 
 /* Small visual refinements — preserve the existing layout and identity. */
 .hero-copy {
-  max-width: 640px;
+  max-width: 760px;
 }
 .hero-copy h1 {
   line-height: 1.04;
@@ -5090,26 +4929,4 @@ html[data-theme="light"] .h3-enter.h3-bottom .h3-plate { fill-opacity: .17 !impo
   stroke-dasharray: none;
   stroke-width: .8;
   opacity: .46;
-}
-
-
-
-/* Three-layer animated pipeline emblem belongs beside the hero tagline, not in the header. */
-.hero-pipeline-emblem {
-  width: clamp(108px, 14vw, 156px);
-  aspect-ratio: 220 / 260;
-  margin: 0 0 12px;
-  position: relative;
-  filter: drop-shadow(0 8px 18px rgba(65, 148, 190, .10));
-}
-.hero-pipeline-emblem img { display:block; width:100%; height:100%; object-fit:contain; }
-.hero-pipeline-dark { display:none !important; }
-html[data-theme="dark"] .hero-pipeline-light { display:none !important; }
-html[data-theme="dark"] .hero-pipeline-dark { display:block !important; }
-.hero3d-side.hero3d-left { display:flex; flex-direction:column; align-items:flex-start; }
-@media(max-width:760px) {
- .hero-pipeline-emblem { width: clamp(84px, 22vw, 112px); margin-bottom:8px; }
-}
-@media(prefers-reduced-motion:reduce) {
- .hero-pipeline-emblem * { animation:none!important; }
 }
