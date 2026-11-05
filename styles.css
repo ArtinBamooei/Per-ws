@@ -5338,3 +5338,22 @@ html[data-theme="dark"] #contact .contact-shell {
   }
 }
 
+
+/* Smooth wheel scrolling with Lenis; keep native touch and reduced-motion behavior. */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+html.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+html.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+html.lenis.lenis-stopped {
+  overflow: hidden;
+}
+html.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
