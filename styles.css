@@ -4978,21 +4978,3 @@ html[data-theme="dark"] .hero-pipeline-dark { display:block !important; }
 @media(prefers-reduced-motion:reduce) {
  .hero-pipeline-emblem * { animation:none!important; }
 }
-
-/* Blend each JPG itself into the page; the JPG pixels have no alpha channel. */
-.hero-pipeline-images {
-  background: transparent !important;
-  border: 0 !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
-  overflow: visible !important;
-  mix-blend-mode: normal !important;
-}
-.hero-pipeline-image-light {
-  mix-blend-mode: multiply;
-  filter: brightness(1.12) contrast(1.25) saturate(1.08);
-}
-html[data-theme="dark"] .hero-pipeline-image-dark {
-  mix-blend-mode: screen;
-  filter: brightness(.62) contrast(1.55) saturate(1.2);
-}
