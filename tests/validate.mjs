@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import assert from "node:assert/strict";
 const html=fs.readFileSync("index.html","utf8"), projects=fs.readFileSync("projects.html","utf8"), js=fs.readFileSync("script.js","utf8"), css=fs.readFileSync("styles.css","utf8"), boot=fs.readFileSync("theme-init.js","utf8"), sitemap=fs.readFileSync("sitemap.xml","utf8");
-const version="20261110-performance-v9";
+const version="20261110-performance-v10";
 const errorPage=fs.readFileSync("404.html","utf8");
 assert.match(errorPage,/<a class="skip-link" href="#main">/,"404 page skip link missing");
 assert.match(errorPage,/<main class="error-page" id="main" tabindex="-1">/,"404 skip target must be focusable");
