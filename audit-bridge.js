@@ -111,6 +111,8 @@
 
     return {
       url: location.href,
+      loadedAssets: [...document.querySelectorAll("script[src], link[rel=stylesheet][href]")].map(node => ({ tag: node.tagName.toLowerCase(), url: new URL(node.getAttribute(node.tagName === "LINK" ? "href" : "src"), location.href).href })),
+      serviceWorker: { supported: "serviceWorker" in navigator, controlled: Boolean(navigator.serviceWorker?.controller), controllerScriptURL: navigator.serviceWorker?.controller?.scriptURL || null },
       viewport: { width: innerWidth, height: innerHeight, devicePixelRatio },
       document: { width: document.documentElement.scrollWidth, height: document.documentElement.scrollHeight, overflowX: document.documentElement.scrollWidth > innerWidth + 1 },
       navigation: nav ? {
