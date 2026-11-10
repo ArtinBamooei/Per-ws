@@ -132,6 +132,9 @@ assert.match(auditJs, /localStorage\.setItem\(REPORT_KEY/, "previous-run compari
 assert.doesNotMatch(auditJs, /\b(?:innerHTML|outerHTML|insertAdjacentHTML|document\.write)\b/, "audit console must not use unsafe HTML sinks");
 assert.match(auditCss, /@media print/, "print stylesheet missing");
 assert.match(auditCss, /@media \(max-width: 520px\)/, "mobile audit layout missing");
+assert.match(main, /class="audit-entry" href="\.\/audit\.html"[^>]*data-i18n="navAudit"/, "desktop navigation audit entry missing");
+assert.match(main, /class="audit-entry-mobile" href="\.\/audit\.html"[^>]*data-i18n="navAudit"/, "mobile navigation audit entry missing");
+assert.equal(js.split("\n").filter(line => line.includes("navAudit:")).length, 3, "audit navigation label must be translated in all three languages");
 for (const source of [main, cases]) assert.match(source, /href="\.\/audit\.html"/, "site footer must link to the audit console");
 
 console.log("Deep quality audit: PASS (responsive semantics, local assets/fragments, language/theme persistence, RTL, reduced motion, keyboard navigation, case-study completeness and payload budgets).");
