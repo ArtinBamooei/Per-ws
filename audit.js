@@ -741,7 +741,7 @@
   }
 
   async function checkServiceWorker() {
-    const sw = { supported: "serviceWorker" in navigator, controller: Boolean(navigator.serviceWorker?.controller), registrations: 0, cacheNames: [], cacheEntries: 0, scriptOk: false };
+    const sw = { supported: "serviceWorker" in navigator, controller: Boolean(navigator.serviceWorker?.controller), registrations: 0, cacheNames: [], cacheEntries: 0, scriptOk: false, auditBypass: false };
     try {
       if (sw.supported) {
         const registrations = await navigator.serviceWorker.getRegistrations();
@@ -753,7 +753,7 @@
           const cache = await caches.open(name);
           sw.cacheEntries += (await cache.keys()).length;
         }
-        const response = await fetchWithTimeout(new URL("sw.js", SITE_URL).href, { cache: "no-store" }, 12000);
+        const response = await fetchWithTimeout(new URL("sw.js?audit=1", SITE_URL).href, { cache: "no-store" }, 12000);
         if (response.ok) {
           const source = await response.text();
           sw.scriptOk = source.includes("cache.put") && source.includes("cache.match") && source.includes("clients.claim");
@@ -766,7 +766,7 @@
       "پشتیبانی مرورگر: " + (sw.supported ? "بله" : "خیر") + " · registration: " + sw.registrations + " · controller: " + (sw.controller ? "فعال" : "در این نشست کنترل‌کننده نیست"),
       "نبود ثبت فعال، قابلیت cache-first و fallback آفلاین را محدود می‌کند.",
       "ثبت SW را پس از انتشار بررسی کن و بعد از تغییر نسخه، cache قدیمی را پاک‌سازی کن.");
-    addResult("کش و آفلاین", "سلامت فایل Service Worker و Cache Storage", sw.scriptOk ? "pass" : "warn",
+    addResult("کش و آفلاین", "سلامت فایل Service Worker و Cache Storage", sw.scriptOk && sw.auditBypass ? "pass" : "warn",
       "فایل sw.js: " + (sw.scriptOk ? "الگوی cache دیده شد" : "قابل تأیید نیست") + " · bypass تست زنده: " + sw.auditBypass + " · cacheها: " + sw.cacheNames.length + " · ورودی‌ها: " + sw.cacheEntries,
       "کش ناقص یا قدیمی ممکن است نسخه‌های ناسازگار فایل‌ها را ارائه دهد.",
       "نسخه cache و مسیرهای cache را پس از هر انتشار بررسی کن.");
