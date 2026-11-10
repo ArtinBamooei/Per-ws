@@ -1,5 +1,5 @@
 /* Lightweight runtime cache for the portfolio. */
-const CACHE_NAME = "portfolio-static-v5";
+const CACHE_NAME = "portfolio-static-v6";
 const CACHE_PREFIX = "portfolio-static-";
 
 self.addEventListener("install", (event) => {
@@ -39,6 +39,15 @@ self.addEventListener("fetch", (event) => {
   }
 
   event.respondWith((async () => {
+    if (event.clientId) {
+      try {
+        const client = await self.clients.get(event.clientId);
+        if (client && new URL(client.url).searchParams.get("audit") === "1") {
+          return fetch(request, { cache: "no-store" });
+        }
+      } catch (_) {}
+    }
+
     const cache = await caches.open(CACHE_NAME);
     const cached = await cache.match(request);
     if (cached) {
