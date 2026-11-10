@@ -3,7 +3,8 @@ import assert from "node:assert/strict";
 
 const pages = [
   ["index.html", fs.readFileSync("index.html", "utf8")],
-  ["projects.html", fs.readFileSync("projects.html", "utf8")]
+  ["projects.html", fs.readFileSync("projects.html", "utf8")],
+  ["audit.html", fs.readFileSync("audit.html", "utf8")]
 ];
 const errorPage = fs.readFileSync("404.html", "utf8");
 const scripts = [
