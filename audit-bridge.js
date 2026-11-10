@@ -5,7 +5,7 @@
   if (params.get("audit") !== "1" || !runId || window.parent === window) return;
 
   const SOURCE = "portfolio-audit-bridge";
-  const runtime = { consoleErrors: [], resourceErrors: [], rejections: [], cspViolations: [], longTasks: [], lcp: null, cls: 0, inp: null };
+  const runtime = { consoleErrors: [], resourceErrors: [], rejections: [], cspViolations: [], longTasks: [], paints: [], fontProbe: { loadedFaces: 0, error: "" }, lcp: null, cls: 0, inp: null };
   const post = (type, payload = {}) => {
     window.parent.postMessage({ source: SOURCE, runId, type, path: location.pathname, ...payload }, location.origin);
   };
@@ -67,6 +67,11 @@
     } catch (_) {}
     try {
       new PerformanceObserver(list => {
+        runtime.paints.push(...list.getEntries().map(entry => ({ name: entry.name, startTime: entry.startTime })));
+      }).observe({ type: "paint", buffered: true });
+    } catch (_) {}
+    try {
+      new PerformanceObserver(list => {
         for (const entry of list.getEntries()) runtime.longTasks.push(entry.duration);
       }).observe({ type: "longtask", buffered: true });
     } catch (_) {}
@@ -76,7 +81,7 @@
 
   function snapshot() {
     const nav = performance.getEntriesByType("navigation")[0];
-    const paints = performance.getEntriesByType("paint");
+    const paints = [...performance.getEntriesByType("paint"), ...runtime.paints].filter((entry, index, all) => all.findIndex(item => item.name === entry.name) === index);
     const resources = performance.getEntriesByType("resource");
     const sameOrigin = resources.filter(item => {
       try { return new URL(item.name).origin === location.origin; } catch (_) { return false; }
@@ -151,7 +156,9 @@
         focusableCount: interactive.length,
         smallTargets: targetSizes.slice(0, 25),
         fontsReady: document.fonts?.status === "loaded",
-        vazirmatnAvailable: document.fonts?.check?.("16px Vazirmatn") ?? false
+        vazirmatnAvailable: document.fonts?.check?.('16px "Vazirmatn"', "فارسی") ?? false,
+        vazirmatnFaces: runtime.fontProbe.loadedFaces,
+        vazirmatnError: runtime.fontProbe.error
       }
     };
   }
@@ -311,7 +318,12 @@
       try {
         await document.fonts?.ready;
         // Explicitly request the Persian face; it is otherwise unused on initial LTR visits.
-        try { await document.fonts?.load('16px "Vazirmatn"', "فارسی"); } catch (_) {}
+        try {
+          const faces = await document.fonts?.load('16px "Vazirmatn"', "فارسی");
+          runtime.fontProbe.loadedFaces = faces?.length || 0;
+        } catch (error) {
+          runtime.fontProbe.error = clean(error.message || error);
+        }
         await wait(1200);
         // Capture page-load metrics before axe and click probes can change layout or add work.
         loadSnapshot = snapshot();
