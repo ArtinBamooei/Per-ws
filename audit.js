@@ -83,7 +83,7 @@
   }
 
   function setProgress(percent, title, detail) {
-    $("#progress-bar").style.width = Math.max(0, Math.min(100, percent)) + "%";
+    $("#progress-bar").value = Math.max(0, Math.min(100, percent));
     $("#progress-title").textContent = title;
     $("#progress-detail").textContent = detail || "";
   }
@@ -580,7 +580,7 @@
         const score = categories[key]?.score;
         const item = make("div", "score-item");
         const ring = make("div", "score-ring " + (statusFromScore(score) === "unknown" ? "" : "score-" + statusFromScore(score)));
-        if (Number.isFinite(score)) ring.style.setProperty("--score", String(Math.round(score * 100)));
+        if (Number.isFinite(score)) ring.classList.add("score-value-" + Math.round(score * 20) * 5);
         ring.append(make("strong", "", scoreLabel(score)));
         item.append(ring, make("small", "", label));
         scores.append(item);
