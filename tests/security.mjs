@@ -10,7 +10,8 @@ const errorPage = fs.readFileSync("404.html", "utf8");
 const scripts = [
   ["script.js", fs.readFileSync("script.js", "utf8")],
   ["theme-init.js", fs.readFileSync("theme-init.js", "utf8")],
-  ["audit.js", fs.readFileSync("audit.js", "utf8")]
+  ["audit.js", fs.readFileSync("audit.js", "utf8")],
+  ["audit-bridge.js", fs.readFileSync("audit-bridge.js", "utf8")]
 ];
 
 for (const [name, html] of pages) {
