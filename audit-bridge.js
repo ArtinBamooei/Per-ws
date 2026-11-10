@@ -168,6 +168,10 @@
       themeButton.click();
       const afterTheme = root.dataset.theme;
       const ariaAfterClick = themeButton.getAttribute("aria-pressed");
+      let persistedTheme = null;
+      let themeStorageReadable = true;
+      try { persistedTheme = localStorage.getItem("portfolio-theme"); } catch (_) { themeStorageReadable = false; }
+      const themePersisted = !themeStorageReadable || persistedTheme === afterTheme;
       themeButton.click();
       const restoredTheme = root.dataset.theme;
       if (storageReadable) {
@@ -180,8 +184,8 @@
       themeButton.setAttribute("aria-pressed", String(beforeTheme === "dark"));
       results.push({
         id: "theme-toggle",
-        status: afterTheme !== beforeTheme && restoredTheme === beforeTheme && ariaAfterClick === String(afterTheme === "dark") ? "pass" : "fail",
-        detail: "before=" + beforeTheme + ", after=" + afterTheme + ", restored=" + restoredTheme + ", aria-pressed=" + ariaAfterClick,
+        status: afterTheme !== beforeTheme && restoredTheme === beforeTheme && ariaAfterClick === String(afterTheme === "dark") && themePersisted ? "pass" : "fail",
+        detail: "before=" + beforeTheme + ", after=" + afterTheme + ", restored=" + restoredTheme + ", aria-pressed=" + ariaAfterClick + ", persisted=" + themePersisted,
         note: "تست کلیک واقعی روی کنترل تغییر پوسته انجام شد؛ مقدار ذخیره‌شده قبلی بازیابی شد."
       });
     } else {
