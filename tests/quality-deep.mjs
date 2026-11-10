@@ -199,7 +199,7 @@ assert.match(serviceWorker, /portfolio-static-v10/, "service worker cache versio
 assert.match(serviceWorker, /searchParams\.get\("audit"\) === "1"/, "service worker must bypass audit navigations");
 assert.match(serviceWorker, /self\.clients\.get\(event\.clientId\)/, "service worker must bypass cached subresources for audit frames");
 
-assert.match(auditHtml, /audit\.js\?v=20261110-audit-v9/, "audit engine cache key must match the final build");
+assert.match(auditHtml, /audit\.js\?v=20261110-audit-v10/, "audit engine cache key must match the final build");
 
 assert.match(auditBridge, /const loadSnapshot = snapshot\(\)|loadSnapshot = snapshot\(\)/, "page-load metrics must be captured before diagnostics and interactions");
 assert.match(auditBridge, /type: "paint", buffered: true/, "buffered Paint Timing observer missing");
