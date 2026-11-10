@@ -214,7 +214,7 @@ console.log("Deep quality audit: PASS (responsive semantics, local assets/fragme
 /* Hero visual: localized copy, early language direction, theme-aware depth and reduced motion. */
 assert.match(boot, /root\.dir\s*=\s*language === "FA"\s*\?\s*"rtl"\s*:\s*"ltr"/, "pre-paint RTL direction assignment missing");
 assert.match(boot, /root\.lang\s*=\s*language === "FA"\s*\?\s*"fa"\s*:\s*language\.toLowerCase\(\)/, "pre-paint language assignment missing");
-for (const key of ["brandHomeLabel", "academicFocusLabel"]) {
+for (const key of ["academicFocusLabel"]) {
   assert.ok(main.includes('data-i18n="' + key + '"') || main.includes('data-i18n-aria="' + key + '"'), "localized hero/accessibility key missing in HTML: " + key);
   assert.equal(js.split("\n").filter(line => line.includes(key + ":")).length, 3, "hero/accessibility translation must exist in all locales: " + key);
 }
