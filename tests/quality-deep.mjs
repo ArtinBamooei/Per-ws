@@ -166,6 +166,10 @@ assert.match(auditBridge, /unhandledrejection/, "unhandled promise rejections ar
 assert.match(auditBridge, /largest-contentful-paint/, "live LCP observer missing");
 assert.match(auditBridge, /longtask/, "long-task observer missing");
 assert.match(auditBridge, /axe\.run/, "axe-core execution missing");
+assert.match(js, /langENLabel:"EN — English"/, "English language accessible label translation missing");
+assert.match(js, /langDELabel:"DE — German"/, "German language accessible label translation missing");
+assert.match(js, /langFALabel:"FA — Persian"/, "Persian language accessible label translation missing");
+assert.ok(auditBridge.includes('document.fonts?.load(\'16px "Vazirmatn"\', "فارسی")'), "Vazirmatn probe must explicitly load the Persian font face");
 assert.match(axeVendor, /axe v4\.14\.0/, "pinned axe-core version missing");
 assert.ok(axeLicense.length > 1000, "axe-core MPL and third-party license notices missing");
 assert.match(auditJs, /runBrowserPageAudit/, "live browser page runner missing");
