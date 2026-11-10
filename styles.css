@@ -5413,3 +5413,13 @@ html[data-theme="dark"] #contact .contact-shell {
   .audit-entry { transition: none; }
   .audit-entry:hover { transform: none; }
 }
+
+
+/* Meet WCAG 2.5.8 minimum target dimensions for compact text navigation links. */
+.nav-link, .footer-links > a, .text-link, .detail-back {
+  min-height: 24px;
+}
+.footer-links > a, .text-link, .detail-back {
+  display: inline-flex;
+  align-items: center;
+}
