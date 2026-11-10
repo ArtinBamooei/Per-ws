@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="fa" dir="rtl" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#f4f7fb">
+  <meta name="description" content="Private-use diagnostic console for the Artin Bamooei portfolio.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://api.github.com https://www.googleapis.com; form-action 'self'; frame-src 'none'; media-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests;">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <title>Site Audit Console — Artin Bamooei</title>
+  <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./audit.css?v=20261110-audit-v1">
+  <script src="./theme-init.js?v=20261110-audit-v1"></script>
+  <script defer src="./audit.js?v=20261110-audit-v1"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">رفتن به محتوای اصلی</a>
+  <header class="audit-topbar">
+    <a class="brand" href="./index.html" aria-label="بازگشت به صفحه اصلی">
+      <span class="brand-mark">AB</span>
+      <span class="brand-copy"><strong>Artin Bamooei</strong><small>Site quality console</small></span>
+    </a>
+    <div class="top-actions">
+      <span class="live-indicator"><i></i> محیط تشخیصی</span>
+      <button class="theme-toggle" type="button" id="theme-toggle" aria-label="تغییر پوسته" aria-pressed="false">
+        <svg class="theme-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.9 4.9l1.5 1.5m11.2 11.2 1.5 1.5m0-14.2-1.5 1.5M6.4 17.6l-1.5 1.5"/></svg>
+        <svg class="theme-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.2 15.1A8.5 8.5 0 0 1 8.9 3.8 8.8 8.8 0 1 0 20.2 15.1Z"/></svg>
+      </button>
+      <a class="back-link" href="./index.html">بازگشت به سایت <span aria-hidden="true">↗</span></a>
+    </div>
+  </header>
+
+  <main id="main" class="audit-shell" tabindex="-1">
+    <section class="audit-hero">
+      <div class="hero-copy">
+        <p class="eyebrow"><span></span> QUALITY · PERFORMANCE · SECURITY</p>
+        <h1>مرکز ارزیابی و سلامت سایت</h1>
+        <p>یک بررسی چندلایه از ساختار صفحات، دسترس‌پذیری، امنیت، سئو، منابع، کش، وضعیت انتشار و شاخص‌های واقعی Lighthouse.</p>
+        <div class="hero-meta"><span><i class="meta-dot"></i> دامنه هدف: artinbamooei.github.io/Per-ws</span><span>گزارش با تاریخ و قابلیت خروجی</span></div>
+      </div>
+      <div class="hero-visual" aria-hidden="true">
+        <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
+        <div class="visual-core"><span>AB</span><i></i></div>
+        <span class="orbit-node node-a"></span><span class="orbit-node node-b"></span><span class="orbit-node node-c"></span>
+      </div>
+    </section>
+
+    <section class="security-note" aria-label="توضیح محدودیت امنیتی">
+      <span class="note-icon" aria-hidden="true">!</span>
+      <div><strong>نکته امنیتی مهم</strong><p>این نسخه روی GitHub Pages اجرا می‌شود. رمز این صفحه فقط یک قفل رابط کاربری است؛ کد و آزمون‌ها عمومی‌اند و این PIN احراز هویت سمت سرور محسوب نمی‌شود. برای محرمانگی واقعی باید صفحه پشت سرویس احراز هویت مانند Cloudflare Access یا بک‌اند خصوصی قرار بگیرد. رمز در مرورگر به‌صورت متن ساده ذخیره نمی‌شود.</p></div>
+    </section>
+
+    <section class="gate-card" id="gate" aria-labelledby="gate-title">
+      <div class="gate-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3m-4 4v3"/></svg></div>
+      <p class="section-eyebrow">RESTRICTED CONSOLE</p>
+      <h2 id="gate-title">ورود به پنل ارزیابی</h2>
+      <p class="gate-copy">برای شروع آزمون کامل، رمز دسترسی را وارد کن.</p>
+      <form id="pin-form" novalidate>
+        <label for="pin-input">رمز دسترسی</label>
+        <div class="pin-row">
+          <input id="pin-input" name="pin" type="password" inputmode="numeric" pattern="[0-9]{3}" maxlength="3" autocomplete="off" placeholder="•••" required aria-describedby="pin-help pin-error">
+          <button class="primary-button" type="submit">ورود و اجرای تست <span aria-hidden="true">←</span></button>
+        </div>
+        <p id="pin-help" class="field-help">هر بار ورود به این صفحه، رمز دوباره درخواست می‌شود.</p>
+        <p id="pin-error" class="field-error" role="alert" aria-live="assertive"></p>
+      </form>
+      <div class="gate-foot"><span class="lock-mini" aria-hidden="true">⌑</span> رمز واردشده در localStorage یا فایل گزارش ذخیره نمی‌شود.</div>
+    </section>
+
+    <section class="dashboard" id="dashboard" hidden aria-labelledby="dashboard-title">
+      <div class="dashboard-heading">
+        <div><p class="section-eyebrow">AUDIT REPORT / LIVE SESSION</p><h2 id="dashboard-title">گزارش سلامت وب‌سایت</h2><p id="report-date" class="report-date">آماده‌سازی گزارش…</p></div>
+        <div class="report-actions">
+          <button class="secondary-button" id="rerun-button" type="button">اجرای مجدد <span aria-hidden="true">↻</span></button>
+          <button class="secondary-button" id="download-button" type="button">خروجی JSON <span aria-hidden="true">↓</span></button>
+          <button class="primary-button" id="print-button" type="button">چاپ / PDF <span aria-hidden="true">↗</span></button>
+        </div>
+      </div>
+
+      <div class="progress-panel" id="progress-panel">
+        <div class="progress-copy"><strong id="progress-title">در حال آماده‌سازی آزمون‌ها…</strong><span id="progress-detail">بررسی ساختار سایت و دریافت شاخص‌های Lighthouse</span></div>
+        <div class="progress-track"><span id="progress-bar"></span></div>
+      </div>
+
+      <div class="summary-grid" id="summary-grid" aria-live="polite">
+        <article class="summary-card"><span class="summary-label">آزمون‌های موفق</span><strong id="pass-count">—</strong><small>PASS</small></article>
+        <article class="summary-card"><span class="summary-label">نیازمند توجه</span><strong id="warn-count">—</strong><small>WARN</small></article>
+        <article class="summary-card"><span class="summary-label">موارد بحرانی</span><strong id="fail-count">—</strong><small>FAIL</small></article>
+        <article class="summary-card"><span class="summary-label">کل بررسی‌ها</span><strong id="total-count">—</strong><small>CHECKS</small></article>
+      </div>
+
+      <section class="report-section" aria-labelledby="lighthouse-title">
+        <div class="section-heading"><div><p class="section-eyebrow">GOOGLE LIGHTHOUSE / PAGESPEED</p><h3 id="lighthouse-title">امتیازهای استاندارد Lighthouse</h3></div><span class="section-note">موبایل و دسکتاپ · اجرای زنده</span></div>
+        <div class="psi-grid" id="psi-grid">
+          <article class="psi-card loading-card"><span class="psi-platform">موبایل</span><strong>در انتظار داده</strong><p>PageSpeed Insights</p></article>
+          <article class="psi-card loading-card"><span class="psi-platform">دسکتاپ</span><strong>در انتظار داده</strong><p>PageSpeed Insights</p></article>
+        </div>
+        <p class="fine-print">این امتیازها در صورت پاسخ‌گویی API گوگل نمایش داده می‌شوند. امتیاز Lighthouse آزمایشگاهی است و با داده میدانی Core Web Vitals تفاوت دارد؛ نبود داده به معنی امتیاز صفر نیست.</p>
+      </section>
+
+      <section class="report-section" aria-labelledby="vitals-title">
+        <div class="section-heading"><div><p class="section-eyebrow">CORE WEB VITALS</p><h3 id="vitals-title">شاخص‌های تجربه کاربر</h3></div><span class="section-note">Field data اولویت دارد؛ Lab data جدا مشخص می‌شود</span></div>
+        <div class="vitals-grid" id="vitals-grid"><div class="empty-state">در حال دریافت LCP، INP، CLS، FCP و TTFB…</div></div>
+      </section>
+
+      <section class="report-section" aria-labelledby="ci-title">
+        <div class="section-heading"><div><p class="section-eyebrow">DELIVERY PIPELINE</p><h3 id="ci-title">وضعیت GitHub Actions و انتشار</h3></div><a class="inline-link" href="https://github.com/ArtinBamooei/Per-ws/actions" target="_blank" rel="noopener noreferrer">مشاهده همه اجراها ↗</a></div>
+        <div class="ci-panel" id="ci-panel"><div class="empty-state">در حال بررسی آخرین workflowها…</div></div>
+      </section>
+
+      <section class="report-section" aria-labelledby="findings-title">
+        <div class="section-heading"><div><p class="section-eyebrow">DETAILED FINDINGS</p><h3 id="findings-title">یافته‌ها و پیشنهادهای اصلاحی</h3></div><div class="filter-group" role="group" aria-label="فیلتر یافته‌ها"><button type="button" class="filter-button active" data-filter="all" aria-pressed="true">همه</button><button type="button" class="filter-button" data-filter="fail" aria-pressed="false">بحرانی</button><button type="button" class="filter-button" data-filter="warn" aria-pressed="false">هشدار</button><button type="button" class="filter-button" data-filter="pass" aria-pressed="false">موفق</button></div></div>
+        <div class="findings-list" id="findings-list" aria-live="polite"><div class="empty-state">یافته‌ها پس از پایان آزمون نمایش داده می‌شوند.</div></div>
+      </section>
+
+      <section class="report-section two-column-section">
+        <div><div class="section-heading compact-heading"><div><p class="section-eyebrow">ASSET PROFILE</p><h3>حجم منابع و بارگذاری</h3></div></div><div id="asset-summary" class="asset-summary"><div class="empty-state">در حال بررسی فایل‌ها…</div></div><div id="asset-list" class="asset-list"></div></div>
+        <div><div class="section-heading compact-heading"><div><p class="section-eyebrow">CACHE & OFFLINE</p><h3>Service Worker و کش</h3></div></div><div id="sw-panel" class="sw-panel"><div class="empty-state">در حال بررسی وضعیت کش…</div></div></div>
+      </section>
+
+      <section class="report-section">
+        <div class="section-heading"><div><p class="section-eyebrow">MANUAL VERIFICATION</p><h3>موارد نیازمند بررسی انسانی</h3></div><span class="section-note">اتوماسیون جایگزین تست دستی نیست</span></div>
+        <div class="manual-grid">
+          <article><span class="manual-number">01</span><div><strong>کنتراست و خوانایی</strong><p>متن، لینک‌ها، حالت hover و هر دو پوسته روشن/تاریک با WCAG 2.2 AA بررسی چشمی و ابزاری شوند.</p></div><span class="manual-tag">دستی</span></article>
+          <article><span class="manual-number">02</span><div><strong>صفحه‌خوان و صفحه‌کلید</strong><p>ترتیب فوکوس، اعلان تغییر زبان، منوی موبایل و نام قابل‌فهم کنترل‌ها با صفحه‌خوان آزمایش شود.</p></div><span class="manual-tag">دستی</span></article>
+          <article><span class="manual-number">03</span><div><strong>تعامل تغییر تم</strong><p>دکمه خورشید/ماه را در هر دو صفحه و پس از بارگذاری مجدد، با ماوس و صفحه‌کلید آزمایش کن.</p></div><span class="manual-tag">دستی</span></article>
+          <article><span class="manual-number">04</span><div><strong>مرورگر و دستگاه واقعی</strong><p>Chrome، Firefox و Safari در اندازه‌های موبایل و دسکتاپ و با شبکه کند بررسی شوند.</p></div><span class="manual-tag">دستی</span></article>
+        </div>
+      </section>
+
+      <div class="report-footer"><span>این گزارش در مرورگر فعلی و در زمان اجرای آزمون ساخته شده است.</span><button id="logout-button" type="button" class="text-button">قفل‌کردن پنل</button></div>
+    </section>
+  </main>
+
+  <footer class="audit-footer"><span>ARTIN BAMOOEI / SITE QUALITY CONSOLE</span><span>آزمون‌ها فقط خواندنی‌اند و هیچ تغییری در مخزن ایجاد نمی‌کنند.</span></footer>
+</body>
+</html>
