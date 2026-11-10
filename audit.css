@@ -135,7 +135,31 @@ html[data-theme="dark"] .theme-moon { display: block; }
 .progress-copy { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px 20px; margin-bottom: 9px; font-size: 11px; }
 .progress-copy span { color: var(--quiet); }
 .progress-track { height: 5px; border-radius: 10px; overflow: hidden; background: var(--surface-strong); }
-.progress-track span { display: block; width: 0; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--accent), var(--good)); transition: width .3s ease; }
+.progress-track progress { display: block; width: 100%; height: 5px; border: 0; border-radius: 10px; overflow: hidden; background: var(--surface-strong); accent-color: var(--accent); }
+.progress-track progress::-webkit-progress-bar { background: var(--surface-strong); }
+.progress-track progress::-webkit-progress-value { background: linear-gradient(90deg, var(--accent), var(--good)); border-radius: 10px; }
+.progress-track progress::-moz-progress-bar { background: linear-gradient(90deg, var(--accent), var(--good)); border-radius: 10px; }
+.score-value-0 { --score: 0; }
+.score-value-5 { --score: 5; }
+.score-value-10 { --score: 10; }
+.score-value-15 { --score: 15; }
+.score-value-20 { --score: 20; }
+.score-value-25 { --score: 25; }
+.score-value-30 { --score: 30; }
+.score-value-35 { --score: 35; }
+.score-value-40 { --score: 40; }
+.score-value-45 { --score: 45; }
+.score-value-50 { --score: 50; }
+.score-value-55 { --score: 55; }
+.score-value-60 { --score: 60; }
+.score-value-65 { --score: 65; }
+.score-value-70 { --score: 70; }
+.score-value-75 { --score: 75; }
+.score-value-80 { --score: 80; }
+.score-value-85 { --score: 85; }
+.score-value-90 { --score: 90; }
+.score-value-95 { --score: 95; }
+.score-value-100 { --score: 100; }
 .summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 0 0 28px; }
 .summary-card { min-height: 100px; padding: 15px 17px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); display: grid; grid-template-columns: 1fr auto; align-content: center; }
 .summary-label { color: var(--muted); font-size: 11px; }
