@@ -49,7 +49,7 @@ assert.match(js, /localStorage\.setItem\(["']portfolio-language["']/, "language 
 assert.match(js, /localStorage\.setItem\(["']portfolio-theme["']/, "theme persistence missing");
 assert.match(js, /history\.replaceState/, "language URL synchronization missing");
 assert.match(boot, /queryLanguage/, "pre-paint language bootstrap missing");
-for (const key of ["heroVisualLabel", "visualData", "visualTagline", "visualAnalyze", "visualBuild", "visualImprove", "brandHomeLabel", "academicFocusLabel"]) {
+for (const key of ["brandHomeLabel", "academicFocusLabel"]) {
 }
 assert.match(js, /document\.documentElement\.dir\s*=\s*currentLanguage === "FA" \? "rtl" : "ltr"/, "RTL/LTR switching missing");
 assert.match(css, /html\[dir="rtl"\]/, "RTL CSS missing");
@@ -123,13 +123,15 @@ console.log("Deep quality audit: PASS (responsive semantics, local assets/fragme
 /* Hero visual: localized copy, early language direction, theme-aware depth and reduced motion. */
 assert.match(boot, /root\.dir\s*=\s*language === "FA"\s*\?\s*"rtl"\s*:\s*"ltr"/, "pre-paint RTL direction assignment missing");
 assert.match(boot, /root\.lang\s*=\s*language === "FA"\s*\?\s*"fa"\s*:\s*language\.toLowerCase\(\)/, "pre-paint language assignment missing");
-for (const key of ["heroVisualLabel", "visualData", "visualTagline", "visualAnalyze", "visualBuild", "visualImprove", "brandHomeLabel", "academicFocusLabel"]) {
+for (const key of ["brandHomeLabel", "academicFocusLabel"]) {
   assert.ok(main.includes('data-i18n="' + key + '"') || main.includes('data-i18n-aria="' + key + '"'), "localized hero/accessibility key missing in HTML: " + key);
   assert.equal(js.split("\n").filter(line => line.includes(key + ":")).length, 3, "hero/accessibility translation must exist in all locales: " + key);
 }
-assert.match(css, /--hero-fill-top/, "theme-aware SVG fill variables missing");
-assert.match(css, /html\[data-theme="light"\] \.hero3d/, "light-theme hero surface missing");
-assert.match(css, /drop-shadow\(0 10px 11px rgba\(34, 57, 88, \.15\)\)/, "light-theme isometric layer shadows missing");
 assert.match(css, /\.h3-links \{ display: none !important; \}/, "unnecessary vertical connection clutter should be removed");
-assert.match(css, /\.hero3d-stack svg animateMotion \{ display: none; \}/, "SVG motion should be disabled for reduced-motion users");
-assert.match(js, /visualScale/, "responsive hero graphic scale missing");
+
+assert.match(js, /function setupReveal\(\)[\s\S]*?IntersectionObserver/, "native reveal observer missing");
+assert.doesNotMatch(js, /Lenis|ScrollTrigger|gsap|requestAnimationFrame/, "continuous animation runtime remains");
+assert.match(css, /backdrop-filter: blur\(14px\) saturate\(125%\)/, "reduced navigation blur missing");
+assert.match(css, /\.theme-toggle svg[\s\S]*?width: 18px !important;[\s\S]*?height: 18px !important;/, "fixed theme icon geometry missing");
+assert.match(main, /viewBox="0 0 24 24" focusable="false"/, "theme icon SVG sizing missing");
+assert.match(boot, /serviceWorker\.register/, "service worker registration missing");
