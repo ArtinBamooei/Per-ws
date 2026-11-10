@@ -2,6 +2,10 @@ import fs from "node:fs";
 import assert from "node:assert/strict";
 const html=fs.readFileSync("index.html","utf8"), projects=fs.readFileSync("projects.html","utf8"), js=fs.readFileSync("script.js","utf8"), css=fs.readFileSync("styles.css","utf8"), boot=fs.readFileSync("theme-init.js","utf8"), sitemap=fs.readFileSync("sitemap.xml","utf8");
 const version="20261110-performance-v6";
+const errorPage=fs.readFileSync("404.html","utf8");
+assert.match(errorPage,/<a class="skip-link" href="#main">/,"404 page skip link missing");
+assert.match(errorPage,/<main class="error-page" id="main" tabindex="-1">/,"404 skip target must be focusable");
+assert.ok(errorPage.includes(`styles.css?v=${version}`),"404 stylesheet cache version mismatch");
 for(const [name,source] of [["index.html",html],["projects.html",projects]]){
  assert.match(source,/Content-Security-Policy/, `${name}: CSP missing`);
  assert.match(source,/object-src 'none'/, `${name}: object embedding not blocked`);
@@ -20,7 +24,7 @@ for(const [name,source] of [["index.html",html],["projects.html",projects]]){
  assert.match(source,/rel="icon"/,`${name}: favicon missing`);
  assert.match(source,/class="skip-link"/,`${name}: skip link missing`);
  assert.match(source,/<main[^>]*id="main"[^>]*tabindex="-1"/,`${name}: main skip target missing`);
- for(const [lang,label] of [["EN","English"],["DE","Deutsch"],["FA","فارسی"]]) assert.match(source,new RegExp(`data-lang="${lang}"[^>]*aria-label="${label}"`),`${name}: ${lang} accessible label missing`);
+ for(const lang of ["EN","DE","FA"]) assert.match(source,new RegExp(`data-lang="${lang}"[^>]*aria-label="${lang}[^"]*"`),`${name}: ${lang} visible text must be included in its accessible name`);
  assert.ok(!source.includes("\\n  <link"),`${name}: escaped newline in head`);
  for(const a of [...source.matchAll(/<a\b[^>]*target="_blank"[^>]*>/g)].map(m=>m[0])) assert.match(a,/rel="[^"]*noopener[^"]*"/,`${name}: unsafe target=_blank link`);
  for(const id of [...source.matchAll(/href="#([-\w]+)"/g)].map(m=>m[1])) assert.match(source,new RegExp(`id=["']${id}["']`),`${name}: broken anchor #${id}`);
