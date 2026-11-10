@@ -901,53 +901,60 @@
   function renderLighthouse() {
     const grid = $("#psi-grid");
     grid.replaceChildren();
-    for (const strategy of ["mobile", "desktop"]) {
-      const data = state.lighthouse[strategy];
+    const targets = [
+      ["home-mobile", "صفحه اصلی · موبایل"],
+      ["home-desktop", "صفحه اصلی · دسکتاپ"],
+      ["projects-mobile", "پروژه‌ها · موبایل"],
+      ["projects-desktop", "پروژه‌ها · دسکتاپ"]
+    ];
+    targets.forEach(([key, label]) => {
+      const data = state.lighthouse[key];
       const card = make("article", "psi-card");
       const head = make("div", "psi-card-head");
-      head.append(make("strong", "psi-platform", strategy === "mobile" ? "موبایل" : "دسکتاپ"));
+      head.append(make("strong", "psi-platform", label));
       head.append(make("span", "psi-state", data ? (data.lighthouseResult?.fetchTime ? new Date(data.lighthouseResult.fetchTime).toLocaleString("fa-IR") : "Lighthouse") : "داده دریافت نشد"));
       card.append(head);
       if (!data) {
-        card.append(make("div", "empty-state", "PageSpeed Insights در دسترس نبود؛ محدودیت API، شبکه یا سهمیه ممکن است علت باشد."));
+        card.append(make("div", "empty-state", "PageSpeed Insights برای این صفحه/دستگاه پاسخ نداد یا سهمیه API محدود شد."));
         grid.append(card);
-        continue;
+        return;
       }
       const scores = make("div", "score-grid");
       const categories = data.lighthouseResult.categories || {};
       const definitions = [
         ["performance", "Performance"], ["accessibility", "Accessibility"], ["best-practices", "Best Practices"], ["seo", "SEO"]
       ];
-      definitions.forEach(([key, label]) => {
-        const score = categories[key]?.score;
+      definitions.forEach(([category, title]) => {
+        const score = categories[category]?.score;
         const item = make("div", "score-item");
         const ring = make("div", "score-ring " + (statusFromScore(score) === "unknown" ? "" : "score-" + statusFromScore(score)));
         if (Number.isFinite(score)) ring.classList.add("score-value-" + Math.round(score * 20) * 5);
         ring.append(make("strong", "", scoreLabel(score)));
-        item.append(ring, make("small", "", label));
+        item.append(ring, make("small", "", title));
         scores.append(item);
       });
       card.append(scores);
+      card.append(make("p", "fine-print", "Lighthouse " + (data.lighthouseResult.lighthouseVersion || "version نامشخص") + " · " + (data.lighthouseResult.configSettings?.formFactor || data.lighthouseResult.configSettings?.emulatedFormFactor || "form factor نامشخص")));
       grid.append(card);
-    }
+    });
   }
 
   function renderVitals() {
     const grid = $("#vitals-grid");
     grid.replaceChildren();
-    const platforms = [
-      ["mobile", "موبایل"],
-      ["desktop", "دسکتاپ"]
+    const targets = [
+      ["home-mobile", "خانه · موبایل"],
+      ["home-desktop", "خانه · دسکتاپ"],
+      ["projects-mobile", "پروژه‌ها · موبایل"],
+      ["projects-desktop", "پروژه‌ها · دسکتاپ"]
     ].filter(([key]) => Boolean(state.lighthouse[key]));
-    if (!platforms.length) {
+    if (!targets.length) {
       grid.append(make("div", "empty-state", "شاخص‌های PageSpeed دریافت نشدند. پس از رفع دسترسی API دوباره اجرا کن."));
       return;
     }
     const allVitals = [];
-    platforms.forEach(([key, label]) => {
-      extractVitals(state.lighthouse[key]).forEach(metric => {
-        allVitals.push({ ...metric, platform: label });
-      });
+    targets.forEach(([key, label]) => {
+      extractVitals(state.lighthouse[key]).forEach(metric => allVitals.push({ ...metric, platform: label }));
     });
     state.vitals = allVitals;
     allVitals.forEach(metric => {
@@ -961,9 +968,10 @@
       card.append(badge);
       grid.append(card);
     });
-    const hasFieldData = platforms.some(([key]) => Object.keys(getFieldMetrics(state.lighthouse[key])).length > 0);
+    const hasFieldData = targets.some(([key]) => Object.keys(getFieldMetrics(state.lighthouse[key])).length > 0
+      || Object.keys(getOriginMetrics(state.lighthouse[key])).length > 0);
     if (!hasFieldData) {
-      grid.append(make("div", "empty-state", "داده میدانی CrUX برای این اجرا موجود نبود؛ مقادیر LCP، CLS و FCP در صورت وجود از Lighthouse Lab هستند. INP و TTFB بدون داده میدانی اعلام نمی‌شوند."));
+      grid.append(make("div", "empty-state", "داده میدانی CrUX در دسترس نبود؛ مقادیر LCP، CLS و FCP از Lighthouse Lab هستند. INP و TTFB فقط در صورت وجود Field data گزارش می‌شوند."));
     }
   }
 
