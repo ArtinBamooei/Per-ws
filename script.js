@@ -312,7 +312,7 @@ function setupTheme() {
   applyTheme(document.documentElement.dataset.theme === "dark" ? "dark" : "light", false);
   toggle.addEventListener("click", () => {
     const nextTheme = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
-    withViewTransition(() => applyTheme(nextTheme));
+    applyTheme(nextTheme);
   });
 }
 
