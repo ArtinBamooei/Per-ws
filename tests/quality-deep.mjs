@@ -168,6 +168,8 @@ const serviceWorker = fs.readFileSync("sw.js", "utf8");
 assert.match(serviceWorker, /searchParams\.get\("audit"\) === "1"/, "service worker must bypass audit navigations");
 assert.match(serviceWorker, /self\.clients\.get\(event\.clientId\)/, "service worker must bypass cached subresources for audit frames");
 
+assert.match(auditHtml, /audit\.js\?v=20261110-audit-v6/, "audit engine cache key must match the final build");
+
 console.log("Deep quality audit: PASS (responsive semantics, local assets/fragments, language/theme persistence, RTL, reduced motion, keyboard navigation, case-study completeness and payload budgets).");
 
 
