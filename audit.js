@@ -264,7 +264,7 @@
         reject(new Error("مهلت پاسخ صفحه واقعی تمام شد: " + expectedType));
       }, timeout);
       window.addEventListener("message", handler);
-      frame.contentWindow.postMessage({ source: "portfolio-audit-parent", runId, type: command, ...payload }, origin);
+      if (command) frame.contentWindow.postMessage({ source: "portfolio-audit-parent", runId, type: command, ...payload }, origin);
     });
   }
 
@@ -1048,6 +1048,24 @@
     try { localStorage.setItem(REPORT_KEY, JSON.stringify(report)); } catch (_) {}
   }
 
+  async function check404Handling() {
+    const probe = new URL("__site-audit-nonexistent-" + Date.now().toString(36), SITE_URL);
+    try {
+      const response = await fetchWithTimeout(probe.href, { cache: "no-store" }, 15000);
+      const body = await response.text();
+      const looksLike404 = /page not found|404/i.test(body);
+      const status = response.status === 404 && looksLike404 ? "pass" : response.status === 200 ? "warn" : "fail";
+      addResult("HTTP و مسیریابی", "Fallback صفحه 404 واقعی", status,
+        "HTTP " + response.status + " · نشانگر صفحه خطا: " + looksLike404,
+        "پاسخ اشتباه به مسیر ناموجود ممکن است خطای پیمایش یا soft-404 سئو ایجاد کند.",
+        "برای مسیر ناموجود باید HTTP 404 و صفحه راهنمای قابل‌فهم نمایش داده شود.");
+    } catch (error) {
+      addResult("HTTP و مسیریابی", "Fallback صفحه 404 واقعی", "warn", error.message || "probe ناموفق",
+        "رفتار مسیر ناموجود در این اجرا تأیید نشد.",
+        "یک مسیر تصادفی ناموجود را با Network panel بررسی کن.");
+    }
+  }
+
   async function runAudit() {
     if (state.running) return;
     state.running = true;
@@ -1057,28 +1075,37 @@
     state.assets = null;
     state.serviceWorker = null;
     state.vitals = [];
+    state.browser = { pages: [] };
+    state.markup = [];
     const previous = (() => {
       try { return JSON.parse(localStorage.getItem(REPORT_KEY) || "null"); } catch (_) { return null; }
     })();
     $("#rerun-button").disabled = true;
     $("#progress-panel").hidden = false;
-    setProgress(4, "شروع بررسی", "در حال واکشی صفحه اصلی، مطالعات پروژه و صفحه خطا");
+    setProgress(3, "شروع بررسی", "ساختار و پاسخ HTTP صفحات اصلی، پروژه‌ها و صفحه 404");
     renderFindings();
     try {
       const paths = ["./", "./projects.html", "./404.html"];
       const pagePromise = Promise.all(paths.map(scanDocument));
-      const psiPromise = Promise.all(["mobile", "desktop"].map(async strategy => {
+      const targets = [
+        { key: "home-mobile", url: SITE_URL, strategy: "mobile", page: "صفحه اصلی", platform: "موبایل" },
+        { key: "home-desktop", url: SITE_URL, strategy: "desktop", page: "صفحه اصلی", platform: "دسکتاپ" },
+        { key: "projects-mobile", url: new URL("projects.html", SITE_URL).href, strategy: "mobile", page: "صفحه پروژه‌ها", platform: "موبایل" },
+        { key: "projects-desktop", url: new URL("projects.html", SITE_URL).href, strategy: "desktop", page: "صفحه پروژه‌ها", platform: "دسکتاپ" }
+      ];
+      const psiPromise = Promise.all(targets.map(async target => {
         try {
-          const result = await runPageSpeed(strategy);
-          state.lighthouse[strategy] = result;
-          addResult("عملکرد و شاخص‌ها", "PageSpeed Insights · " + (strategy === "mobile" ? "موبایل" : "دسکتاپ"), "pass",
-            "Lighthouse با موفقیت اجرا شد؛ " + (result.lighthouseResult.fetchTime || "زمان اجرا نامشخص"),
-            "معیار آزمایشگاهی برای مقایسه عملکرد نسخه‌های سایت فراهم می‌شود.",
-            "با گزارش‌های قبلی مقایسه و ابتدا شاخص‌های قرمز Performance را بررسی کن.");
+          const result = await runPageSpeed(target.url, target.strategy);
+          state.lighthouse[target.key] = result;
+          addResult("عملکرد و شاخص‌ها", "PageSpeed Insights · " + target.page + " · " + target.platform, "pass",
+            "Lighthouse " + (result.lighthouseResult.lighthouseVersion || "نامشخص") + " · " + (result.lighthouseResult.fetchTime || "زمان اجرا نامشخص"),
+            "این اجرا سنجش آزمایشگاهی واقعی برای URL و دستگاه مشخص‌شده فراهم می‌کند.",
+            "دسته‌بندی‌ها و auditهای دارای وزن را با اجرای قبلی مقایسه کن.");
+          addLighthouseFindings(result, target.page, target.platform);
         } catch (error) {
-          addResult("عملکرد و شاخص‌ها", "PageSpeed Insights · " + (strategy === "mobile" ? "موبایل" : "دسکتاپ"), "warn",
+          addResult("عملکرد و شاخص‌ها", "PageSpeed Insights · " + target.page + " · " + target.platform, "warn",
             error.message || "API در دسترس نیست.",
-            "معیارهای Lighthouse و داده‌های میدانی این اجرا قابل دریافت نشدند.",
+            "معیارهای Lighthouse و داده‌های میدانی این صفحه/دستگاه دریافت نشدند.",
             "دسترسی به Google PageSpeed API، محدودیت شبکه و سهمیه درخواست را بررسی کن.");
         }
       }));
@@ -1088,29 +1115,53 @@
           "صفحه Actions مخزن را مستقیماً بررسی کن.");
       });
 
-      setProgress(22, "تحلیل صفحات و پیوندها", "در حال بررسی دسترس‌پذیری، سئو، CSP و مسیرهای داخلی");
+      setProgress(17, "بررسی استانداردها و صفحات", "در حال تحلیل ساختار، لینک‌ها، سئو و پاسخ HTTP");
       const pages = await pagePromise;
-      setProgress(53, "تحلیل عملکرد و انتشار", "منتظر PageSpeed Insights و GitHub Actions");
-      await Promise.all([psiPromise, ciPromise]);
-      setProgress(76, "بررسی منابع و کش", "در حال اندازه‌گیری فایل‌های محلی و Service Worker");
-      await Promise.all([checkAssets(pages), checkServiceWorker(), checkSecurityHeaders(pages[0])]);
-      await inspectInteractionAssets(pages[0]);
-      addResult("دسترس‌پذیری", "اعتبارسنجی جامع WCAG", "info",
-        "این پنل آزمون‌های ایستای قابل اجرا در مرورگر را انجام می‌دهد؛ axe-core و بررسی contrast/صفحه‌خوان در این اجرا بارگذاری نشده‌اند.",
-        "موفقیت آزمون‌های خودکار به معنی انطباق کامل WCAG 2.2 AA نیست.",
-        "برای تأیید نهایی از axe DevTools یا Lighthouse به‌همراه تست دستی صفحه‌کلید و screen reader استفاده کن.");
+      setProgress(32, "اعتبارسنجی رسمی HTML", "درخواست نتایج W3C Nu برای صفحه اصلی و پروژه‌ها");
+      const markupPromise = Promise.all(["./", "./projects.html"].map(validateMarkup));
+      setProgress(42, "اجرای صفحات در مرورگر", "آزمون runtime، axe-core، منابع، تعاملات و چهار عرض صفحه");
+      const browserPromise = (async () => {
+        for (const pagePath of ["./", "./projects.html"]) {
+          try {
+            const pageResult = await runBrowserPageAudit(pagePath);
+            state.browser.pages.push(pageResult);
+            addBrowserFindings(pageResult);
+          } catch (error) {
+            addResult("مرورگر واقعی", pagePath + " · اجرای صفحه در iframe", "warn",
+              error.message || String(error),
+              "خطاهای runtime، axe-core و breakpointهای این صفحه در این اجرا اندازه‌گیری نشدند.",
+              "بررسی کن که GitHub Pages اجازه بارگذاری same-origin iframe و فایل audit-bridge.js را می‌دهد.");
+          }
+        }
+      })();
+      const pagespeedAndCiPromise = Promise.all([psiPromise, ciPromise]);
 
+      await Promise.all([browserPromise, markupPromise, pagespeedAndCiPromise]);
+      setProgress(83, "بررسی منابع، کش و خطاهای HTTP", "در حال بررسی assetها، Service Worker، headers و fallback صفحه 404");
+      await Promise.all([
+        checkAssets(pages),
+        checkServiceWorker(),
+        checkSecurityHeaders(pages[0]),
+        check404Handling()
+      ]);
+      await inspectInteractionAssets(pages[0]);
       renderLighthouse();
       renderVitals();
+      renderBrowser();
+      renderMarkup();
       renderFindings();
       renderSummary();
       renderPrevious(previous);
       saveReport();
-      setProgress(100, "آزمون به پایان رسید", "گزارش آماده است؛ برای دریافت نسخه PDF از گزینه چاپ استفاده کن.");
+      setProgress(100, "آزمون کامل شد", "گزارش آماده است؛ داده‌های میدانی/آزمایشگاهی و محدودیت هر آزمون جداگانه مشخص شده‌اند.");
     } catch (error) {
       addResult("اجرای آزمون", "خطای غیرمنتظره در اجرای گزارش", "fail", error.message || String(error),
         "بخشی از آزمون‌ها ممکن است کامل نشده باشد.",
         "کنسول مرورگر را بررسی کن و دوباره اجرا کن.");
+      renderLighthouse();
+      renderVitals();
+      renderBrowser();
+      renderMarkup();
       renderFindings();
       renderSummary();
     } finally {
