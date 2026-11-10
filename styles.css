@@ -5367,3 +5367,49 @@ html[data-theme="dark"] #contact .contact-shell {
 @media (prefers-reduced-motion: reduce) {
   .top-glass-menu, .top-glass-menu *, .theme-toggle { transition: none !important; }
 }
+
+
+/* Persistent entry point for the site audit console. */
+.audit-entry {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 32px;
+  padding: 4px 11px;
+  border: 1px solid color-mix(in srgb, var(--accent) 42%, var(--border));
+  border-radius: 9px;
+  background: color-mix(in srgb, var(--accent) 7%, var(--surface));
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1.2;
+  white-space: nowrap;
+  transition: background .18s ease, border-color .18s ease, transform .18s ease;
+}
+.audit-entry:hover,
+.audit-entry:focus-visible {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 13%, var(--surface));
+  transform: translateY(-1px);
+}
+.mobile-nav .audit-entry-mobile {
+  display: block;
+  margin-top: 12px;
+  padding: 11px 14px;
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--border));
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--accent) 7%, var(--surface));
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 800;
+}
+@media (max-width: 520px) {
+  .audit-entry { min-height: 29px; padding: 4px 7px; font-size: 10px; }
+}
+@media (max-width: 360px) {
+  .audit-entry { padding-inline: 6px; font-size: 9px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .audit-entry { transition: none; }
+  .audit-entry:hover { transform: none; }
+}
