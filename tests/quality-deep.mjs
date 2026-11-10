@@ -161,6 +161,13 @@ assert.match(auditBridge, /language-switcher/, "real three-language interaction 
 assert.match(auditBridge, /themePersisted/, "theme persistence assertion missing");
 assert.match(auditJs, /language-switcher/, "language interaction findings are not rendered");
 
+assert.match(auditJs, /searchParams\.set\("audit", "1"\)/, "live probes must use direct-network cache-bypass URLs");
+assert.match(auditJs, /checkCrawlFiles/, "robots and sitemap audits missing");
+assert.match(auditJs, /check404Handling/, "real HTTP 404 probe missing");
+const serviceWorker = fs.readFileSync("sw.js", "utf8");
+assert.match(serviceWorker, /searchParams\.get\("audit"\) === "1"/, "service worker must bypass audit navigations");
+assert.match(serviceWorker, /self\.clients\.get\(event\.clientId\)/, "service worker must bypass cached subresources for audit frames");
+
 console.log("Deep quality audit: PASS (responsive semantics, local assets/fragments, language/theme persistence, RTL, reduced motion, keyboard navigation, case-study completeness and payload budgets).");
 
 
