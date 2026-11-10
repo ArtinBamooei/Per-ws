@@ -1268,7 +1268,7 @@
   function renderPrevious(previous) {
     const dateNode = $("#report-date");
     let text = "زمان اجرا: " + new Date().toLocaleString("fa-IR");
-    if (previous && previous.counts && previous.schemaVersion === 2 && previous.validity === "valid") {
+    if (isAuditReportValid() && previous && previous.counts && previous.schemaVersion === 2 && previous.validity === "valid") {
       const current = state.results.reduce((acc, result) => {
         acc[result.status] = (acc[result.status] || 0) + 1;
         return acc;
@@ -1289,6 +1289,15 @@
     dateNode.textContent = text;
   }
 
+  function isAuditReportValid() {
+    const sw = state.serviceWorker;
+    return Boolean(state.integrity?.verified && state.integrity?.valid
+      && sw?.supported && sw.registrations > 0 && sw.active === 1
+      && sw.activeState === "activated" && sw.controller
+      && sw.workerInfo?.cacheName && sw.cacheVersionMatches
+      && sw.scriptOk && sw.auditBypass && sw.oldCaches?.length === 0);
+  }
+
   function saveReport() {
     const counts = state.results.reduce((acc, result) => {
       acc[result.status] = (acc[result.status] || 0) + 1;
@@ -1296,7 +1305,7 @@
     }, {});
     const report = {
       schemaVersion: 2,
-      validity: state.integrity?.valid && state.serviceWorker?.cacheVersionMatches ? "valid" : "invalid",
+      validity: isAuditReportValid() ? "valid" : "invalid",
       integrity: state.integrity,
       serviceWorker: state.serviceWorker,
       createdAt: new Date().toISOString(),
@@ -1453,7 +1462,7 @@
   function downloadReport() {
     const payload = {
       schemaVersion: 2,
-      validity: state.integrity?.valid && state.serviceWorker?.cacheVersionMatches && !state.serviceWorker?.oldCaches?.length ? "valid" : "invalid",
+      validity: isAuditReportValid() ? "valid" : "invalid",
       integrity: state.integrity,
       site: SITE_URL,
       repository: REPOSITORY,
