@@ -226,3 +226,8 @@ assert.match(css, /backdrop-filter: blur\(14px\) saturate\(125%\)/, "reduced nav
 assert.match(css, /\.theme-toggle svg[\s\S]*?width: 18px !important;[\s\S]*?height: 18px !important;/, "fixed theme icon geometry missing");
 assert.match(main, /viewBox="0 0 24 24" focusable="false"/, "theme icon SVG sizing missing");
 assert.match(boot, /serviceWorker\.register/, "service worker registration missing");
+
+assert.doesNotMatch(main, /<a class="brand"[^>]*aria-label=/, "brand link must derive its accessible name from visible content");
+assert.doesNotMatch(cases, /<a class="brand"[^>]*aria-label=/, "project brand link must derive its accessible name from visible content");
+assert.match(css, /\.nav-link, \.footer-links > a, \.text-link, \.detail-back\s*\{\s*min-height: 24px;/, "compact navigation links must meet 24px target height");
+assert.match(serviceWorker, /portfolio-static-v10/, "service worker cache must be invalidated after target-size changes");
