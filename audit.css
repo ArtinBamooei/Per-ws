@@ -369,3 +369,7 @@ html[data-theme="dark"] .theme-moon { display: block; }
   .audit-test-frame { display: none !important; }
   .browser-page-card, .axe-rule, .markup-message { break-inside: avoid; }
 }
+
+/* Deployment integrity status */
+.integrity-pass { color: #16845b; }
+.integrity-fail { color: #c43b45; }
