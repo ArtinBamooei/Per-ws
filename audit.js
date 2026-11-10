@@ -1019,18 +1019,23 @@
 
   function renderPrevious(previous) {
     const dateNode = $("#report-date");
-    const now = new Date();
-    let text = "زمان اجرا: " + now.toLocaleString("fa-IR");
+    let text = "زمان اجرا: " + new Date().toLocaleString("fa-IR");
     if (previous && previous.counts) {
       const current = state.results.reduce((acc, result) => {
         acc[result.status] = (acc[result.status] || 0) + 1;
         return acc;
       }, {});
       const diff = (current.fail || 0) - (previous.counts.fail || 0);
-      const trend = diff < 0 ? "موارد بحرانی " + Math.abs(diff) + " مورد کمتر" : diff > 0 ? "موارد بحرانی " + diff + " مورد بیشتر" : "تعداد موارد بحرانی بدون تغییر";
-      text += " · مقایسه با " + new Date(previous.createdAt).toLocaleDateString("fa-IR") + ": " + trend;
+      const axeNow = state.browser.pages.reduce((sum, page) => sum + (page.desktop.accessibility?.violations?.length || 0) + (page.desktop.mobileAccessibility?.violations?.length || 0), 0);
+      const htmlNow = state.markup.reduce((sum, item) => sum + (item.errors?.length || 0), 0);
+      const parts = [
+        diff < 0 ? "موارد بحرانی " + Math.abs(diff) + " مورد کمتر" : diff > 0 ? "موارد بحرانی " + diff + " مورد بیشتر" : "موارد بحرانی بدون تغییر"
+      ];
+      if (Number.isFinite(previous.axeViolations)) parts.push("نقض‌های axe: " + (axeNow - previous.axeViolations >= 0 ? "+" : "") + (axeNow - previous.axeViolations));
+      if (Number.isFinite(previous.htmlErrors)) parts.push("خطاهای HTML: " + (htmlNow - previous.htmlErrors >= 0 ? "+" : "") + (htmlNow - previous.htmlErrors));
+      text += " · مقایسه با " + new Date(previous.createdAt).toLocaleDateString("fa-IR") + ": " + parts.join(" · ");
     } else {
-      text += " · این نخستین گزارش ذخیره‌شده در این مرورگر است.";
+      text += " · هنوز گزارش قبلی در این مرورگر ذخیره نشده است.";
     }
     dateNode.textContent = text;
   }
@@ -1043,7 +1048,19 @@
     const report = {
       createdAt: new Date().toISOString(),
       counts,
-      lighthouse: Object.fromEntries(Object.entries(state.lighthouse).map(([key, data]) => [key, data ? Object.fromEntries(Object.entries(data.lighthouseResult.categories || {}).map(([name, item]) => [name, item.score])) : null]))
+      lighthouse: Object.fromEntries(Object.entries(state.lighthouse).map(([key, data]) => [key, data ? Object.fromEntries(Object.entries(data.lighthouseResult.categories || {}).map(([name, item]) => [name, item.score])) : null])),
+      axeViolations: state.browser.pages.reduce((sum, page) => sum + (page.desktop.accessibility?.violations?.length || 0) + (page.desktop.mobileAccessibility?.violations?.length || 0), 0),
+      htmlErrors: state.markup.reduce((sum, item) => sum + (item.errors?.length || 0), 0),
+      browser: state.browser.pages.map(page => ({
+        pagePath: page.pagePath,
+        ttfb: page.desktop.snapshot.navigation?.ttfb ?? null,
+        fcp: page.desktop.snapshot.paint?.fcp ?? null,
+        cls: page.desktop.snapshot.paint?.cls ?? null,
+        longTasks: page.desktop.snapshot.execution?.longTaskCount ?? null,
+        consoleErrors: page.desktop.snapshot.execution?.consoleErrors?.length ?? 0,
+        resourceErrors: page.desktop.snapshot.execution?.resourceErrors?.length ?? 0,
+        mobileOverflow: page.viewports.find(item => item.requestedWidth === 390)?.document?.overflowX ?? null
+      }))
     };
     try { localStorage.setItem(REPORT_KEY, JSON.stringify(report)); } catch (_) {}
   }
@@ -1187,6 +1204,9 @@
         audits: Object.fromEntries(["largest-contentful-paint", "first-contentful-paint", "cumulative-layout-shift", "server-response-time", "total-blocking-time"].map(id => [id, data.lighthouseResult.audits?.[id]?.numericValue ?? null]))
       } : null])),
       findings: state.results,
+      vitals: state.vitals,
+      browser: state.browser.pages,
+      markup: state.markup,
       assets: state.assets,
       serviceWorker: state.serviceWorker,
       recentActions: state.ciRuns.map(run => ({ name: run.name, status: run.status, conclusion: run.conclusion, branch: run.head_branch, sha: run.head_sha, updatedAt: run.updated_at, url: run.html_url }))
