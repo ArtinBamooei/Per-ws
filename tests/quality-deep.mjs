@@ -3,7 +3,7 @@ import path from "node:path";
 import assert from "node:assert/strict";
 
 const root = process.cwd();
-const pages = ["index.html", "projects.html", "404.html"];
+const pages = ["index.html", "projects.html", "404.html", "audit.html"];
 const docs = new Map(pages.map(file => [file, fs.readFileSync(path.join(root, file), "utf8")]));
 const main = docs.get("index.html");
 const cases = docs.get("projects.html");
@@ -117,6 +117,23 @@ assert.match(fs.readFileSync("sitemap.xml", "utf8"), /projects\.html/, "case stu
 assert.ok(Buffer.byteLength(css, "utf8") < 200000, "CSS payload exceeds 200 KB");
 assert.ok(Buffer.byteLength(js, "utf8") < 150000, "JS payload exceeds 150 KB");
 assert.doesNotMatch(js, /innerHTML|outerHTML|insertAdjacentHTML|document\.write\s*\(/, "unsafe HTML sink introduced");
+
+const auditHtml = docs.get("audit.html");
+const auditJs = fs.readFileSync("audit.js", "utf8");
+const auditCss = fs.readFileSync("audit.css", "utf8");
+assert.match(auditHtml, /id="pin-input"/, "audit console PIN gate missing");
+assert.match(auditHtml, /id="dashboard"/, "audit dashboard missing");
+assert.match(auditHtml, /id="download-button"/, "JSON report download missing");
+assert.match(auditHtml, /id="print-button"/, "print/PDF report action missing");
+assert.match(auditJs, /PBKDF2/, "PIN verifier must use a password-based KDF");
+assert.match(auditJs, /runPageSpeed/, "PageSpeed Insights integration missing");
+assert.match(auditJs, /api.github.com/, "GitHub Actions integration missing");
+assert.match(auditJs, /localStorage\.setItem\(REPORT_KEY/, "previous-run comparison snapshot missing");
+assert.doesNotMatch(auditJs, /\\b(?:innerHTML|outerHTML|insertAdjacentHTML|document\.write)\\b/, "audit console must not use unsafe HTML sinks");
+assert.match(auditCss, /@media print/, "print stylesheet missing");
+assert.match(auditCss, /@media \(max-width: 520px\)/, "mobile audit layout missing");
+for (const source of [main, cases]) assert.match(source, /href="\.\/audit\.html"/, "site footer must link to the audit console");
+
 console.log("Deep quality audit: PASS (responsive semantics, local assets/fragments, language/theme persistence, RTL, reduced motion, keyboard navigation, case-study completeness and payload budgets).");
 
 
