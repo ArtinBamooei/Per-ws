@@ -61,6 +61,9 @@ assert.match(main, /data-menu-toggle[^>]*aria-expanded="false"[^>]*aria-controls
 assert.match(main, /<nav class="mobile-nav" id="mobile-nav"[^>]*hidden/, "mobile navigation must start closed");
 assert.match(js, /event\.key === "Escape"/, "mobile navigation cannot be dismissed with Escape");
 assert.match(main, /class="skip-link"/, "skip link missing");
+assert.equal((main.match(/<article class="language-item">/g) || []).length, 3, "three language profile articles expected");
+assert.equal((main.match(/<h3 class="language-name" data-dynamic="lang-name-/g) || []).length, 3, "each language article must have a semantic heading");
+assert.doesNotMatch(main, /<article class="language-item">[^<]*<div class="language-top"><strong/, "language articles must have semantic headings");
 assert.match(main, /class="hero-meta" role="group"/, "hero metadata label needs group semantics");
 assert.match(main, /class="interest-list" role="group"/, "interest list label needs group semantics");
 assert.match(main, /class="contact-links contact-method-grid" role="group"/, "contact methods label needs group semantics");
@@ -187,7 +190,7 @@ assert.match(auditJs, /searchParams\.set\("audit", "1"\)/, "live probes must use
 assert.match(auditJs, /checkCrawlFiles/, "robots and sitemap audits missing");
 assert.match(auditJs, /check404Handling/, "real HTTP 404 probe missing");
 const serviceWorker = fs.readFileSync("sw.js", "utf8");
-assert.match(serviceWorker, /portfolio-static-v7/, "service worker cache version must be bumped after release changes");
+assert.match(serviceWorker, /portfolio-static-v8/, "service worker cache version must be bumped after release changes");
 assert.match(serviceWorker, /searchParams\.get\("audit"\) === "1"/, "service worker must bypass audit navigations");
 assert.match(serviceWorker, /self\.clients\.get\(event\.clientId\)/, "service worker must bypass cached subresources for audit frames");
 
