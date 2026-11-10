@@ -82,6 +82,11 @@ assert.match(css, /--accent-warm: #a8441d;/, "light warm accent contrast token m
 
 assert.match(css, /:focus-visible/, "keyboard focus style missing");
 assert.match(css, /\.language-item::before/, "creative language card motif missing");
+assert.match(main, /<article class="language-item"><div class="language-top"><h3 class="language-name"/, "language cards must use semantic headings");
+assert.doesNotMatch(main, /class="course-grade-value"[^>]*data-i18n-aria=/, "generic grade placeholder span must not receive aria-label");
+assert.doesNotMatch(main, /class="transcript-count"[^>]*data-i18n-aria=/, "generic transcript count div must not receive aria-label");
+assert.match(js, /brandHomeLabel:"Artin Bamooei, Computer Science · Data · AI, home"/, "brand accessible name must contain its visible subtitle");
+assert.match(js, /gradePlaceholder:"Not entered"/, "grade placeholder must be meaningful visible text");
 assert.match(css, /\.project-card:hover/, "project card interaction missing");
 assert.equal((main.match(/<article class="skill-group reveal">/g)||[]).length,3,"Skills preview must retain exactly three category cards");
 assert.equal((main.match(/<div class="skill-item">/g)||[]).length,17,"Skills preview must retain all 17 listed skills");
@@ -164,7 +169,7 @@ const axeLicense = fs.readFileSync("assets/vendor/AXE-CORE-LICENSE.txt", "utf8")
 assert.match(auditHtml, /frame-src 'self'/, "audit page must allow only same-origin diagnostic frames");
 assert.match(auditHtml, /https:\/\/validator\.w3\.org/, "W3C checker connect policy missing");
 assert.match(auditBridge, /portfolio-audit-bridge/, "runtime bridge message protocol missing");
-assert.ok(boot.includes("audit-bridge.js?v=20261110-audit-bridge-v4"), "updated audit bridge cache key missing");
+assert.ok(boot.includes("audit-bridge.js?v=20261110-audit-bridge-v5"), "updated audit bridge cache key missing");
 assert.match(auditBridge, /securitypolicyviolation/, "browser CSP violations are not captured");
 assert.match(auditBridge, /unhandledrejection/, "unhandled promise rejections are not captured");
 assert.match(auditBridge, /largest-contentful-paint/, "live LCP observer missing");
@@ -194,9 +199,15 @@ assert.match(serviceWorker, /portfolio-static-v8/, "service worker cache version
 assert.match(serviceWorker, /searchParams\.get\("audit"\) === "1"/, "service worker must bypass audit navigations");
 assert.match(serviceWorker, /self\.clients\.get\(event\.clientId\)/, "service worker must bypass cached subresources for audit frames");
 
-assert.match(auditHtml, /audit\.js\?v=20261110-audit-v7/, "audit engine cache key must match the final build");
+assert.match(auditHtml, /audit\.js\?v=20261110-audit-v8/, "audit engine cache key must match the final build");
 
 assert.match(auditBridge, /const loadSnapshot = snapshot\(\)|loadSnapshot = snapshot\(\)/, "page-load metrics must be captured before diagnostics and interactions");
+assert.match(auditBridge, /type: "paint", buffered: true/, "buffered Paint Timing observer missing");
+assert.match(auditBridge, /vazirmatnFaces/, "Persian font load result must include loaded font faces");
+assert.match(auditJs, /strategy\.toUpperCase\(\)/, "PageSpeed strategy must use the API enum casing");
+assert.match(auditJs, /intentionallyNoindex/, "intentional noindex pages must not get false canonical/OG warnings");
+assert.match(auditJs, /githubPagesStaticHost/, "GitHub Pages custom-header limitation must be reported accurately");
+assert.match(auditJs, /runPsiWorker/, "PageSpeed requests must use a bounded concurrency queue");
 console.log("Deep quality audit: PASS (responsive semantics, local assets/fragments, language/theme persistence, RTL, reduced motion, keyboard navigation, case-study completeness and payload budgets).");
 
 
