@@ -495,7 +495,9 @@
   async function scanDocument(path) {
     const pageUrl = new URL(path, SITE_URL);
     try {
-      const response = await fetchWithTimeout(pageUrl.href, { cache: "no-store" }, 20000);
+      const pageProbe = new URL(pageUrl.href);
+      pageProbe.searchParams.set("audit", "1");
+      const response = await fetchWithTimeout(pageProbe.href, { cache: "no-store" }, 20000);
       if (!response.ok) {
         addResult("ساختار صفحات", "دسترسی به " + path, "fail", "HTTP " + response.status, "صفحه برای کاربر بارگذاری نمی‌شود.", "مسیر و وضعیت انتشار فایل را بررسی کن.");
         return null;
@@ -665,9 +667,11 @@
       while (queue.length) {
         const url = queue.shift();
         try {
-          let response = await fetchWithTimeout(url, { method: "HEAD", cache: "no-store" }, 12000);
+          const probeUrl = new URL(url);
+          probeUrl.searchParams.set("audit", "1");
+          let response = await fetchWithTimeout(probeUrl.href, { method: "HEAD", cache: "no-store" }, 12000);
           if (response.status === 405 || response.status === 403) {
-            response = await fetchWithTimeout(url, { cache: "no-store" }, 12000);
+            response = await fetchWithTimeout(probeUrl.href, { cache: "no-store" }, 12000);
           }
           if (!response.ok) broken.push(url.replace(SITE_URL, "./"));
         } catch (_) {
@@ -699,7 +703,9 @@
       while (queue.length) {
         const [url, name] = queue.shift();
         try {
-          const response = await fetchWithTimeout(url, { cache: "no-store" }, 16000);
+          const probeUrl = new URL(url);
+          probeUrl.searchParams.set("audit", "1");
+          const response = await fetchWithTimeout(probeUrl.href, { cache: "no-store" }, 16000);
           if (!response.ok) { totals.failed++; continue; }
           const size = (await response.arrayBuffer()).byteLength;
           totals.bytes += size;
@@ -796,8 +802,8 @@
     if (!homePage) return;
     try {
       const [scriptResponse, styleResponse] = await Promise.all([
-        fetchWithTimeout(new URL("script.js", SITE_URL).href, { cache: "no-store" }, 15000),
-        fetchWithTimeout(new URL("styles.css", SITE_URL).href, { cache: "no-store" }, 15000)
+        fetchWithTimeout(new URL("script.js?audit=1", SITE_URL).href, { cache: "no-store" }, 15000),
+        fetchWithTimeout(new URL("styles.css?audit=1", SITE_URL).href, { cache: "no-store" }, 15000)
       ]);
       const scriptText = scriptResponse.ok ? await scriptResponse.text() : "";
       const styleText = styleResponse.ok ? await styleResponse.text() : "";
@@ -853,8 +859,8 @@
   async function checkCrawlFiles() {
     try {
       const [robotsResponse, sitemapResponse] = await Promise.all([
-        fetchWithTimeout(new URL("robots.txt", SITE_URL).href, { cache: "no-store" }, 12000),
-        fetchWithTimeout(new URL("sitemap.xml", SITE_URL).href, { cache: "no-store" }, 12000)
+        fetchWithTimeout(new URL("robots.txt?audit=1", SITE_URL).href, { cache: "no-store" }, 12000),
+        fetchWithTimeout(new URL("sitemap.xml?audit=1", SITE_URL).href, { cache: "no-store" }, 12000)
       ]);
       let robotsText = "";
       let sitemapText = "";
@@ -1133,6 +1139,7 @@
 
   async function check404Handling() {
     const probe = new URL("__site-audit-nonexistent-" + Date.now().toString(36), SITE_URL);
+    probe.searchParams.set("audit", "1");
     try {
       const response = await fetchWithTimeout(probe.href, { cache: "no-store" }, 15000);
       const body = await response.text();
