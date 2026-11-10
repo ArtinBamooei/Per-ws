@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import assert from "node:assert/strict";
 const html=fs.readFileSync("index.html","utf8"), projects=fs.readFileSync("projects.html","utf8"), js=fs.readFileSync("script.js","utf8"), css=fs.readFileSync("styles.css","utf8"), boot=fs.readFileSync("theme-init.js","utf8"), sitemap=fs.readFileSync("sitemap.xml","utf8");
-const version="20261110-performance-v8";
+const version="20261110-performance-v9";
 const errorPage=fs.readFileSync("404.html","utf8");
 assert.match(errorPage,/<a class="skip-link" href="#main">/,"404 page skip link missing");
 assert.match(errorPage,/<main class="error-page" id="main" tabindex="-1">/,"404 skip target must be focusable");
@@ -24,6 +24,9 @@ for(const [name,source] of [["index.html",html],["projects.html",projects]]){
  assert.match(source,/rel="icon"/,`${name}: favicon missing`);
  assert.match(source,/class="skip-link"/,`${name}: skip link missing`);
  assert.match(source,/<main[^>]*id="main"[^>]*tabindex="-1"/,`${name}: main skip target missing`);
+ const brandTag=source.match(/<a class="brand"[^>]*aria-label="([^"]+)"/);
+ assert.ok(brandTag && brandTag[1].includes("Computer Science · Data · AI"),`${name}: brand accessible name must include visible subtitle`);
+ for(const tag of source.matchAll(/<div\b[^>]*aria-label=[^>]*>/gi)) assert.match(tag[0],/\brole="/,`${name}: aria-labelled div needs an appropriate role`);
  for(const lang of ["EN","DE","FA"]) assert.match(source,new RegExp(`data-lang="${lang}"[^>]*aria-label="${lang}[^"]*"`),`${name}: ${lang} visible text must be included in its accessible name`);
  assert.ok(!source.includes("\\n  <link"),`${name}: escaped newline in head`);
  for(const a of [...source.matchAll(/<a\b[^>]*target="_blank"[^>]*>/g)].map(m=>m[0])) assert.match(a,/rel="[^"]*noopener[^"]*"/,`${name}: unsafe target=_blank link`);
@@ -32,6 +35,9 @@ for(const [name,source] of [["index.html",html],["projects.html",projects]]){
 assert.equal((js.match(/innerHTML/g)||[]).length,0,"innerHTML usage detected");
 assert.equal((html.match(/style\s*=/gi)||[]).length,0,"inline styles violate CSP");
 assert.match(html,/fonts\.googleapis\.com\/css2\?family=Vazirmatn/,"Vazirmatn font missing");
+assert.doesNotMatch(html,/class="course-grade-value"[^>]*data-i18n-aria=/,"generic grade placeholder must not have aria-label");
+assert.doesNotMatch(html,/class="transcript-count"[^>]*data-i18n-aria=/,"generic transcript count must not have aria-label");
+assert.match(css,/--accent-warm: #a8441d/,"project number accent must meet WCAG AA contrast on the light card background");
 for(const id of ["air-quality","supermarket-analytics","machine-learning"]) { assert.match(html,new RegExp('<a class="project-card project-card-link reveal" href="./projects.html#'+id+'"'),`project card is not a whole-card link: ${id}`); assert.ok(projects.includes(`id="${id}"`),`missing detail ${id}`); }
 assert.doesNotMatch(html,/data-i18n="caseStudyLink"|Case study ↗|مطالعه موردی/, "obsolete case-study card link remains");
 assert.equal((html.match(/class="project-card project-card-link reveal"/g)||[]).length,3,"all project cards must be clickable links");
