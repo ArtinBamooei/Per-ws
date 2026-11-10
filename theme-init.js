@@ -23,7 +23,7 @@
   if (window.parent !== window && auditParams.get("audit") === "1" && /^[a-zA-Z0-9_-]{8,80}$/.test(auditParams.get("auditRun") || "")) {
     const auditBridge = document.createElement("script");
     auditBridge.async = false;
-    auditBridge.src = new URL("./audit-bridge.js?v=20261110-audit-bridge-v2", window.location.href).href;
+    auditBridge.src = new URL("./audit-bridge.js?v=20261110-audit-bridge-v3", window.location.href).href;
     document.head.append(auditBridge);
   }
 
