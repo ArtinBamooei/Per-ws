@@ -132,7 +132,7 @@
   }
 
   async function runPageSpeed(pageUrl, strategy) {
-    const endpoint = new URL("https://www.googleapis.com/pagespeedonline/v5/runPagespeed");
+    const endpoint = new URL("https://pagespeedonline.googleapis.com/pagespeedonline/v5/runPagespeed");
     endpoint.searchParams.set("url", pageUrl);
     endpoint.searchParams.set("strategy", strategy);
     ["performance", "accessibility", "best-practices", "seo"].forEach(category => endpoint.searchParams.append("category", category));
