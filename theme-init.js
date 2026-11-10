@@ -17,4 +17,11 @@
   if (![ "EN", "DE", "FA" ].includes(language)) language = "EN";
   root.lang = language === "FA" ? "fa" : language.toLowerCase();
   root.dir = language === "FA" ? "rtl" : "ltr";
+
+  // Register a tiny same-origin cache; it never blocks the first paint.
+  if ("serviceWorker" in navigator && window.isSecureContext) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("./sw.js", { scope: "./" }).catch(() => {});
+    }, { once: true });
+  }
 })();
