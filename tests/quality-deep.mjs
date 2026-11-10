@@ -230,4 +230,4 @@ assert.match(boot, /serviceWorker\.register/, "service worker registration missi
 assert.doesNotMatch(main, /<a class="brand"[^>]*aria-label=/, "brand link must derive its accessible name from visible content");
 assert.doesNotMatch(cases, /<a class="brand"[^>]*aria-label=/, "project brand link must derive its accessible name from visible content");
 assert.match(css, /\.nav-link, \.footer-links > a, \.text-link, \.detail-back\s*\{\s*min-height: 24px;/, "compact navigation links must meet 24px target height");
-assert.match(serviceWorker, /portfolio-static-v10/, "service worker cache must be invalidated after target-size changes");
+assert.match(serviceWorker, /portfolio-static-v11/, "service worker cache must be invalidated after target-size changes");
