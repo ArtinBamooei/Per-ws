@@ -1,0 +1,5 @@
+axe-core 4.14.0
+Copyright (c) 2015-2026 Deque Systems, Inc.
+Licensed under Mozilla Public License 2.0 (MPL-2.0). See AXE-CORE-LICENSE.txt.
+Official project: https://github.com/dequelabs/axe-core
+Vendored browser engine used for accessibility auditing only. The file is kept locally to avoid a runtime CDN dependency.
