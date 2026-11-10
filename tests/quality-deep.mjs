@@ -61,6 +61,22 @@ assert.match(main, /data-menu-toggle[^>]*aria-expanded="false"[^>]*aria-controls
 assert.match(main, /<nav class="mobile-nav" id="mobile-nav"[^>]*hidden/, "mobile navigation must start closed");
 assert.match(js, /event\.key === "Escape"/, "mobile navigation cannot be dismissed with Escape");
 assert.match(main, /class="skip-link"/, "skip link missing");
+assert.match(main, /class="hero-meta" role="group"/, "hero metadata label needs group semantics");
+assert.match(main, /class="interest-list" role="group"/, "interest list label needs group semantics");
+assert.match(main, /class="contact-links contact-method-grid" role="group"/, "contact methods label needs group semantics");
+assert.match(main, /class="footer-langs" role="group"/, "footer language controls need group semantics");
+assert.match(cases, /class="language-switcher" role="group"/, "project language controls need group semantics");
+assert.match(cases, /class="footer-langs" role="group"/, "project footer language controls need group semantics");
+for (const [source, page] of [[main, "home"], [cases, "projects"]]) {
+  for (const lang of ["EN", "DE", "FA"]) assert.ok(source.includes('data-lang="' + lang + '" aria-label="' + lang + ' — '), page + ": accessible name must include visible language code " + lang);
+}
+assert.match(js, /langENLabel:"EN — English"/, "English language label translation missing");
+assert.match(js, /langDELabel:"DE — German"/, "German language label translation missing");
+assert.match(js, /langFALabel:"FA — Persian"/, "Persian language label translation missing");
+assert.match(fs.readFileSync("404.html", "utf8"), /<a class="skip-link" href="#main">/, "404 keyboard skip link missing");
+assert.match(fs.readFileSync("404.html", "utf8"), /<main class="error-page" id="main" tabindex="-1">/, "404 main target must be focusable");
+assert.match(css, /--accent-warm: #a8441d;/, "light warm accent contrast token missing");
+
 assert.match(css, /:focus-visible/, "keyboard focus style missing");
 assert.match(css, /\.language-item::before/, "creative language card motif missing");
 assert.match(css, /\.project-card:hover/, "project card interaction missing");
@@ -127,6 +143,7 @@ assert.match(auditHtml, /id="download-button"/, "JSON report download missing");
 assert.match(auditHtml, /id="print-button"/, "print/PDF report action missing");
 assert.match(auditJs, /PBKDF2/, "PIN verifier must use a password-based KDF");
 assert.match(auditJs, /runPageSpeed/, "PageSpeed Insights integration missing");
+assert.match(auditJs, /pagespeedonline\\.googleapis\\.com/, "canonical PageSpeed API endpoint missing");
 assert.match(auditJs, /api.github.com/, "GitHub Actions integration missing");
 assert.match(auditJs, /localStorage\.setItem\(REPORT_KEY/, "previous-run comparison snapshot missing");
 assert.doesNotMatch(auditJs, /\b(?:innerHTML|outerHTML|insertAdjacentHTML|document\.write)\b/, "audit console must not use unsafe HTML sinks");
