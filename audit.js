@@ -21,6 +21,7 @@
     ciRuns: [],
     assets: null,
     serviceWorker: null,
+    integrity: null,
     vitals: [],
     browser: { pages: [] },
     markup: [],
@@ -711,6 +712,114 @@
     return broken;
   }
 
+
+  async function gitBlobSha(buffer) {
+    const prefix = new TextEncoder().encode("blob " + buffer.byteLength + "\0");
+    const bytes = new Uint8Array(prefix.length + buffer.byteLength);
+    bytes.set(prefix, 0);
+    bytes.set(new Uint8Array(buffer), prefix.length);
+    return hex(await crypto.subtle.digest("SHA-1", bytes));
+  }
+
+  async function checkDeploymentIntegrity() {
+    const paths = ["index.html", "projects.html", "404.html", "audit.html", "script.js", "styles.css", "theme-init.js", "sw.js", "audit.js", "audit-bridge.js", "audit.css"];
+    const report = { verified: false, valid: false, branch: "main", commit: null, checkedAt: new Date().toISOString(), files: [], error: "" };
+    try {
+      const commitResponse = await fetchWithTimeout("https://api.github.com/repos/" + REPOSITORY + "/commits/main", {
+        cache: "no-store", headers: { Accept: "application/vnd.github+json" }
+      }, 18000);
+      if (!commitResponse.ok) throw new Error("GitHub commit API: HTTP " + commitResponse.status);
+      const commit = await commitResponse.json();
+      const treeSha = commit.commit?.tree?.sha;
+      if (!commit.sha || !treeSha) throw new Error("اطلاعات commit/tree شاخه main ناقص است.");
+      report.commit = commit.sha;
+      const treeResponse = await fetchWithTimeout("https://api.github.com/repos/" + REPOSITORY + "/git/trees/" + treeSha + "?recursive=1", {
+        cache: "no-store", headers: { Accept: "application/vnd.github+json" }
+      }, 22000);
+      if (!treeResponse.ok) throw new Error("GitHub tree API: HTTP " + treeResponse.status);
+      const tree = await treeResponse.json();
+      if (tree.truncated) throw new Error("فهرست فایل‌های GitHub ناقص بود؛ تطبیق کامل ممکن نیست.");
+      const expected = new Map((tree.tree || []).filter(item => item.type === "blob").map(item => [item.path, item.sha]));
+      const queue = [...paths];
+      const workers = Array.from({ length: 4 }, async () => {
+        while (queue.length) {
+          const path = queue.shift();
+          const expectedSha = expected.get(path) || null;
+          const item = { path, expectedSha, actualSha: null, status: "unverified", bytes: null };
+          try {
+            if (!expectedSha) throw new Error("فایل در commit فعلی main وجود ندارد.");
+            const url = new URL(path, SITE_URL);
+            url.searchParams.set("audit", "1");
+            url.searchParams.set("auditIntegrity", commit.sha.slice(0, 12));
+            const response = await fetchWithTimeout(url.href, { cache: "no-store" }, 18000);
+            if (!response.ok) throw new Error("HTTP " + response.status);
+            const buffer = await response.arrayBuffer();
+            item.bytes = buffer.byteLength;
+            item.actualSha = await gitBlobSha(buffer);
+            item.status = item.actualSha === expectedSha ? "match" : "mismatch";
+          } catch (error) {
+            item.error = error.message || String(error);
+            item.status = "error";
+          }
+          report.files.push(item);
+        }
+      });
+      await Promise.all(workers);
+      report.files.sort((a, b) => paths.indexOf(a.path) - paths.indexOf(b.path));
+      report.verified = report.files.length === paths.length && report.files.every(item => item.expectedSha && item.actualSha);
+      report.valid = report.verified && report.files.every(item => item.status === "match");
+      if (!report.verified) report.error = "تطبیق همه فایل‌ها با commit مخزن کامل نشد.";
+    } catch (error) {
+      report.error = error.message || String(error);
+    }
+    state.integrity = report;
+    const mismatches = report.files.filter(item => item.status !== "match");
+    addResult("یکپارچگی انتشار", "تطبیق فایل‌های واقعاً منتشرشده با GitHub main",
+      report.valid ? "pass" : "fail",
+      report.valid
+        ? report.files.length + " فایل با SHA-1 واقعی Git برابرند · commit " + report.commit.slice(0, 12)
+        : (report.error || (mismatches.length + " فایل با commit فعلی مخزن تطبیق ندارند.")) + " · " + mismatches.map(item => item.path + ": " + (item.status === "mismatch" ? "نسخه متفاوت" : item.error || "تأییدنشده")).join("؛ "),
+      "نسخه قدیمی یا کش‌شده می‌تواند نتیجه آزمون را درباره کدی غیر از نسخه فعلی مخزن نشان دهد.",
+      "تا زمان تطبیق همه فایل‌ها با commit منتشرشده، این گزارش معتبر تلقی نمی‌شود؛ انتشار GitHub Pages و کش مرورگر/Service Worker را بررسی کن.");
+    renderIntegrity();
+    return report;
+  }
+
+  function renderIntegrity() {
+    const data = state.integrity;
+    const node = $("#integrity-panel");
+    if (!data || !node) return;
+    node.replaceChildren();
+    const summary = make("div", "sw-line");
+    summary.append(make("span", "", "اعتبار نسخه منتشرشده"), make("strong", data.valid ? "integrity-pass" : "integrity-fail", data.valid ? "تأیید شد" : "نامعتبر / تأییدنشده"));
+    node.append(summary);
+    const commit = make("div", "sw-line");
+    commit.append(make("span", "", "commit شاخه main"), make("strong", "", data.commit ? data.commit.slice(0, 12) : "دریافت نشد"));
+    node.append(commit);
+    data.files.forEach(item => {
+      const row = make("div", "sw-line");
+      row.append(make("span", "", item.path), make("strong", item.status === "match" ? "integrity-pass" : "integrity-fail",
+        item.status === "match" ? "مطابق" : item.status === "mismatch" ? "نسخه متفاوت" : "تأیید نشد"));
+      node.append(row);
+    });
+    if (data.error) node.append(make("p", "empty-state", data.error));
+  }
+
+  async function requestWorkerInfo(worker) {
+    if (!worker || !("MessageChannel" in window)) return null;
+    return new Promise(resolve => {
+      const channel = new MessageChannel();
+      const timer = window.setTimeout(() => { channel.port1.close(); resolve(null); }, 2500);
+      channel.port1.onmessage = event => {
+        window.clearTimeout(timer);
+        channel.port1.close();
+        resolve(event.data || null);
+      };
+      try { worker.postMessage({ type: "PORTFOLIO_AUDIT_INFO" }, [channel.port2]); }
+      catch (_) { window.clearTimeout(timer); channel.port1.close(); resolve(null); }
+    });
+  }
+
   async function checkAssets(pages) {
     const assetUrls = new Map();
     for (const page of pages.filter(Boolean)) {
@@ -775,35 +884,68 @@
   }
 
   async function checkServiceWorker() {
-    const sw = { supported: "serviceWorker" in navigator, controller: Boolean(navigator.serviceWorker?.controller), registrations: 0, cacheNames: [], cacheEntries: 0, scriptOk: false, auditBypass: false };
+    const sw = {
+      supported: "serviceWorker" in navigator,
+      controller: Boolean(navigator.serviceWorker?.controller),
+      controllerScriptURL: navigator.serviceWorker?.controller?.scriptURL || null,
+      registrations: 0, active: 0, waiting: 0, installing: 0,
+      activeState: "unavailable", workerInfo: null,
+      cacheNames: [], cacheEntries: 0, scriptOk: false, auditBypass: false,
+      deployedCacheName: null, cacheVersionMatches: false, oldCaches: []
+    };
     try {
       if (sw.supported) {
         const registrations = await navigator.serviceWorker.getRegistrations();
-        const matches = registrations.filter(reg => reg.active?.scriptURL.endsWith("/sw.js") || reg.waiting?.scriptURL.endsWith("/sw.js"));
+        const scopePath = new URL(SITE_URL).pathname;
+        const matches = registrations.filter(reg =>
+          (reg.active?.scriptURL || reg.waiting?.scriptURL || "").endsWith("/sw.js")
+          && new URL(reg.scope).pathname.startsWith(scopePath));
         sw.registrations = matches.length;
+        const registration = matches.sort((a, b) => Number(Boolean(b.active)) - Number(Boolean(a.active)))[0];
+        if (registration) {
+          sw.active = Number(Boolean(registration.active));
+          sw.waiting = Number(Boolean(registration.waiting));
+          sw.installing = Number(Boolean(registration.installing));
+          sw.activeState = registration.active?.state || "no-active-worker";
+          sw.workerInfo = await requestWorkerInfo(registration.active);
+        }
         const keys = await caches.keys();
         sw.cacheNames = keys.filter(key => key.startsWith("portfolio-static-"));
         for (const name of sw.cacheNames) {
           const cache = await caches.open(name);
           sw.cacheEntries += (await cache.keys()).length;
         }
-        const response = await fetchWithTimeout(new URL("sw.js?audit=1", SITE_URL).href, { cache: "no-store" }, 12000);
+        const response = await fetchWithTimeout(new URL("sw.js?audit=1&auditIntegrity=" + Date.now(), SITE_URL).href, { cache: "no-store" }, 12000);
         if (response.ok) {
           const source = await response.text();
           sw.scriptOk = source.includes("cache.put") && source.includes("cache.match") && source.includes("clients.claim");
           sw.auditBypass = source.includes('searchParams.get("audit") === "1"');
+          sw.deployedCacheName = source.match(/CACHE_NAME\s*=\s*["']([^"']+)["']/)?.[1] || null;
         }
+        sw.cacheVersionMatches = Boolean(sw.deployedCacheName && sw.workerInfo?.cacheName === sw.deployedCacheName);
+        sw.oldCaches = sw.cacheNames.filter(name => name !== sw.deployedCacheName);
       }
-    } catch (_) {}
+    } catch (error) {
+      sw.error = error.message || String(error);
+    }
     state.serviceWorker = sw;
-    addResult("کش و آفلاین", "ثبت Service Worker", sw.registrations ? "pass" : "warn",
-      "پشتیبانی مرورگر: " + (sw.supported ? "بله" : "خیر") + " · registration: " + sw.registrations + " · controller: " + (sw.controller ? "فعال" : "در این نشست کنترل‌کننده نیست"),
-      "نبود ثبت فعال، قابلیت cache-first و fallback آفلاین را محدود می‌کند.",
-      "ثبت SW را پس از انتشار بررسی کن و بعد از تغییر نسخه، cache قدیمی را پاک‌سازی کن.");
-    addResult("کش و آفلاین", "سلامت فایل Service Worker و Cache Storage", sw.scriptOk && sw.auditBypass ? "pass" : "warn",
-      "فایل sw.js: " + (sw.scriptOk ? "الگوی cache دیده شد" : "قابل تأیید نیست") + " · bypass تست زنده: " + sw.auditBypass + " · cacheها: " + sw.cacheNames.length + " · ورودی‌ها: " + sw.cacheEntries,
-      "کش ناقص یا قدیمی ممکن است نسخه‌های ناسازگار فایل‌ها را ارائه دهد.",
-      "نسخه cache و مسیرهای cache را پس از هر انتشار بررسی کن.");
+    const workerHealthy = sw.supported && sw.registrations > 0 && sw.active === 1
+      && sw.activeState === "activated" && sw.controller
+      && sw.workerInfo?.cacheName && sw.cacheVersionMatches
+      && sw.scriptOk && sw.auditBypass && sw.oldCaches.length === 0;
+    addResult("کش و آفلاین", "وضعیت واقعی Service Worker فعال",
+      workerHealthy ? "pass" : "fail",
+      "registration: " + sw.registrations + " · active: " + sw.active + " (" + sw.activeState + ") · waiting: " + sw.waiting
+        + " · controller: " + (sw.controller ? "بله" : "خیر") + " · controller script: " + (sw.controllerScriptURL || "ندارد")
+        + " · worker cache: " + (sw.workerInfo?.cacheName || "پاسخ نداد"),
+      "وجود یک registration به‌تنهایی ثابت نمی‌کند Worker فعال، کنترل‌کننده صفحه و هم‌نسخه با فایل منتشرشده است.",
+      "Worker را به‌روزرسانی و فعال کن؛ cache نسخه قدیمی را پاک کن و پس از reload دوباره آزمون بگیر.");
+    addResult("کش و آفلاین", "تطبیق Cache Storage با نسخه منتشرشده",
+      sw.cacheVersionMatches && sw.oldCaches.length === 0 ? "pass" : "fail",
+      "نسخه در sw.js: " + (sw.deployedCacheName || "نامشخص") + " · نسخه Worker فعال: " + (sw.workerInfo?.cacheName || "نامشخص")
+        + " · cacheهای قدیمی/غیرمنتظره: " + (sw.oldCaches.join(", ") || "هیچ‌کدام") + " · ورودی‌ها: " + sw.cacheEntries,
+      "cache قدیمی می‌تواند فایل‌هایی از انتشارهای متفاوت را در یک نشست ترکیب کند.",
+      "پس از فعال‌شدن Worker جدید، فقط cache نسخه جاری باید باقی بماند.");
     renderServiceWorker();
   }
 
@@ -817,6 +959,11 @@
       ["ثبت فعال sw.js", String(data.registrations)],
       ["کنترل صفحه فعلی", data.controller ? "فعال" : "هنوز فعال نیست"],
       ["Cache Storage", data.cacheNames.length + " cache"],
+      ["وضعیت Worker فعال", data.activeState],
+      ["نسخه cache در Worker", data.workerInfo?.cacheName || "تأیید نشد"],
+      ["نسخه cache منتشرشده", data.deployedCacheName || "نامشخص"],
+      ["تطبیق نسخه‌ها", data.cacheVersionMatches ? "بله" : "خیر"],
+      ["cacheهای قدیمی", String(data.oldCaches.length)],
       ["ورودی‌های cache", String(data.cacheEntries)]
     ];
     items.forEach(([label, value]) => {
@@ -1121,7 +1268,7 @@
   function renderPrevious(previous) {
     const dateNode = $("#report-date");
     let text = "زمان اجرا: " + new Date().toLocaleString("fa-IR");
-    if (previous && previous.counts) {
+    if (previous && previous.counts && previous.schemaVersion === 2 && previous.validity === "valid") {
       const current = state.results.reduce((acc, result) => {
         acc[result.status] = (acc[result.status] || 0) + 1;
         return acc;
@@ -1136,8 +1283,9 @@
       if (Number.isFinite(previous.htmlErrors)) parts.push("خطاهای HTML: " + (htmlNow - previous.htmlErrors >= 0 ? "+" : "") + (htmlNow - previous.htmlErrors));
       text += " · مقایسه با " + new Date(previous.createdAt).toLocaleDateString("fa-IR") + ": " + parts.join(" · ");
     } else {
-      text += " · هنوز گزارش قبلی در این مرورگر ذخیره نشده است.";
+      text += previous ? " · گزارش قبلی به دلیل قدیمی‌بودن قالب یا تأیید‌نشدن نسخه، از مقایسه معتبر کنار گذاشته شد." : " · هنوز گزارش قبلی در این مرورگر ذخیره نشده است.";
     }
+    if (state.integrity && !state.integrity.valid) text += " · هشدار: گزارش فعلی نامعتبر است (نسخه منتشرشده تأیید نشد).";
     dateNode.textContent = text;
   }
 
@@ -1147,6 +1295,10 @@
       return acc;
     }, {});
     const report = {
+      schemaVersion: 2,
+      validity: state.integrity?.valid && state.serviceWorker?.cacheVersionMatches ? "valid" : "invalid",
+      integrity: state.integrity,
+      serviceWorker: state.serviceWorker,
       createdAt: new Date().toISOString(),
       counts,
       lighthouse: Object.fromEntries(Object.entries(state.lighthouse).map(([key, data]) => [key, data ? Object.fromEntries(Object.entries(data.lighthouseResult.categories || {}).map(([name, item]) => [name, item.score])) : null])),
@@ -1193,6 +1345,7 @@
     state.ciRuns = [];
     state.assets = null;
     state.serviceWorker = null;
+    state.integrity = null;
     state.vitals = [];
     state.browser = { pages: [] };
     state.markup = [];
@@ -1263,6 +1416,7 @@
 
       await Promise.all([browserPromise, markupPromise, pagespeedAndCiPromise]);
       setProgress(83, "بررسی منابع، کش و خطاهای HTTP", "در حال بررسی assetها، Service Worker، headers و fallback صفحه 404");
+      await checkDeploymentIntegrity();
       await Promise.all([
         checkAssets(pages),
         checkServiceWorker(),
@@ -1279,7 +1433,7 @@
       renderSummary();
       renderPrevious(previous);
       saveReport();
-      setProgress(100, "آزمون کامل شد", "گزارش آماده است؛ داده‌های میدانی/آزمایشگاهی و محدودیت هر آزمون جداگانه مشخص شده‌اند.");
+      setProgress(100, state.integrity?.valid ? "آزمون کامل شد · نسخه تأییدشده" : "آزمون انجام شد · گزارش نامعتبر است", state.integrity?.valid ? "فایل‌های منتشرشده با commit مخزن و Service Worker تطبیق داده شدند." : "به دلیل اختلاف نسخه یا نبود امکان تأیید یکپارچگی، این گزارش نباید نتیجه معتبر سایت تلقی شود.");
     } catch (error) {
       addResult("اجرای آزمون", "خطای غیرمنتظره در اجرای گزارش", "fail", error.message || String(error),
         "بخشی از آزمون‌ها ممکن است کامل نشده باشد.",
@@ -1298,6 +1452,9 @@
 
   function downloadReport() {
     const payload = {
+      schemaVersion: 2,
+      validity: state.integrity?.valid && state.serviceWorker?.cacheVersionMatches && !state.serviceWorker?.oldCaches?.length ? "valid" : "invalid",
+      integrity: state.integrity,
       site: SITE_URL,
       repository: REPOSITORY,
       generatedAt: new Date().toISOString(),
