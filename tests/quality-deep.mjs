@@ -211,7 +211,7 @@ assert.match(auditJs, /runPsiWorker/, "PageSpeed requests must use a bounded con
 assert.match(auditJs, /checkDeploymentIntegrity/, "live deployed files must be hash-verified against the GitHub main tree");
 assert.match(auditJs, /gitBlobSha/, "deployed asset comparison must use Git blob SHA-1, not filename/version strings");
 assert.match(auditJs, /schemaVersion: 2/, "audit reports must be versioned and reject legacy snapshots");
-assert.match(auditJs, /previous\\.schemaVersion === 2 && previous\\.validity === "valid"/, "legacy or invalid reports must not be used as valid baselines");
+assert.match(auditJs, /previous\.schemaVersion === 2 && previous\.validity === "valid"/, "legacy or invalid reports must not be used as valid baselines");
 assert.match(auditJs, /PORTFOLIO_AUDIT_INFO/, "active Service Worker must expose its actual cache version");
 assert.match(auditHtml, /id="integrity-panel"/, "deployment integrity panel missing");
 assert.match(auditBridge, /loadedAssets/, "real iframe loaded asset URLs must be captured");
