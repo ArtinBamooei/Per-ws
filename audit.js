@@ -387,7 +387,7 @@
         const [url, name] = queue.shift();
         try {
           const response = await fetchWithTimeout(url, { cache: "no-store" }, 16000);
-          if (!response.ok) { totals.failed++; return; }
+          if (!response.ok) { totals.failed++; continue; }
           const size = (await response.arrayBuffer()).byteLength;
           totals.bytes += size;
           const ext = name.split(".").pop().toLowerCase();
@@ -847,7 +847,7 @@
         error.textContent = err.message || "امکان بررسی رمز وجود ندارد.";
       } finally {
         button.disabled = false;
-        button.innerHTML = "ورود و اجرای تست <span aria-hidden='true'>←</span>";
+        button.textContent = "ورود و اجرای تست";
       }
     });
   }
