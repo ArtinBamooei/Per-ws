@@ -459,7 +459,7 @@
         "اسکریپت اصلی: " + (scriptResponse.ok ? "دریافت شد" : "ناموفق") + " · تنظیم حالت و ذخیره انتخاب: " + (themeOk ? "الگوی مورد انتظار موجود است" : "کامل تأیید نشد"),
         "مشکل در کنترل پوسته می‌تواند باعث ناهماهنگی دیداری یا عدم ماندگاری ترجیح کاربر شود.",
         "رفتار کلیک، aria-pressed و باقی‌ماندن انتخاب پس از reload را دستی هم آزمایش کن.");
-      const reducedMotionOk = styleResponse.ok && /prefers-reduced-motion\\s*:\\s*reduce/.test(styleText);
+      const reducedMotionOk = styleResponse.ok && /prefers-reduced-motion\s*:\s*reduce/.test(styleText);
       addResult("دسترس‌پذیری", "CSS برای کاهش حرکت", reducedMotionOk ? "pass" : "warn",
         styleResponse.ok ? (reducedMotionOk ? "قاعده prefers-reduced-motion در stylesheet پیدا شد." : "قاعده prefers-reduced-motion پیدا نشد.") : "فایل CSS دریافت نشد.",
         "حرکت غیرضروری می‌تواند برای برخی کاربران آزاردهنده باشد.",
