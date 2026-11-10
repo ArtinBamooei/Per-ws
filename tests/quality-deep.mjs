@@ -137,6 +137,26 @@ assert.match(main, /class="audit-entry-mobile" href="\.\/audit\.html"[^>]*data-i
 assert.equal(js.split("\n").filter(line => line.includes("navAudit:")).length, 3, "audit navigation label must be translated in all three languages");
 for (const source of [main, cases]) assert.match(source, /href="\.\/audit\.html"/, "site footer must link to the audit console");
 
+
+const auditBridge = fs.readFileSync("audit-bridge.js", "utf8");
+const axeVendor = fs.readFileSync("assets/vendor/axe-core-4.14.0.min.js", "utf8");
+const axeLicense = fs.readFileSync("assets/vendor/AXE-CORE-LICENSE.txt", "utf8");
+assert.match(auditHtml, /frame-src 'self'/, "audit page must allow only same-origin diagnostic frames");
+assert.match(auditHtml, /https:\/\/validator\.w3\.org/, "W3C checker connect policy missing");
+assert.match(auditBridge, /portfolio-audit-bridge/, "runtime bridge message protocol missing");
+assert.match(auditBridge, /securitypolicyviolation/, "browser CSP violations are not captured");
+assert.match(auditBridge, /unhandledrejection/, "unhandled promise rejections are not captured");
+assert.match(auditBridge, /largest-contentful-paint/, "live LCP observer missing");
+assert.match(auditBridge, /longtask/, "long-task observer missing");
+assert.match(auditBridge, /axe\.run/, "axe-core execution missing");
+assert.match(axeVendor, /axe v4\.14\.0/, "pinned axe-core version missing");
+assert.ok(axeLicense.length > 1000, "axe-core MPL and third-party license notices missing");
+assert.match(auditJs, /runBrowserPageAudit/, "live browser page runner missing");
+assert.match(auditJs, /validateMarkup/, "W3C HTML validation integration missing");
+assert.match(auditJs, /home-mobile[\s\S]*projects-desktop/, "Lighthouse must cover both pages and both form factors");
+assert.match(auditHtml, /id="browser-runtime"/, "live browser report panel missing");
+assert.match(auditHtml, /id="markup-panel"/, "W3C validation panel missing");
+
 console.log("Deep quality audit: PASS (responsive semantics, local assets/fragments, language/theme persistence, RTL, reduced motion, keyboard navigation, case-study completeness and payload budgets).");
 
 
