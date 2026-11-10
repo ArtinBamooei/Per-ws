@@ -22,6 +22,8 @@
     assets: null,
     serviceWorker: null,
     vitals: [],
+    browser: { pages: [] },
+    markup: [],
     running: false,
     filter: "all"
   };
@@ -89,22 +91,31 @@
   }
 
   function getFieldMetrics(psi) {
-    return psi?.loadingExperience?.metrics || psi?.originLoadingExperience?.metrics || {};
+    return psi?.loadingExperience?.metrics || {};
+  }
+
+  function getOriginMetrics(psi) {
+    return psi?.originLoadingExperience?.metrics || {};
   }
 
   function extractVitals(psi) {
     const audits = psi?.lighthouseResult;
-    const field = getFieldMetrics(psi);
+    const pageField = getFieldMetrics(psi);
+    const originField = getOriginMetrics(psi);
+    const hasPageField = Object.keys(pageField).length > 0;
+    const field = hasPageField ? pageField : originField;
+    const fieldSource = hasPageField ? "CrUX صفحه (صدک ۷۵)" : Object.keys(originField).length ? "CrUX مبدأ (صدک ۷۵)" : null;
     const metrics = [
-      { key: "lcp", label: "LCP", field: fieldValue(field, "LARGEST_CONTENTFUL_PAINT_MS"), lab: auditValue(audits, "largest-contentful-paint"), unit: "زمان نمایش بزرگ‌ترین محتوا" },
-      { key: "inp", label: "INP", field: fieldValue(field, "INTERACTION_TO_NEXT_PAINT"), lab: null, unit: "تأخیر تعامل کاربر" },
-      { key: "cls", label: "CLS", field: fieldValue(field, "CUMULATIVE_LAYOUT_SHIFT_SCORE", 1000), lab: auditValue(audits, "cumulative-layout-shift"), unit: "پایداری چیدمان" },
-      { key: "fcp", label: "FCP", field: fieldValue(field, "FIRST_CONTENTFUL_PAINT_MS"), lab: auditValue(audits, "first-contentful-paint"), unit: "اولین نمایش محتوای صفحه" },
-      { key: "ttfb", label: "TTFB", field: fieldValue(field, "EXPERIMENTAL_TIME_TO_FIRST_BYTE_MS") ?? fieldValue(field, "EXPERIMENTAL_TIME_TO_FIRST_BYTE"), lab: null, unit: "زمان دریافت اولین بایت" }
+      { key: "lcp", label: "LCP", field: fieldValue(field, "LARGEST_CONTENTFUL_PAINT_MS"), lab: auditValue(audits, "largest-contentful-paint") },
+      { key: "inp", label: "INP", field: fieldValue(field, "INTERACTION_TO_NEXT_PAINT"), lab: null },
+      { key: "cls", label: "CLS", field: fieldValue(field, "CUMULATIVE_LAYOUT_SHIFT_SCORE", 1000), lab: auditValue(audits, "cumulative-layout-shift") },
+      { key: "fcp", label: "FCP", field: fieldValue(field, "FIRST_CONTENTFUL_PAINT_MS"), lab: auditValue(audits, "first-contentful-paint") },
+      { key: "ttfb", label: "TTFB", field: fieldValue(field, "EXPERIMENTAL_TIME_TO_FIRST_BYTE"), lab: null }
     ];
     return metrics.map(metric => {
       const value = metric.field ?? metric.lab;
-      return { ...metric, value, source: metric.field !== null ? "داده میدانی CrUX (صدک ۷۵)" : metric.lab !== null ? "آزمایشگاه Lighthouse" : "داده موجود نیست", status: classify(metric.key, value) };
+      const source = metric.field !== null ? fieldSource : metric.lab !== null ? "آزمایشگاه Lighthouse" : "داده موجود نیست";
+      return { ...metric, value, source, status: classify(metric.key, value) };
     });
   }
 
@@ -118,9 +129,9 @@
     }
   }
 
-  async function runPageSpeed(strategy) {
+  async function runPageSpeed(pageUrl, strategy) {
     const endpoint = new URL("https://www.googleapis.com/pagespeedonline/v5/runPagespeed");
-    endpoint.searchParams.set("url", SITE_URL);
+    endpoint.searchParams.set("url", pageUrl);
     endpoint.searchParams.set("strategy", strategy);
     ["performance", "accessibility", "best-practices", "seo"].forEach(category => endpoint.searchParams.append("category", category));
     const response = await fetchWithTimeout(endpoint.toString(), { headers: { Accept: "application/json" } }, 70000);
@@ -131,6 +142,339 @@
     const data = await response.json();
     if (!data.lighthouseResult) throw new Error("پاسخ PageSpeed فاقد lighthouseResult است.");
     return data;
+  }
+
+  function addLighthouseFindings(data, pageLabel, platformLabel) {
+    const categories = data.lighthouseResult?.categories || {};
+    const audits = data.lighthouseResult?.audits || {};
+    for (const [categoryKey, category] of Object.entries(categories)) {
+      if (!Number.isFinite(category.score)) continue;
+      const status = statusFromScore(category.score);
+      addResult("Lighthouse / " + pageLabel, pageLabel + " · " + platformLabel + " · " + (category.title || categoryKey),
+        status, "امتیاز " + Math.round(category.score * 100) + "/100",
+        "امتیاز دسته‌بندی حاصل از ارزیابی آزمایشگاهی Lighthouse است.",
+        "آزمون‌های دارای وزن بیشتر و امتیاز صفر را در جزئیات Lighthouse اولویت بده.");
+      const refs = (category.auditRefs || [])
+        .filter(ref => Number(ref.weight) > 0)
+        .map(ref => ({ ...ref, audit: audits[ref.id] }))
+        .filter(ref => ref.audit && ref.audit.score !== null && ref.audit.score !== undefined
+          && ref.audit.scoreDisplayMode !== "manual"
+          && ref.audit.scoreDisplayMode !== "notApplicable"
+          && ref.audit.score < 1)
+        .sort((a, b) => (b.weight || 0) - (a.weight || 0))
+        .slice(0, 5);
+      refs.forEach(ref => {
+        const item = ref.audit;
+        const severity = item.score === 0 && ref.weight >= 5 ? "fail" : "warn";
+        const display = item.displayValue ? " · " + item.displayValue : "";
+        addResult("Lighthouse / " + pageLabel, pageLabel + " · " + (item.title || ref.id),
+          severity, platformLabel + display + " · وزن دسته‌بندی " + ref.weight,
+          item.description || "این آزمون Lighthouse امتیاز کامل نگرفته است.",
+          item.details?.overallSavingsMs ? "صرفه‌جویی بالقوه حدود " + Math.round(item.details.overallSavingsMs) + " میلی‌ثانیه را بررسی کن." : "جزئیات و توضیح همین audit را در گزارش PageSpeed باز کن.");
+      });
+    }
+  }
+
+  async function validateMarkup(pagePath) {
+    const target = new URL(pagePath, SITE_URL).href;
+    const endpoint = new URL("https://validator.w3.org/nu/");
+    endpoint.searchParams.set("doc", target);
+    endpoint.searchParams.set("out", "json");
+    try {
+      const response = await fetchWithTimeout(endpoint.toString(), { headers: { Accept: "application/json" }, mode: "cors" }, 30000);
+      if (!response.ok) throw new Error("W3C Nu HTTP " + response.status);
+      const data = await response.json();
+      const messages = Array.isArray(data.messages) ? data.messages : [];
+      const errors = messages.filter(item => item.type === "error");
+      const warnings = messages.filter(item => item.type === "info" && item.subType === "warning");
+      const external = messages.filter(item => item.type === "non-document-error");
+      const result = { pagePath, url: target, errors, warnings, external, messages };
+      state.markup.push(result);
+      addResult("استاندارد HTML / W3C", pagePath + " · اعتبارسنجی HTML",
+        external.length ? "warn" : errors.length ? "fail" : warnings.length ? "warn" : "pass",
+        errors.length + " خطا · " + warnings.length + " هشدار · " + external.length + " خطای پردازشگر",
+        "خطاهای HTML ممکن است باعث تفاوت در DOM، دسترس‌پذیری و رفتار مرورگرها شوند.",
+        "هر پیام را با شماره خط و ستون اصلاح کن؛ هشدارها را با توجه به کاربردشان ارزیابی کن.");
+      return result;
+    } catch (error) {
+      const result = { pagePath, url: target, unavailable: true, error: error.message || String(error), messages: [] };
+      state.markup.push(result);
+      addResult("استاندارد HTML / W3C", pagePath + " · اعتبارسنجی HTML", "info",
+        "پاسخ W3C Nu در این مرورگر قابل خواندن نبود: " + result.error,
+        "به دلیل محدودیت CORS یا سرویس، اعتبارسنجی رسمی این صفحه تکمیل نشد.",
+        "برای نتیجه قطعی، URL صفحه را مستقیماً در validator.w3.org/nu بررسی کن.");
+      return result;
+    }
+  }
+
+  function renderMarkup() {
+    const root = $("#markup-panel");
+    root.replaceChildren();
+    if (!state.markup.length) {
+      root.append(make("div", "empty-state", "نتیجه W3C Nu دریافت نشد."));
+      return;
+    }
+    state.markup.forEach(result => {
+      const section = make("section", "markup-page");
+      const title = make("strong", "", result.pagePath);
+      section.append(title);
+      if (result.unavailable) {
+        section.append(make("p", "empty-state", result.error));
+        root.append(section);
+        return;
+      }
+      const errors = result.errors.length;
+      const warnings = result.warnings.length;
+      const stats = make("div", "markup-summary");
+      for (const [label, value] of [["خطا", errors], ["هشدار", warnings], ["پیام دیگر", result.external.length]]) {
+        const stat = make("div", "markup-stat");
+        stat.append(make("strong", "", value), make("span", "", label));
+        stats.append(stat);
+      }
+      section.append(stats);
+      result.messages.slice(0, 15).forEach(message => {
+        const kind = message.type === "error" ? "error" : message.subType === "warning" ? "warning" : "";
+        const card = make("article", "markup-message " + kind);
+        const location = message.lastLine ? " · خط " + message.lastLine + (message.lastColumn ? "، ستون " + message.lastColumn : "") : "";
+        card.append(make("strong", "", (message.type === "error" ? "ERROR" : message.type === "non-document-error" ? "CHECKER" : message.subType === "warning" ? "WARNING" : "INFO") + location));
+        card.append(make("p", "", message.message || "پیام بدون توضیح"));
+        section.append(card);
+      });
+      if (!result.messages.length) section.append(make("p", "empty-state", "هیچ خطا یا هشداری از W3C دریافت نشد."));
+      root.append(section);
+    });
+  }
+
+  function receiveBridgeMessage(frame, runId, expectedType, command, payload = {}, timeout = 25000) {
+    return new Promise((resolve, reject) => {
+      const origin = new URL(SITE_URL).origin;
+      const cleanup = () => {
+        window.removeEventListener("message", handler);
+        window.clearTimeout(timer);
+      };
+      const handler = event => {
+        if (event.origin !== origin || event.source !== frame.contentWindow) return;
+        const data = event.data;
+        if (!data || data.source !== "portfolio-audit-bridge" || data.runId !== runId || data.type !== expectedType) return;
+        cleanup();
+        resolve(data);
+      };
+      const timer = window.setTimeout(() => {
+        cleanup();
+        reject(new Error("مهلت پاسخ صفحه واقعی تمام شد: " + expectedType));
+      }, timeout);
+      window.addEventListener("message", handler);
+      frame.contentWindow.postMessage({ source: "portfolio-audit-parent", runId, type: command, ...payload }, origin);
+    });
+  }
+
+  async function runBrowserPageAudit(pagePath) {
+    const runId = "audit-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 12);
+    const frame = make("iframe", "audit-test-frame viewport-1365");
+    frame.title = "اجرای آزمون واقعی " + pagePath;
+    frame.tabIndex = -1;
+    const source = new URL(pagePath, SITE_URL);
+    source.searchParams.set("audit", "1");
+    source.searchParams.set("auditRun", runId);
+    const ready = receiveBridgeMessage(frame, runId, "ready", null, {}, 25000);
+    frame.src = source.href;
+    document.body.append(frame);
+    try {
+      await ready;
+      const initial = await receiveBridgeMessage(frame, runId, "audit-result", "RUN", {}, 45000);
+      if (initial.error) throw new Error(initial.error);
+      const viewports = [];
+      for (const width of [390, 768, 1024, 1365]) {
+        frame.className = "audit-test-frame viewport-" + width;
+        const check = await receiveBridgeMessage(frame, runId, "viewport-result", "VIEWPORT", { width }, 15000);
+        viewports.push(check);
+        if (width === 390) {
+          const mobileA11y = await receiveBridgeMessage(frame, runId, "accessibility-result", "ACCESSIBILITY", {}, 35000);
+          initial.mobileAccessibility = mobileA11y.accessibility || null;
+          initial.mobileAccessibilityError = mobileA11y.error || null;
+          const mobileInteractions = await receiveBridgeMessage(frame, runId, "interactions-result", "INTERACTIONS", {}, 15000);
+          initial.mobileInteractions = mobileInteractions.interactions || [];
+        }
+      }
+      return { pagePath, runId, desktop: initial, viewports };
+    } finally {
+      frame.remove();
+    }
+  }
+
+  function recordAxeResults(pageResult, accessibility, viewportLabel) {
+    if (!accessibility) {
+      addResult("دسترس‌پذیری / axe-core", pageResult.pagePath + " · اجرای axe-core · " + viewportLabel, "warn",
+        "axe-core اجرا نشد: " + (pageResult.desktop.error || pageResult.desktop.mobileAccessibilityError || "نتیجه در دسترس نیست"),
+        "آزمون استاندارد WCAG خودکار این صفحه تکمیل نشده است.",
+        "بارگذاری فایل محلی axe-core و اجرای فریم هم‌مبدأ را بررسی کن.");
+      return;
+    }
+    const violations = accessibility.violations || [];
+    addResult("دسترس‌پذیری / axe-core", pageResult.pagePath + " · axe-core " + accessibility.version + " · " + viewportLabel,
+      violations.length ? "warn" : "pass",
+      accessibility.passes + " قاعده پاس‌شده · " + violations.length + " قاعده نقض‌شده · " + (accessibility.incomplete || []).length + " مورد نیازمند بازبینی",
+      "axe-core قواعد خودکار WCAG را اجرا می‌کند اما جایگزین ارزیابی انسانی و همه معیارها نیست.",
+      "نقض‌های serious/critical را اولویت بده و موارد incomplete را دستی بازبینی کن.");
+    violations.forEach(rule => {
+      const status = ["critical", "serious"].includes(rule.impact) ? "fail" : "warn";
+      const selectors = rule.nodes.slice(0, 5).map(node => node.target.join(" ")).join(" | ");
+      addResult("دسترس‌پذیری / axe-core", pageResult.pagePath + " · " + rule.id + " · " + viewportLabel,
+        status, (rule.impact || "unknown") + " · " + rule.totalNodes + " عنصر · " + selectors,
+        rule.help + " " + rule.description,
+        "جزئیات قاعده و selectorهای درگیر را در بخش گزارش واقعی مرورگر بررسی و اصلاح کن.");
+    });
+    (accessibility.incomplete || []).slice(0, 10).forEach(rule => {
+      addResult("دسترس‌پذیری / axe-core", pageResult.pagePath + " · بازبینی دستی " + rule.id + " · " + viewportLabel,
+        "info", (rule.impact || "unknown") + " · " + rule.totalNodes + " عنصر نیازمند بررسی",
+        rule.help + " این مورد به‌صورت خودکار قطعی نشده است.",
+        "عنصرهای گزارش‌شده را با صفحه‌خوان، صفحه‌کلید و بررسی بصری کنترل کن.");
+    });
+  }
+
+  function addBrowserFindings(pageResult) {
+    const data = pageResult.desktop.snapshot;
+    const pageLabel = pageResult.pagePath;
+    const timing = data.navigation || {};
+    const statusForMs = value => !Number.isFinite(value) ? "info" : value <= 800 ? "pass" : value <= 1800 ? "warn" : "fail";
+    addResult("مرورگر واقعی / عملکرد", pageLabel + " · TTFB مرورگر",
+      statusForMs(timing.ttfb), Number.isFinite(timing.ttfb) ? timing.ttfb + " ms در iframe فعلی" : "Navigation Timing در دسترس نیست.",
+      "این زمان در یک بار اجرا و مرورگر فعلی اندازه‌گیری شده و معادل CrUX نیست.",
+      "برای روند پایدار، چند بار در شبکه‌های متفاوت و با PageSpeed/CrUX مقایسه کن.");
+    const fcp = data.paint?.fcp;
+    addResult("مرورگر واقعی / عملکرد", pageLabel + " · FCP مرورگر",
+      !Number.isFinite(fcp) ? "info" : fcp <= 1800 ? "pass" : fcp <= 3000 ? "warn" : "fail",
+      Number.isFinite(fcp) ? msLabel(fcp) : "Paint Timing برای FCP ثبت نشد.",
+      "نمایش دیرهنگام محتوای اولیه برداشت کاربر از سرعت سایت را کاهش می‌دهد.",
+      "فونت، CSS رندر-بلاکینگ و منابع بالای صفحه را بررسی کن.");
+    const cls = data.paint?.cls;
+    addResult("مرورگر واقعی / پایداری", pageLabel + " · CLS مرورگر",
+      !Number.isFinite(cls) ? "info" : cls <= 0.1 ? "pass" : cls <= 0.25 ? "warn" : "fail",
+      Number.isFinite(cls) ? cls.toFixed(4) : "Layout Shift ثبت نشد.",
+      "پرش چیدمان می‌تواند باعث کلیک اشتباه و تجربه ناپایدار شود.",
+      "ابعاد تصویر/فونت و اجزایی که بعد از بارگذاری وارد صفحه می‌شوند را بررسی کن.");
+    const tasks = data.execution || {};
+    addResult("مرورگر واقعی / پاسخ‌گویی", pageLabel + " · Long Tasks",
+      !tasks.longTaskCount ? "pass" : tasks.longestTask > 200 ? "fail" : "warn",
+      tasks.longTaskCount + " task · طولانی‌ترین " + (tasks.longestTask === null ? "—" : tasks.longestTask + " ms") + " · مجموع " + tasks.totalLongTaskTime + " ms",
+      "کارهای طولانی thread اصلی می‌توانند ورودی و اسکرول را مسدود کنند.",
+      "اسکریپت‌های سنگین را تقسیم، defer یا از Web Worker برای محاسبات مناسب استفاده کن.");
+    const failures = (tasks.consoleErrors || []).length + (tasks.resourceErrors || []).length + (tasks.unhandledRejections || []).length;
+    addResult("مرورگر واقعی / خطاها", pageLabel + " · خطاهای runtime و منابع",
+      failures ? "fail" : "pass",
+      "console/error: " + tasks.consoleErrors.length + " · منابع: " + tasks.resourceErrors.length + " · Promise rejection: " + tasks.unhandledRejections.length,
+      "خطاهای اجرا یا منبع ناموفق ممکن است بخشی از رابط یا عملکرد سایت را از کار بیندازند.",
+      "خطا را در کد مربوطه بررسی و مسیر یا وابستگی ناموفق را اصلاح کن.");
+    if (tasks.cspViolations?.length) {
+      addResult("امنیت", pageLabel + " · نقض‌های CSP در مرورگر", "fail",
+        tasks.cspViolations.length + " رخداد سیاست Content Security Policy ثبت شد.",
+        "منابعی که CSP مسدود کرده می‌توانند قابلیت‌های صفحه را مختل کنند یا پیکربندی امنیتی را نشان دهند.",
+        "directive و blocked URI را بررسی کن؛ فقط منبع ضروری و قابل اعتماد را مجاز کن.");
+    } else {
+      addResult("امنیت", pageLabel + " · نقض‌های CSP در مرورگر", "pass",
+        "در طول این نشست نقض قابل مشاهده‌ای از CSP ثبت نشد.",
+        "این بررسی فقط خطاهای CSP در همین اجرا را پوشش می‌دهد.",
+        "گزارش CSP را در چند مسیر و حالت مختلف هم آزمایش کن.");
+    }
+    const brokenImages = data.documentChecks?.brokenImages || [];
+    addResult("مرورگر واقعی / منابع", pageLabel + " · تصاویر شکسته",
+      brokenImages.length ? "fail" : "pass",
+      brokenImages.length ? brokenImages.slice(0, 5).join(" · ") : "هیچ تصویر شکسته‌ای در DOM بارگذاری‌شده دیده نشد.",
+      "تصویر شکسته کیفیت بصری و گاهی اطلاعات محتوایی را از بین می‌برد.",
+      "URL تصویر، پاسخ شبکه و سازگاری نام فایل را بررسی کن.");
+    const fonts = data.documentChecks || {};
+    addResult("مرورگر واقعی / منابع", pageLabel + " · آماده بودن فونت",
+      fonts.fontsReady && fonts.vazirmatnAvailable ? "pass" : "warn",
+      "document.fonts.ready=" + fonts.fontsReady + " · Vazirmatn=" + fonts.vazirmatnAvailable,
+      "فونت ناموفق ممکن است باعث fallback، جابه‌جایی متن یا ظاهر ناهمگون شود.",
+      "بارگذاری Google Fonts، CSP و fallbackهای تعریف‌شده را بررسی کن.");
+    const resource = data.resources || {};
+    addResult("مرورگر واقعی / منابع", pageLabel + " · اندازه منابع در مرورگر",
+      resource.thirdParty > 0 ? "info" : "pass",
+      resource.total + " منبع · " + resource.thirdParty + " منبع ثالث · " + bytesLabel(resource.sameOriginTransferBytes) + " انتقال قابل مشاهده هم‌مبدأ",
+      "منابع ثالث و انتقال نامشهود ممکن است اندازه‌گیری حجم را ناقص کنند.",
+      "برای سایز دقیق انتقال، Network panel را با Disable cache و Preserve log هم بررسی کن.");
+    const viewports = pageResult.viewports || [];
+    const overflows = viewports.filter(item => item.document?.overflowX);
+    addResult("مرورگر واقعی / واکنش‌گرایی", pageLabel + " · تست عرض‌های مختلف",
+      overflows.length ? "fail" : "pass",
+      viewports.map(item => item.requestedWidth + "px: " + (item.document?.overflowX ? "overflow" : "OK") + " (document " + item.document?.width + "px)").join(" · "),
+      "overflow افقی روی موبایل/تبلت باعث بریدگی محتوا و اسکرول ناخواسته می‌شود.",
+      "عنصرهای دارای عرض ثابت، grid/flex و متن‌های طولانی را در breakpoint معیوب اصلاح کن.");
+    (pageResult.desktop.interactions || []).filter(item => item.id === "theme-toggle").forEach(item => {
+      addResult("تعامل واقعی", pageLabel + " · تغییر تم", item.status,
+        item.detail || "آزمون تعامل تغییر تم اجرا شد.",
+        "عملکرد اشتباه تم، انتخاب ظاهری کاربر و وضعیت دسترس‌پذیری آن را مختل می‌کند.",
+        "تغییر حالت، aria-pressed و برگشت به حالت قبل را بررسی کن.");
+    });
+    (pageResult.desktop.mobileInteractions || []).filter(item => item.id === "mobile-navigation").forEach(item => {
+      addResult("تعامل واقعی", pageLabel + " · منوی موبایل", item.status,
+        item.detail || "آزمون باز و بسته شدن منو اجرا شد.",
+        "منوی خراب در موبایل دسترسی به بخش‌های اصلی سایت را محدود می‌کند.",
+        "hidden، aria-expanded، کلاس منو و رفتار Escape را بررسی کن.");
+    });
+    recordAxeResults(pageResult, pageResult.desktop.accessibility, "دسکتاپ");
+    if (pageResult.desktop.mobileAccessibility) recordAxeResults(pageResult, pageResult.desktop.mobileAccessibility, "موبایل");
+  }
+
+  function renderBrowser() {
+    const root = $("#browser-runtime");
+    root.replaceChildren();
+    if (!state.browser.pages.length) {
+      root.append(make("div", "empty-state", "اجرای مرورگر واقعی تکمیل نشد."));
+      return;
+    }
+    state.browser.pages.forEach(page => {
+      const snapshot = page.desktop.snapshot;
+      const card = make("article", "browser-page-card");
+      const head = make("div", "browser-page-head");
+      head.append(make("strong", "", page.pagePath));
+      head.append(make("small", "", "Viewport واقعی · " + snapshot.viewport.width + " × " + snapshot.viewport.height));
+      card.append(head);
+      const nav = snapshot.navigation || {};
+      const resources = snapshot.resources || {};
+      const execution = snapshot.execution || {};
+      const metrics = make("div", "browser-metrics");
+      for (const [label,value] of [
+        ["TTFB",Number.isFinite(nav.ttfb)?msLabel(nav.ttfb):"—"],
+        ["FCP",Number.isFinite(snapshot.paint?.fcp)?msLabel(snapshot.paint.fcp):"—"],
+        ["CLS",Number.isFinite(snapshot.paint?.cls)?snapshot.paint.cls.toFixed(3):"—"],
+        ["Long tasks",String(execution.longTaskCount || 0)]
+      ]) {
+        const item=make("div","browser-metric");
+        item.append(make("span","",label),make("strong","",value));
+        metrics.append(item);
+      }
+      card.append(metrics);
+      const details = make("div","browser-details");
+      const runtimeCard = make("div","browser-detail");
+      runtimeCard.append(make("strong","","خطاهای مرورگر"));
+      const errList=make("div","browser-error-list");
+      const errors=[...(execution.consoleErrors||[]).map(e=>"JS: "+e.message),...(execution.resourceErrors||[]).map(e=>"Resource: "+e.url),...(execution.unhandledRejections||[]).map(e=>"Promise: "+e.message)];
+      (errors.length?errors:["خطای ثبت‌شده‌ای در این نشست وجود نداشت."]).slice(0,8).forEach(e=>errList.append(make("div",errors.length?"browser-error":"",e)));
+      runtimeCard.append(errList);
+      const perfCard=make("div","browser-detail");
+      perfCard.append(make("strong","","منابع و انتقال"));
+      perfCard.append(make("p","","کل منابع: "+resources.total+" · هم‌مبدأ: "+resources.sameOrigin+" · ثالث: "+resources.thirdParty));
+      perfCard.append(make("p","","حجم قابل مشاهده هم‌مبدأ: "+bytesLabel(resources.sameOriginTransferBytes)));
+      perfCard.append(make("p","","ناوبری: DCL "+msLabel(nav.domContentLoaded)+" · Load "+msLabel(nav.load)));
+      details.append(runtimeCard,perfCard);
+      card.append(details);
+      const chips=make("div","viewport-list");
+      (page.viewports||[]).forEach(item=>{
+        chips.append(make("span","viewport-chip "+(item.document?.overflowX?"fail":"pass"),
+          item.requestedWidth+"px · "+(item.document?.overflowX?"overflow":"بدون overflow")));
+      });
+      card.append(chips);
+      const axe = page.desktop.accessibility;
+      if(axe){
+        const axeLine=make("div","browser-detail");
+        axeLine.append(make("strong","","axe-core "+axe.version+" · WCAG 2.0/2.1/2.2 A/AA"));
+        axeLine.append(make("p","","Pass: "+axe.passes+" · Violations: "+axe.violations.length+" · Incomplete: "+axe.incomplete.length));
+        card.append(axeLine);
+      }
+      root.append(card);
+    });
   }
 
   function statusFromScore(score) {
