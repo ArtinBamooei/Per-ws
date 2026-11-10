@@ -310,6 +310,8 @@
       let loadSnapshot = null;
       try {
         await document.fonts?.ready;
+        // Explicitly request the Persian face; it is otherwise unused on initial LTR visits.
+        try { await document.fonts?.load('16px "Vazirmatn"', "فارسی"); } catch (_) {}
         await wait(1200);
         // Capture page-load metrics before axe and click probes can change layout or add work.
         loadSnapshot = snapshot();
