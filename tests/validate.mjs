@@ -24,8 +24,7 @@ for(const [name,source] of [["index.html",html],["projects.html",projects]]){
  assert.match(source,/rel="icon"/,`${name}: favicon missing`);
  assert.match(source,/class="skip-link"/,`${name}: skip link missing`);
  assert.match(source,/<main[^>]*id="main"[^>]*tabindex="-1"/,`${name}: main skip target missing`);
- const brandTag=source.match(/<a class="brand"[^>]*aria-label="([^"]+)"/);
- assert.ok(brandTag && brandTag[1].includes("Computer Science · Data · AI"),`${name}: brand accessible name must include visible subtitle`);
+ assert.doesNotMatch(source, /<a class="brand"[^>]*aria-label=/, `${name}: brand accessible name must be derived from visible link text`);
  for(const tag of source.matchAll(/<div\b[^>]*aria-label=[^>]*>/gi)) assert.match(tag[0],/\brole="/,`${name}: aria-labelled div needs an appropriate role`);
  for(const lang of ["EN","DE","FA"]) assert.match(source,new RegExp(`data-lang="${lang}"[^>]*aria-label="${lang}[^"]*"`),`${name}: ${lang} visible text must be included in its accessible name`);
  assert.ok(!source.includes("\\n  <link"),`${name}: escaped newline in head`);
