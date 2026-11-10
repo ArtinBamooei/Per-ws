@@ -143,7 +143,7 @@ assert.match(auditHtml, /id="download-button"/, "JSON report download missing");
 assert.match(auditHtml, /id="print-button"/, "print/PDF report action missing");
 assert.match(auditJs, /PBKDF2/, "PIN verifier must use a password-based KDF");
 assert.match(auditJs, /runPageSpeed/, "PageSpeed Insights integration missing");
-assert.match(auditJs, /pagespeedonline\\.googleapis\\.com/, "canonical PageSpeed API endpoint missing");
+assert.ok(auditJs.includes("pagespeedonline.googleapis.com"), "canonical PageSpeed API endpoint missing");
 assert.match(auditJs, /api.github.com/, "GitHub Actions integration missing");
 assert.match(auditJs, /localStorage\.setItem\(REPORT_KEY/, "previous-run comparison snapshot missing");
 assert.doesNotMatch(auditJs, /\b(?:innerHTML|outerHTML|insertAdjacentHTML|document\.write)\b/, "audit console must not use unsafe HTML sinks");
