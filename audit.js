@@ -72,7 +72,8 @@
       inp: [200, 500],
       cls: [0.1, 0.25],
       fcp: [1800, 3000],
-      ttfb: [800, 1800]
+      ttfb: [800, 1800],
+      tbt: [200, 600]
     };
     const pair = limits[metric];
     if (!pair) return "unknown";
@@ -110,7 +111,8 @@
       { key: "inp", label: "INP", field: fieldValue(field, "INTERACTION_TO_NEXT_PAINT"), lab: null },
       { key: "cls", label: "CLS", field: fieldValue(field, "CUMULATIVE_LAYOUT_SHIFT_SCORE", 1000), lab: auditValue(audits, "cumulative-layout-shift") },
       { key: "fcp", label: "FCP", field: fieldValue(field, "FIRST_CONTENTFUL_PAINT_MS"), lab: auditValue(audits, "first-contentful-paint") },
-      { key: "ttfb", label: "TTFB", field: fieldValue(field, "EXPERIMENTAL_TIME_TO_FIRST_BYTE"), lab: null }
+      { key: "ttfb", label: "TTFB", field: fieldValue(field, "EXPERIMENTAL_TIME_TO_FIRST_BYTE"), lab: null },
+      { key: "tbt", label: "TBT (Lab)", field: null, lab: auditValue(audits, "total-blocking-time") }
     ];
     return metrics.map(metric => {
       const value = metric.field ?? metric.lab;
@@ -353,6 +355,11 @@
       Number.isFinite(cls) ? cls.toFixed(4) : "Layout Shift ثبت نشد.",
       "پرش چیدمان می‌تواند باعث کلیک اشتباه و تجربه ناپایدار شود.",
       "ابعاد تصویر/فونت و اجزایی که بعد از بارگذاری وارد صفحه می‌شوند را بررسی کن.");
+    const observedEventMax = data.paint?.inpMaxObserved;
+    addResult("مرورگر واقعی / پاسخ‌گویی", pageLabel + " · Event Timing مشاهده‌شده (نه INP رسمی)", "info",
+      Number.isFinite(observedEventMax) ? Math.round(observedEventMax) + " ms · بیشترین رویداد ثبت‌شده در این نشست" : "رویداد تعاملی قابل‌اندازه‌گیری ثبت نشد.",
+      "این مقدار از Event Timing همان نشست است و جایگزین INP صدک ۷۵ در CrUX نیست.",
+      "برای INP معتبر از داده CrUX/PageSpeed در سطح صفحه یا مبدأ استفاده کن.");
     const tasks = data.execution || {};
     addResult("مرورگر واقعی / پاسخ‌گویی", pageLabel + " · Long Tasks",
       !tasks.longTaskCount ? "pass" : tasks.longestTask > 200 ? "fail" : "warn",
@@ -445,6 +452,7 @@
         ["TTFB",Number.isFinite(nav.ttfb)?msLabel(nav.ttfb):"—"],
         ["FCP",Number.isFinite(snapshot.paint?.fcp)?msLabel(snapshot.paint.fcp):"—"],
         ["CLS",Number.isFinite(snapshot.paint?.cls)?snapshot.paint.cls.toFixed(3):"—"],
+        ["Event Timing max*",Number.isFinite(snapshot.paint?.inpMaxObserved)?msLabel(snapshot.paint.inpMaxObserved):"—"],
         ["Long tasks",String(execution.longTaskCount || 0)]
       ]) {
         const item=make("div","browser-metric");
@@ -452,6 +460,7 @@
         metrics.append(item);
       }
       card.append(metrics);
+      card.append(make("p", "fine-print", "* بیشترین Event Timing مشاهده‌شده در همین نشست است؛ معیار استاندارد INP صدک ۷۵ را جایگزین نمی‌کند."));
       const details = make("div","browser-details");
       const runtimeCard = make("div","browser-detail");
       runtimeCard.append(make("strong","","خطاهای مرورگر"));
