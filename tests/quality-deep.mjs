@@ -49,7 +49,7 @@ assert.match(js, /localStorage\.setItem\(["']portfolio-language["']/, "language 
 assert.match(js, /localStorage\.setItem\(["']portfolio-theme["']/, "theme persistence missing");
 assert.match(js, /history\.replaceState/, "language URL synchronization missing");
 assert.match(boot, /queryLanguage/, "pre-paint language bootstrap missing");
-for (const key of ["brandHomeLabel", "academicFocusLabel"]) {
+for (const key of ["academicFocusLabel"]) {
 }
 assert.match(js, /document\.documentElement\.dir\s*=\s*currentLanguage === "FA" \? "rtl" : "ltr"/, "RTL/LTR switching missing");
 assert.match(css, /html\[dir="rtl"\]/, "RTL CSS missing");
@@ -85,7 +85,7 @@ assert.match(css, /\.language-item::before/, "creative language card motif missi
 assert.match(main, /<article class="language-item"><div class="language-top"><h3 class="language-name"/, "language cards must use semantic headings");
 assert.doesNotMatch(main, /class="course-grade-value"[^>]*data-i18n-aria=/, "generic grade placeholder span must not receive aria-label");
 assert.doesNotMatch(main, /class="transcript-count"[^>]*data-i18n-aria=/, "generic transcript count div must not receive aria-label");
-assert.match(js, /brandHomeLabel:"Artin Bamooei, Computer Science · Data · AI, home"/, "brand accessible name must contain its visible subtitle");
+assert.doesNotMatch(js, /brandHomeLabel:/, "obsolete brand aria-label translation must be removed");
 assert.match(js, /gradePlaceholder:"Not entered"/, "grade placeholder must be meaningful visible text");
 assert.match(css, /\.project-card:hover/, "project card interaction missing");
 assert.equal((main.match(/<article class="skill-group reveal">/g)||[]).length,3,"Skills preview must retain exactly three category cards");
