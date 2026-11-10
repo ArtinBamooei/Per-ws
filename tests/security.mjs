@@ -52,6 +52,8 @@ assert.match(errorPage, /Content-Security-Policy/, "404.html: CSP missing");
 assert.match(errorPage, /object-src 'none'/, "404.html: object-src missing");
 assert.match(errorPage, /base-uri 'self'/, "404.html: base-uri missing");
 assert.match(errorPage, /name="robots" content="noindex"/, "404.html should not be indexed");
+assert.match(errorPage, /<a class="skip-link" href="#main">/, "404.html: keyboard skip link missing");
+assert.match(errorPage, /<main class="error-page" id="main" tabindex="-1">/, "404.html: focusable main target missing");
 assert.match(pages.find(([name]) => name === "audit.html")[1], /name="robots" content="noindex, nofollow, noarchive"/, "audit console must not be indexed");
 
 for (const [name, source] of scripts) {
