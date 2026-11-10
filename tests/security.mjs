@@ -24,10 +24,8 @@ for (const [name, html] of pages) {
   assert.doesNotMatch(html, /unsafe-inline|unsafe-eval/, name + ": unsafe CSP exception");
   assert.doesNotMatch(html, /<script\b[^>]*src="https?:\/\//i, name + ": externally hosted scripts must be self-hosted");
   assert.doesNotMatch(html, /cdn\.jsdelivr\.net/i, name + ": external JS CDN should not be required");
-  if (name === "index.html") {
-    assert.match(html, /<script defer src="\.\/vendor\/gsap\.min\.js\?v=3\.15\.0"/, "local pinned GSAP file missing");
-    assert.match(html, /<script defer src="\.\/vendor\/ScrollTrigger\.min\.js\?v=3\.15\.0"/, "local pinned ScrollTrigger file missing");
-  }
+  assert.match(html, /worker-src 'self'/, name + ": same-origin service worker must be allowed");
+  assert.doesNotMatch(html, /gsap|ScrollTrigger|Lenis/i, name + ": redundant animation runtime must not be loaded");
   assert.doesNotMatch(html, /<script\b[^>]*>\s*[^<]/i, name + ": inline script content conflicts with CSP");
   assert.doesNotMatch(html, /<[^>]+\s+on[a-z]+\s*=/i, name + ": inline event handler conflicts with CSP");
 
@@ -55,4 +53,4 @@ for (const [name, source] of scripts) {
   assert.doesNotMatch(source, /\binnerHTML\b|\bouterHTML\b|insertAdjacentHTML|document\.write\s*\(/, name + ": unsafe HTML sink detected");
   assert.doesNotMatch(source, /\beval\s*\(|new\s+Function\s*\(/, name + ": dynamic code execution detected");
 }
-console.log("Security invariants: PASS (CSP, HTTPS upgrades, SRI-pinned external scripts, referrer policy, inline execution, external tab safety, 404 page and DOM/code sinks)");
+console.log("Security invariants: PASS (CSP, HTTPS upgrades, referrer policy, same-origin worker policy, no third-party runtime, inline execution, external tab safety, 404 page and DOM/code sinks)");

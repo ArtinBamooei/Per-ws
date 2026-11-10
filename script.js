@@ -382,10 +382,6 @@ function withViewTransition(update) {
   }
 }
 
-function setupHeroAnimations() {
-  // Hero monogram animation is handled by SVG/CSS on first render.
-}
-
 function setupSkillMeters() {
   const progress = { "Beginner": "35%", "Beginner+": "46%", "Intermediate": "64%", "Intermediate+": "72%" };
   qsa(".skill-item").forEach(item => {
@@ -401,130 +397,6 @@ function setupSkillMeters() {
 }
 
 
-function setupSmoothScroll() {
-  const LenisClass = window.Lenis;
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-  if (typeof LenisClass !== "function" || reduceMotion.matches) return;
-
-  try {
-    const lenis = new LenisClass({
-      lerp: 0.085,
-      wheelMultiplier: 0.82,
-      smoothWheel: true,
-      syncTouch: false,
-      anchors: true,
-      autoRaf: false
-    });
-
-    let frame = 0;
-    let updateLenis = null;
-    window.__portfolioLenis = lenis;
-
-    const destroy = () => {
-      if (frame) cancelAnimationFrame(frame);
-      frame = 0;
-      if (updateLenis && window.gsap) {
-        window.gsap.ticker.remove(updateLenis);
-        updateLenis = null;
-      }
-      lenis.destroy();
-      if (window.__portfolioLenis === lenis) delete window.__portfolioLenis;
-    };
-
-    if (window.gsap && window.ScrollTrigger) {
-      lenis.on("scroll", window.ScrollTrigger.update);
-      updateLenis = (time) => lenis.raf(time * 1000);
-      window.gsap.ticker.add(updateLenis);
-      window.gsap.ticker.lagSmoothing(0);
-    } else {
-      const raf = (time) => {
-        frame = 0;
-        if (document.hidden) return;
-        lenis.raf(time);
-        frame = requestAnimationFrame(raf);
-      };
-      const start = () => {
-        if (!document.hidden && !frame) frame = requestAnimationFrame(raf);
-      };
-      document.addEventListener("visibilitychange", () => {
-        if (document.hidden) {
-          if (frame) cancelAnimationFrame(frame);
-          frame = 0;
-        } else {
-          start();
-        }
-      });
-      start();
-    }
-
-    window.addEventListener("pagehide", destroy, { once: true });
-    if (reduceMotion.addEventListener) {
-      reduceMotion.addEventListener("change", (event) => {
-        if (event.matches) destroy();
-      });
-    } else if (reduceMotion.addListener) {
-      reduceMotion.addListener((event) => {
-        if (event.matches) destroy();
-      });
-    }
-  } catch (_error) {
-    // Keep native browser scrolling if the smooth-scroll layer cannot initialize.
-  }
-}
-
-function setupGsapAnimations() {
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (reduceMotion || !window.gsap || !window.ScrollTrigger) return false;
-
-  try {
-    gsap.registerPlugin(ScrollTrigger);
-    const items = gsap.utils.toArray(".reveal");
-    if (!items.length) return false;
-
-    document.documentElement.classList.add("gsap-motion");
-    const mm = gsap.matchMedia();
-
-    mm.add("(prefers-reduced-motion: no-preference)", () => {
-      items.forEach((element) => {
-        const parent = element.parentElement;
-        const peers = parent ? Array.from(parent.children).filter(child => child.classList.contains("reveal")) : [];
-        const peerIndex = Math.max(0, peers.indexOf(element));
-        const delay = peers.length > 1 ? Math.min(peerIndex * 0.055, 0.165) : 0;
-
-        gsap.fromTo(element,
-          { autoAlpha: 0, y: 16 },
-          {
-            autoAlpha: 1,
-            y: 0,
-            duration: 0.68,
-            delay,
-            ease: "power2.out",
-            overwrite: "auto",
-            clearProps: "transform",
-            scrollTrigger: {
-              trigger: element,
-              start: "top 91%",
-              once: true,
-              invalidateOnRefresh: true
-            }
-          }
-        );
-      });
-
-      return () => {
-        gsap.killTweensOf(items);
-        gsap.set(items, { clearProps: "opacity,visibility,transform" });
-      };
-    });
-
-    window.addEventListener("load", () => ScrollTrigger.refresh(), { once: true });
-    return true;
-  } catch (_error) {
-    document.documentElement.classList.remove("gsap-motion");
-    return false;
-  }
-}
-
 function setupReveal() {
   const items = qsa(".reveal:not(.is-visible)");
   if (!("IntersectionObserver" in window)) { items.forEach(item => item.classList.add("is-visible")); return; }
@@ -535,44 +407,11 @@ function setupReveal() {
 }
 
 function setupCreativeMotion() {
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-  const progressRail = document.createElement("div");
-  progressRail.className = "scroll-progress";
-  progressRail.setAttribute("aria-hidden", "true");
-  document.body.appendChild(progressRail);
-
-  let ticking = false;
-  const updateProgress = () => {
-    const max = document.documentElement.scrollHeight - window.innerHeight;
-    progressRail.style.setProperty("--scroll-progress", max > 0 ? (window.scrollY / max) * 100 + "%" : "0%");
-    ticking = false;
-  };
-  window.addEventListener("scroll", () => {
-    if (!ticking) {
-      window.requestAnimationFrame(updateProgress);
-      ticking = true;
-    }
-  }, { passive: true });
-  updateProgress();
-
-  qsa(".project-card, .skill-group, .highlights-card, .contact-shell").forEach(card => {
-    card.addEventListener("pointermove", event => {
-      const rect = card.getBoundingClientRect();
-      card.style.setProperty("--mx", ((event.clientX - rect.left) / rect.width) * 100 + "%");
-      card.style.setProperty("--my", ((event.clientY - rect.top) / rect.height) * 100 + "%");
-    }, { passive: true });
-    card.addEventListener("pointerleave", () => {
-      card.style.removeProperty("--mx");
-      card.style.removeProperty("--my");
-    }, { passive: true });
-  });
-
+  // Keep inexpensive hover-state hooks; avoid pointer-driven style/layout work.
   qsa(".skill-item").forEach(item => {
     item.addEventListener("pointerenter", () => item.classList.add("is-hovered"));
     item.addEventListener("pointerleave", () => item.classList.remove("is-hovered"));
   });
-
   qsa(".project-card").forEach(card => {
     card.addEventListener("pointerenter", () => card.classList.add("project-focus"));
     card.addEventListener("pointerleave", () => card.classList.remove("project-focus"));
@@ -646,28 +485,7 @@ document.addEventListener("DOMContentLoaded", () => {
   setupTheme();
   setupLanguages();
   setupNav();
-  setupSmoothScroll();
   setupSkillMeters();
-  if (!setupGsapAnimations()) setupReveal();
-  setupHeroAnimations();
+  setupReveal();
   setupCreativeMotion();
 });
-/* Lightweight hero interaction; no external animation dependencies. */
-(() => {
- const root=document.getElementById('hero-visual'), stack=document.getElementById('hero3d-stack');
- if(!root||!stack)return;
- const waves=Array.from(root.querySelectorAll('.h3-wave')), reduce=window.matchMedia('(prefers-reduced-motion: reduce)'), hover=window.matchMedia('(hover: hover) and (pointer: fine)');
- const visualScale=()=>window.matchMedia('(max-width: 760px)').matches?1.08:window.matchMedia('(max-width: 1100px)').matches?1.18:1.28;
- let scale=visualScale(),tx=0,ty=0,cx=0,cy=0,visible=true,frame=0,last=0;
- const setBaseTransform=()=>{stack.style.transform='scale('+scale+')'};
- window.addEventListener('resize',()=>{scale=visualScale();if(reduce.matches)setBaseTransform()},{passive:true});
- const observer='IntersectionObserver' in window?new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;if(visible&&!reduce.matches&&!frame)frame=requestAnimationFrame(loop)},{threshold:.05}):null;
- if(observer)observer.observe(root);
- root.addEventListener('pointermove',e=>{if(reduce.matches||!hover.matches)return;const r=root.getBoundingClientRect();tx=Math.max(-.5,Math.min(.5,(e.clientX-r.left)/r.width-.5));ty=Math.max(-.5,Math.min(.5,(e.clientY-r.top)/r.height-.5))},{passive:true});
- root.addEventListener('pointerleave',()=>{tx=0;ty=0},{passive:true});
- function wave(time){waves.forEach((p,i)=>{let d='';for(let x=110;x<=490;x+=8){const env=Math.sin((x-110)/380*Math.PI),phase=i*.34,y=300+(i-3.5)*3.1+env*11*Math.sin(x*.017-time*.0008+phase);d+=(x===110?'M':'L')+x+' '+y.toFixed(1)+' '}p.setAttribute('d',d)})}
- function loop(time){frame=0;if(reduce.matches||!visible)return;cx+=(tx-cx)*.075;cy+=(ty-cy)*.075;root.style.setProperty('--h3x',(cx*2).toFixed(3));root.style.setProperty('--h3y',(cy*2).toFixed(3));stack.style.transform=hover.matches?'perspective(900px) rotateX('+(-cy*7).toFixed(2)+'deg) rotateY('+(cx*10).toFixed(2)+'deg) scale('+scale+')':'scale('+scale+')';if(time-last>40){wave(time);last=time}frame=requestAnimationFrame(loop)}
- function motionChange(){if(frame)cancelAnimationFrame(frame);frame=0;if(reduce.matches){tx=ty=cx=cy=0;setBaseTransform();root.style.setProperty('--h3x','0');root.style.setProperty('--h3y','0');wave(0)}else if(visible)frame=requestAnimationFrame(loop)}
- if(reduce.addEventListener)reduce.addEventListener('change',motionChange);else if(reduce.addListener)reduce.addListener(motionChange);
- wave(0);if(reduce.matches)setBaseTransform();else frame=requestAnimationFrame(loop)
-})();

@@ -1,14 +1,14 @@
 import fs from "node:fs";
 import assert from "node:assert/strict";
 const html=fs.readFileSync("index.html","utf8"), projects=fs.readFileSync("projects.html","utf8"), js=fs.readFileSync("script.js","utf8"), css=fs.readFileSync("styles.css","utf8"), boot=fs.readFileSync("theme-init.js","utf8"), sitemap=fs.readFileSync("sitemap.xml","utf8");
-const version="20261105-pipeline-images";
+const version="20261110-performance-v1";
 for(const [name,source] of [["index.html",html],["projects.html",projects]]){
  assert.match(source,/Content-Security-Policy/, `${name}: CSP missing`);
  assert.match(source,/object-src 'none'/, `${name}: object embedding not blocked`);
  assert.match(source,/base-uri 'self'/, `${name}: base URI not restricted`);
  assert.match(source,/script-src 'self'/, `${name}: scripts not restricted to same origin`);
  assert.match(source,/frame-src 'none'/, `${name}: frames not blocked`);
- assert.match(source,/worker-src 'none'/, `${name}: workers not blocked`);
+ assert.match(source,/worker-src 'self'/, `${name}: workers not blocked`);
  assert.match(source,/upgrade-insecure-requests/, `${name}: insecure subresource upgrade missing`);
  assert.match(source,/name="referrer" content="strict-origin-when-cross-origin"/, `${name}: referrer policy missing`);
  assert.doesNotMatch(source,/unsafe-inline|unsafe-eval/, `${name}: unsafe CSP exception found`);
