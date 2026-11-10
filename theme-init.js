@@ -18,6 +18,14 @@
   root.lang = language === "FA" ? "fa" : language.toLowerCase();
   root.dir = language === "FA" ? "rtl" : "ltr";
 
+  // Load browser diagnostics only for the audit console's same-origin hidden test frame.
+  const auditParams = new URLSearchParams(window.location.search);
+  if (window.parent !== window && auditParams.get("audit") === "1" && /^[a-zA-Z0-9_-]{8,80}$/.test(auditParams.get("auditRun") || "")) {
+    const auditBridge = document.createElement("script");
+    auditBridge.src = new URL("./audit-bridge.js", window.location.href).href;
+    document.head.append(auditBridge);
+  }
+
   // Register a tiny same-origin cache; it never blocks the first paint.
   if ("serviceWorker" in navigator && window.isSecureContext) {
     window.addEventListener("load", () => {
