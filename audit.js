@@ -1442,7 +1442,7 @@
       renderSummary();
       renderPrevious(previous);
       saveReport();
-      setProgress(100, state.integrity?.valid ? "آزمون کامل شد · نسخه تأییدشده" : "آزمون انجام شد · گزارش نامعتبر است", state.integrity?.valid ? "فایل‌های منتشرشده با commit مخزن و Service Worker تطبیق داده شدند." : "به دلیل اختلاف نسخه یا نبود امکان تأیید یکپارچگی، این گزارش نباید نتیجه معتبر سایت تلقی شود.");
+      setProgress(100, isAuditReportValid() ? "آزمون کامل شد · نسخه تأییدشده" : "آزمون انجام شد · گزارش نامعتبر است", isAuditReportValid() ? "فایل‌های منتشرشده و Service Worker فعال با commit مخزن تطبیق داده شدند." : "به دلیل اختلاف نسخه یا نبود امکان تأیید یکپارچگی/Service Worker، این گزارش نباید نتیجه معتبر سایت تلقی شود.");
     } catch (error) {
       addResult("اجرای آزمون", "خطای غیرمنتظره در اجرای گزارش", "fail", error.message || String(error),
         "بخشی از آزمون‌ها ممکن است کامل نشده باشد.",
