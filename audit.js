@@ -441,6 +441,41 @@
     });
   }
 
+  async function inspectInteractionAssets(homePage) {
+    if (!homePage) return;
+    try {
+      const [scriptResponse, styleResponse] = await Promise.all([
+        fetchWithTimeout(new URL("script.js", SITE_URL).href, { cache: "no-store" }, 15000),
+        fetchWithTimeout(new URL("styles.css", SITE_URL).href, { cache: "no-store" }, 15000)
+      ]);
+      const scriptText = scriptResponse.ok ? await scriptResponse.text() : "";
+      const styleText = styleResponse.ok ? await styleResponse.text() : "";
+      const themeOk = scriptResponse.ok
+        && scriptText.includes("function setupTheme()")
+        && scriptText.includes('qs("[data-theme-toggle]")')
+        && scriptText.includes('localStorage.setItem("portfolio-theme", activeTheme)')
+        && scriptText.includes("applyTheme(nextTheme)");
+      addResult("تعامل و تجربه کاربری", "پیاده‌سازی تغییر تم", themeOk ? "pass" : "warn",
+        "اسکریپت اصلی: " + (scriptResponse.ok ? "دریافت شد" : "ناموفق") + " · تنظیم حالت و ذخیره انتخاب: " + (themeOk ? "الگوی مورد انتظار موجود است" : "کامل تأیید نشد"),
+        "مشکل در کنترل پوسته می‌تواند باعث ناهماهنگی دیداری یا عدم ماندگاری ترجیح کاربر شود.",
+        "رفتار کلیک، aria-pressed و باقی‌ماندن انتخاب پس از reload را دستی هم آزمایش کن.");
+      const reducedMotionOk = styleResponse.ok && /prefers-reduced-motion\\s*:\\s*reduce/.test(styleText);
+      addResult("دسترس‌پذیری", "CSS برای کاهش حرکت", reducedMotionOk ? "pass" : "warn",
+        styleResponse.ok ? (reducedMotionOk ? "قاعده prefers-reduced-motion در stylesheet پیدا شد." : "قاعده prefers-reduced-motion پیدا نشد.") : "فایل CSS دریافت نشد.",
+        "حرکت غیرضروری می‌تواند برای برخی کاربران آزاردهنده باشد.",
+        "برای prefers-reduced-motion: reduce همه transitionها و animationهای غیرضروری را محدود کن.");
+      const mainToggle = homePage.doc.querySelector("[data-theme-toggle]");
+      addResult("تعامل و تجربه کاربری", "وجود کنترل تغییر تم", mainToggle ? "pass" : "fail",
+        mainToggle ? "کنترل تغییر پوسته در HTML وجود دارد؛ این آزمون کلیک واقعی را اجرا نمی‌کند." : "کنترل تغییر تم پیدا نشد.",
+        "نبود کنترل، انتخاب حالت دیداری را از کاربر می‌گیرد.",
+        "وجود کنترل، برچسب دسترس‌پذیر و رفتار آن را در هر دو پوسته بررسی کن.");
+    } catch (error) {
+      addResult("تعامل و تجربه کاربری", "بررسی فایل‌های تعامل و CSS", "warn", error.message || "دریافت منابع ناموفق بود.",
+        "رفتار اجرایی تم و کاهش حرکت تأیید نشد.",
+        "دسترسی به فایل‌های script.js و styles.css را بررسی کن.");
+    }
+  }
+
   async function checkSecurityHeaders(homePage) {
     if (!homePage) return;
     const headers = homePage.response.headers;
@@ -707,16 +742,7 @@
       await Promise.all([psiPromise, ciPromise]);
       setProgress(76, "بررسی منابع و کش", "در حال اندازه‌گیری فایل‌های محلی و Service Worker");
       await Promise.all([checkAssets(pages), checkServiceWorker(), checkSecurityHeaders(pages[0])]);
-      const themeButton = pages[0]?.doc.querySelector("[data-theme-toggle]");
-      addResult("تعامل و تجربه کاربری", "وجود کنترل تغییر تم", themeButton ? "pass" : "fail",
-        themeButton ? "کنترل تغییر پوسته در صفحه اصلی وجود دارد؛ عملکرد کلیک در این بررسی ایستا اجرا نشده است." : "دکمه تغییر تم پیدا نشد.",
-        "تغییر تم ناموفق، تجربه دیداری و دسترس‌پذیری حالت‌های روشن/تاریک را مختل می‌کند.",
-        "عملکرد کلیک، aria-pressed و ماندگاری انتخاب را به‌صورت دستی در هر دو صفحه آزمایش کن.");
-      const reducedMotion = pages[0]?.doc.querySelector('link[rel="stylesheet"]');
-      addResult("دسترس‌پذیری", "پشتیبانی از کاهش حرکت", pages[0]?.html.includes("prefers-reduced-motion") || Boolean(reducedMotion) ? "pass" : "warn",
-        "وجود CSS اصلی تأیید شد؛ این آزمون به‌تنهایی انطباق تمام انیمیشن‌ها را ثابت نمی‌کند.",
-        "حرکت غیرضروری می‌تواند برای کاربران حساس آزاردهنده باشد.",
-        "وضعیت prefers-reduced-motion را در مرورگر روشن و همه تعاملات را بررسی کن.");
+      await inspectInteractionAssets(pages[0]);
       addResult("دسترس‌پذیری", "اعتبارسنجی جامع WCAG", "info",
         "این پنل آزمون‌های ایستای قابل اجرا در مرورگر را انجام می‌دهد؛ axe-core و بررسی contrast/صفحه‌خوان در این اجرا بارگذاری نشده‌اند.",
         "موفقیت آزمون‌های خودکار به معنی انطباق کامل WCAG 2.2 AA نیست.",
@@ -833,6 +859,7 @@
       $("#pin-error").textContent = "";
       $("#pin-input").focus();
     });
+    $("#theme-toggle").setAttribute("aria-pressed", String(document.documentElement.dataset.theme === "dark"));
     $("#theme-toggle").addEventListener("click", () => {
       const root = document.documentElement;
       const next = root.dataset.theme === "dark" ? "light" : "dark";
