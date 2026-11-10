@@ -4934,9 +4934,9 @@ html[data-theme="light"] .h3-enter.h3-bottom .h3-plate { fill-opacity: .17 !impo
 
 /* Restrained warm-orange accent to balance the blue identity. */
 :root {
-  --accent-warm: #e7652f;
-  --accent-warm-soft: rgba(231, 101, 47, .10);
-  --accent-warm-border: rgba(231, 101, 47, .30);
+  --accent-warm: #a8441d;
+  --accent-warm-soft: rgba(168, 68, 29, .10);
+  --accent-warm-border: rgba(168, 68, 29, .35);
 }
 html[data-theme="dark"] {
   --accent-warm: #ff9a68;
