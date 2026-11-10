@@ -401,6 +401,12 @@
       viewports.map(item => item.requestedWidth + "px: " + (item.document?.overflowX ? "overflow" : "OK") + " (document " + item.document?.width + "px)").join(" · "),
       "overflow افقی روی موبایل/تبلت باعث بریدگی محتوا و اسکرول ناخواسته می‌شود.",
       "عنصرهای دارای عرض ثابت، grid/flex و متن‌های طولانی را در breakpoint معیوب اصلاح کن.");
+    (pageResult.desktop.interactions || []).filter(item => item.id === "language-switcher").forEach(item => {
+      addResult("تعامل واقعی", pageLabel + " · تغییر زبان EN/DE/FA", item.status,
+        item.detail || "آزمون تعویض زبان اجرا شد.",
+        "خطا در تغییر زبان می‌تواند متن، جهت RTL و برچسب‌های دسترس‌پذیری را ناسازگار کند.",
+        "به‌روزرسانی lang/dir، aria-pressed، ترجمه محتوا و حفظ انتخاب را بررسی کن.");
+    });
     (pageResult.desktop.interactions || []).filter(item => item.id === "theme-toggle").forEach(item => {
       addResult("تعامل واقعی", pageLabel + " · تغییر تم", item.status,
         item.detail || "آزمون تعامل تغییر تم اجرا شد.",
