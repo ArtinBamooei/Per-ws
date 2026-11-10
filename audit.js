@@ -134,12 +134,28 @@
   async function runPageSpeed(pageUrl, strategy) {
     const endpoint = new URL("https://pagespeedonline.googleapis.com/pagespeedonline/v5/runPagespeed");
     endpoint.searchParams.set("url", pageUrl);
-    endpoint.searchParams.set("strategy", strategy);
+    endpoint.searchParams.set("strategy", strategy.toUpperCase());
     ["performance", "accessibility", "best-practices", "seo"].forEach(category => endpoint.searchParams.append("category", category));
-    const response = await fetchWithTimeout(endpoint.toString(), { headers: { Accept: "application/json" } }, 70000);
-    if (!response.ok) {
-      const body = await response.text().catch(() => "");
-      throw new Error("PageSpeed API: HTTP " + response.status + (body ? " · " + body.slice(0, 150) : ""));
+    let response = null;
+    for (let attempt = 0; attempt < 2; attempt += 1) {
+      try {
+        response = await fetchWithTimeout(endpoint.toString(), { headers: { Accept: "application/json" } }, 70000);
+      } catch (error) {
+        if (attempt === 0 && error?.name !== "AbortError") {
+          await new Promise(resolve => window.setTimeout(resolve, 900));
+          continue;
+        }
+        throw error;
+      }
+      if ((response.status === 429 || response.status >= 500) && attempt === 0) {
+        await new Promise(resolve => window.setTimeout(resolve, 1200));
+        continue;
+      }
+      break;
+    }
+    if (!response?.ok) {
+      const body = await response?.text().catch(() => "");
+      throw new Error("PageSpeed API: HTTP " + (response?.status || "network error") + (body ? " · " + body.slice(0, 150) : ""));
     }
     const data = await response.json();
     if (!data.lighthouseResult) throw new Error("پاسخ PageSpeed فاقد lighthouseResult است.");
@@ -390,11 +406,12 @@
       "تصویر شکسته کیفیت بصری و گاهی اطلاعات محتوایی را از بین می‌برد.",
       "URL تصویر، پاسخ شبکه و سازگاری نام فایل را بررسی کن.");
     const fonts = data.documentChecks || {};
-    addResult("مرورگر واقعی / منابع", pageLabel + " · آماده بودن فونت",
-      fonts.fontsReady && fonts.vazirmatnAvailable ? "pass" : "warn",
-      "document.fonts.ready=" + fonts.fontsReady + " · Vazirmatn=" + fonts.vazirmatnAvailable,
-      "فونت ناموفق ممکن است باعث fallback، جابه‌جایی متن یا ظاهر ناهمگون شود.",
-      "بارگذاری Google Fonts، CSP و fallbackهای تعریف‌شده را بررسی کن.");
+    const fontOk = fonts.vazirmatnAvailable && fonts.vazirmatnFaces > 0;
+    addResult("مرورگر واقعی / منابع", pageLabel + " · آماده بودن فونت فارسی",
+      fontOk ? "pass" : "fail",
+      "document.fonts.ready=" + fonts.fontsReady + " · Vazirmatn=" + fonts.vazirmatnAvailable + " · loaded faces=" + (fonts.vazirmatnFaces ?? 0) + (fonts.vazirmatnError ? " · " + fonts.vazirmatnError : ""),
+      "فونت فارسی باید پس از درخواست صریح و با گلیف فارسی بارگذاری شود.",
+      "در صورت شکست، درخواست fonts.googleapis.com و fonts.gstatic.com، CSP و fallbackهای فونت را بررسی کن.");
     const resource = data.resources || {};
     addResult("مرورگر واقعی / منابع", pageLabel + " · اندازه منابع در مرورگر",
       resource.thirdParty > 0 ? "info" : "pass",
@@ -543,6 +560,7 @@
     const main = doc.querySelectorAll("main");
     const h1 = doc.querySelectorAll("h1");
     const language = root.getAttribute("lang");
+    const intentionallyNoindex = /\bnoindex\b/i.test(doc.querySelector('meta[name="robots"]')?.content || "");
     const ids = [...doc.querySelectorAll("[id]")].map(node => node.id);
     const duplicateIds = ids.filter((id, index) => ids.indexOf(id) !== index);
     const brokenAnchors = [];
@@ -634,15 +652,16 @@
       "در صورت امکان اسکریپت‌ها را self-host کن؛ برای منابع خارجی integrity و نسخه ثابت لازم است.");
 
     const canonical = doc.querySelector('link[rel="canonical"]')?.href || "";
-    addResult("SEO و فراداده", path + " · canonical", canonical ? "pass" : "warn",
-      canonical || "canonical وجود ندارد.",
-      "canonical به موتور جست‌وجو برای تشخیص URL مرجع کمک می‌کند.",
-      "برای صفحه‌های قابل ایندکس canonical دقیق و یکتا تعیین کن.");
+    const canonicalStatus = canonical ? "pass" : intentionallyNoindex ? "info" : "warn";
+    addResult("SEO و فراداده", path + " · canonical", canonicalStatus,
+      canonical || (intentionallyNoindex ? "این صفحه عمداً noindex است؛ canonical برای صفحه 404 لازم نیست." : "canonical وجود ندارد."),
+      "canonical برای صفحات عمومی و قابل ایندکس اهمیت دارد.",
+      intentionallyNoindex ? "برای صفحه خطای واقعی 404، noindex را نگه دار و canonical به صفحه اصلی اضافه نکن." : "برای صفحه‌های قابل ایندکس canonical دقیق و یکتا تعیین کن.");
     const social = doc.querySelector('meta[property="og:title"]') && doc.querySelector('meta[property="og:description"]');
-    addResult("SEO و فراداده", path + " · Open Graph", social ? "pass" : "warn",
-      social ? "og:title و og:description موجودند." : "فراداده اشتراک‌گذاری ناقص است.",
-      "نمایش لینک هنگام اشتراک‌گذاری ممکن است ناقص باشد.",
-      "og:title، og:description، og:url و og:image متناسب با صفحه تنظیم کن.");
+    addResult("SEO و فراداده", path + " · Open Graph", social ? "pass" : intentionallyNoindex ? "info" : "warn",
+      social ? "og:title و og:description موجودند." : intentionallyNoindex ? "صفحه عمداً noindex است؛ Open Graph برای صفحه 404 ضروری نیست." : "فراداده اشتراک‌گذاری ناقص است.",
+      "فراداده Open Graph نمایش لینک صفحات عمومی را بهبود می‌دهد.",
+      intentionallyNoindex ? "برای صفحه 404، نمایش پیام خطا و مسیر بازگشت اولویت دارد." : "og:title، og:description، og:url و og:image متناسب با صفحه تنظیم کن.");
     const lazyCandidates = [...doc.querySelectorAll("img")].filter(img => {
       const rect = img.getAttribute("loading");
       return !rect && !img.closest("header, .hero");
@@ -857,11 +876,12 @@
       const hasMetaFallback = label === "Content-Security-Policy"
         ? Boolean(homePage.doc.querySelector('meta[http-equiv="Content-Security-Policy"]'))
         : label === "Referrer-Policy" ? Boolean(homePage.doc.querySelector('meta[name="referrer"]')) : false;
-      const status = value ? "pass" : hasMetaFallback ? "warn" : label === "Strict-Transport-Security" ? "warn" : "info";
+      const githubPagesStaticHost = location.hostname.endsWith(".github.io");
+      const status = value ? "pass" : githubPagesStaticHost ? "info" : hasMetaFallback ? "warn" : label === "Strict-Transport-Security" ? "warn" : "info";
       addResult("امنیت", "HTTP header · " + label, status,
-        value ? value.slice(0, 180) : hasMetaFallback ? "Header موجود نیست؛ meta fallback در HTML دیده شد." : "Header در پاسخ قابل مشاهده نبود.",
-        "هدرهای امنیتی در لایه پاسخ HTTP بهتر از meta tag قابل اعمال و قابل اتکا هستند.",
-        "در میزبان یا proxy، هدرهای مناسب شامل CSP، HSTS، nosniff، Referrer-Policy و Permissions-Policy را تنظیم کن.");
+        value ? value.slice(0, 180) : hasMetaFallback ? "هدر HTTP موجود نیست؛ meta fallback در HTML فعال است." : "Header در پاسخ قابل مشاهده نبود.",
+        "این آزمون هدر واقعی پاسخ HTTP را بررسی می‌کند؛ meta tag جایگزین کامل header نیست.",
+        githubPagesStaticHost ? "محدودیت میزبان: GitHub Pages از داخل مخزن امکان تنظیم هدر سفارشی HTTP نمی‌دهد؛ برای این هدر به CDN/proxy یا میزبان دارای تنظیم header نیاز است." : "در میزبان یا proxy، هدرهای CSP، HSTS، nosniff، Referrer-Policy و Permissions-Policy را تنظیم کن.");
     }
   }
 
@@ -1192,22 +1212,28 @@
         { key: "projects-mobile", url: new URL("projects.html", SITE_URL).href, strategy: "mobile", page: "صفحه پروژه‌ها", platform: "موبایل" },
         { key: "projects-desktop", url: new URL("projects.html", SITE_URL).href, strategy: "desktop", page: "صفحه پروژه‌ها", platform: "دسکتاپ" }
       ];
-      const psiPromise = Promise.all(targets.map(async target => {
-        try {
-          const result = await runPageSpeed(target.url, target.strategy);
-          state.lighthouse[target.key] = result;
-          addResult("عملکرد و شاخص‌ها", "PageSpeed Insights · " + target.page + " · " + target.platform, "pass",
-            "Lighthouse " + (result.lighthouseResult.lighthouseVersion || "نامشخص") + " · " + (result.lighthouseResult.fetchTime || "زمان اجرا نامشخص"),
-            "این اجرا سنجش آزمایشگاهی واقعی برای URL و دستگاه مشخص‌شده فراهم می‌کند.",
-            "دسته‌بندی‌ها و auditهای دارای وزن را با اجرای قبلی مقایسه کن.");
-          addLighthouseFindings(result, target.page, target.platform);
-        } catch (error) {
-          addResult("عملکرد و شاخص‌ها", "PageSpeed Insights · " + target.page + " · " + target.platform, "warn",
-            error.message || "API در دسترس نیست.",
-            "معیارهای Lighthouse و داده‌های میدانی این صفحه/دستگاه دریافت نشدند.",
-            "دسترسی به Google PageSpeed API، محدودیت شبکه و سهمیه درخواست را بررسی کن.");
+      const psiQueue = [...targets];
+      const runPsiWorker = async () => {
+        while (psiQueue.length) {
+          const target = psiQueue.shift();
+          try {
+            const result = await runPageSpeed(target.url, target.strategy);
+            state.lighthouse[target.key] = result;
+            addResult("عملکرد و شاخص‌ها", "PageSpeed Insights · " + target.page + " · " + target.platform, "pass",
+              "Lighthouse " + (result.lighthouseResult.lighthouseVersion || "نامشخص") + " · " + (result.lighthouseResult.fetchTime || "زمان اجرا نامشخص"),
+              "این اجرا سنجش آزمایشگاهی واقعی برای URL و دستگاه مشخص‌شده فراهم می‌کند.",
+              "دسته‌بندی‌ها و auditهای دارای وزن را با اجرای قبلی مقایسه کن.");
+            addLighthouseFindings(result, target.page, target.platform);
+          } catch (error) {
+            const detail = error.message || "API در دسترس نیست.";
+            addResult("عملکرد و شاخص‌ها", "PageSpeed Insights · " + target.page + " · " + target.platform, "warn",
+              detail,
+              "معیارهای Lighthouse و داده‌های میدانی این صفحه/دستگاه دریافت نشدند.",
+              "اگر Failed to fetch ادامه داشت، شبکه/افزونه مسدودکننده، سهمیه و دسترسی API را بررسی کن؛ برای اجرای پرتعداد API key به کار ببر.");
+          }
         }
-      }));
+      };
+      const psiPromise = Promise.all(Array.from({ length: Math.min(2, targets.length) }, runPsiWorker));
       const ciPromise = checkGitHubActions().catch(error => {
         addResult("CI/CD و انتشار", "اتصال به GitHub Actions", "warn", error.message || "GitHub API در دسترس نبود.",
           "وضعیت آخرین build و deploy از این نشست تأیید نشد.",
