@@ -156,7 +156,7 @@
     };
   }
 
-  function testInteractions() {
+  async function testInteractions() {
     const results = [];
     const themeButton = document.querySelector("[data-theme-toggle]");
     if (themeButton) {
@@ -186,6 +186,50 @@
       });
     } else {
       results.push({ id: "theme-toggle", status: "fail", detail: "Theme button not found" });
+    }
+
+    const languageButtons = ["EN", "DE", "FA"].map(code => document.querySelector('[data-lang="' + code + '"]'));
+    if (languageButtons.every(Boolean)) {
+      const root = document.documentElement;
+      const initialLanguage = root.lang;
+      const initialDirection = root.dir;
+      const initialUrl = location.href;
+      let initialStorage = null;
+      let canReadStorage = true;
+      try { initialStorage = localStorage.getItem("portfolio-language"); } catch (_) { canReadStorage = false; }
+      const resultsByLanguage = [];
+      for (const code of ["EN", "DE", "FA"]) {
+        const button = document.querySelector('[data-lang="' + code + '"]');
+        button.click();
+        await wait(120);
+        const expectedLang = code === "FA" ? "fa" : code.toLowerCase();
+        const expectedDir = code === "FA" ? "rtl" : "ltr";
+        const stateOk = root.lang === expectedLang && root.dir === expectedDir;
+        const pressedOk = button.getAttribute("aria-pressed") === "true";
+        const storageOk = !canReadStorage || localStorage.getItem("portfolio-language") === code;
+        resultsByLanguage.push({ code, stateOk, pressedOk, storageOk });
+      }
+      const originalCode = initialLanguage.toLowerCase() === "fa" ? "FA" : initialLanguage.toUpperCase();
+      const restoreButton = document.querySelector('[data-lang="' + (["EN", "DE", "FA"].includes(originalCode) ? originalCode : "EN") + '"]');
+      if (restoreButton) {
+        restoreButton.click();
+        await wait(120);
+      }
+      if (canReadStorage) {
+        try {
+          if (initialStorage === null) localStorage.removeItem("portfolio-language");
+          else localStorage.setItem("portfolio-language", initialStorage);
+        } catch (_) {}
+      }
+      try { history.replaceState(null, "", initialUrl); } catch (_) {}
+      results.push({
+        id: "language-switcher",
+        status: resultsByLanguage.every(item => item.stateOk && item.pressedOk && item.storageOk) ? "pass" : "fail",
+        detail: resultsByLanguage.map(item => item.code + ": lang/dir=" + item.stateOk + ", aria=" + item.pressedOk + ", storage=" + item.storageOk).join(" · "),
+        note: "هر سه زبان با کلیک واقعی آزمایش و ترجیح اولیه بازیابی شد."
+      });
+    } else {
+      results.push({ id: "language-switcher", status: "fail", detail: "Language selector buttons are missing" });
     }
 
     const menuButton = document.querySelector("[data-menu-toggle]");
@@ -263,10 +307,10 @@
         await document.fonts?.ready;
         await wait(1200);
         const accessibility = await runAccessibility();
-        const interactions = testInteractions();
+        const interactions = await testInteractions();
         post("audit-result", { snapshot: snapshot(), accessibility, interactions });
       } catch (error) {
-        post("audit-result", { snapshot: snapshot(), error: clean(error.message || error), interactions: testInteractions() });
+        post("audit-result", { snapshot: snapshot(), error: clean(error.message || error), interactions: await testInteractions() });
       }
     }
 
@@ -280,7 +324,7 @@
     }
 
     if (message.type === "INTERACTIONS") {
-      post("interactions-result", { interactions: testInteractions(), viewport: innerWidth });
+      post("interactions-result", { interactions: await testInteractions(), viewport: innerWidth });
     }
 
     if (message.type === "VIEWPORT") {
