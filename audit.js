@@ -851,53 +851,61 @@
   }
 
   async function checkCrawlFiles() {
-    const [robotsResponse, sitemapResponse] = await Promise.all([
-      fetchWithTimeout(new URL("robots.txt", SITE_URL).href, { cache: "no-store" }, 12000),
-      fetchWithTimeout(new URL("sitemap.xml", SITE_URL).href, { cache: "no-store" }, 12000)
-    ]);
-    let robotsText = "";
-    let sitemapText = "";
-    if (robotsResponse.ok) robotsText = await robotsResponse.text();
-    if (sitemapResponse.ok) sitemapText = await sitemapResponse.text();
+    try {
+      const [robotsResponse, sitemapResponse] = await Promise.all([
+        fetchWithTimeout(new URL("robots.txt", SITE_URL).href, { cache: "no-store" }, 12000),
+        fetchWithTimeout(new URL("sitemap.xml", SITE_URL).href, { cache: "no-store" }, 12000)
+      ]);
+      let robotsText = "";
+      let sitemapText = "";
+      if (robotsResponse.ok) robotsText = await robotsResponse.text();
+      if (sitemapResponse.ok) sitemapText = await sitemapResponse.text();
 
-    const sitemapDeclared = robotsText.split(/\r?\n/).some(line =>
-      /^\s*sitemap\s*:/i.test(line) && line.toLowerCase().includes("sitemap.xml")
-    );
-    const allowsRoot = robotsText.split(/\r?\n/).some(line => /^\s*allow\s*:\s*\/\s*$/i.test(line));
-    const rootBlocked = robotsText.split(/\r?\n/).some(line => /^\s*disallow\s*:\s*\/\s*$/i.test(line));
-    addResult("SEO و خزش", "robots.txt و سیاست خزش", robotsResponse.ok && !rootBlocked ? "pass" : robotsResponse.status === 404 ? "info" : "warn",
-      "HTTP " + robotsResponse.status + " · Allow root: " + allowsRoot + " · Disallow all: " + rootBlocked + " · Sitemap declared: " + sitemapDeclared,
-      "قواعد robots می‌توانند دسترسی crawlerها به صفحات عمومی را محدود کنند.",
-      "دستورها را با هدف ایندکس‌کردن صفحات اصلی هماهنگ کن؛ برای حذف از نتایج از noindex استفاده کن، نه صرفاً مسدودکردن crawl.");
-    if (!sitemapResponse.ok) {
-      addResult("SEO و خزش", "sitemap.xml", sitemapResponse.status === 404 ? "warn" : "fail",
-        "HTTP " + sitemapResponse.status,
-        "نبود یا خطای sitemap کشف URLهای سایت را برای موتور جست‌وجو سخت‌تر می‌کند.",
-        "فایل XML معتبر، قابل‌دسترسی و شامل URLهای canonical را منتشر کن.");
-      return;
-    }
+      const sitemapDeclared = robotsText.split(/\r?\n/).some(line =>
+        /^\s*sitemap\s*:/i.test(line) && line.toLowerCase().includes("sitemap.xml")
+      );
+      const allowsRoot = robotsText.split(/\r?\n/).some(line => /^\s*allow\s*:\s*\/\s*$/i.test(line));
+      const rootBlocked = robotsText.split(/\r?\n/).some(line => /^\s*disallow\s*:\s*\/\s*$/i.test(line));
+      addResult("SEO و خزش", "robots.txt و سیاست خزش", robotsResponse.ok && !rootBlocked ? "pass" : robotsResponse.status === 404 ? "info" : "warn",
+        "HTTP " + robotsResponse.status + " · Allow root: " + allowsRoot + " · Disallow all: " + rootBlocked + " · Sitemap declared: " + sitemapDeclared,
+        "قواعد robots می‌توانند دسترسی crawlerها به صفحات عمومی را محدود کنند.",
+        "دستورها را با هدف ایندکس‌کردن صفحات اصلی هماهنگ کن؛ برای حذف از نتایج از noindex استفاده کن، نه صرفاً مسدودکردن crawl.");
+      if (!sitemapResponse.ok) {
+        addResult("SEO و خزش", "sitemap.xml", sitemapResponse.status === 404 ? "warn" : "fail",
+          "HTTP " + sitemapResponse.status,
+          "نبود یا خطای sitemap کشف URLهای سایت را برای موتور جست‌وجو سخت‌تر می‌کند.",
+          "فایل XML معتبر، قابل‌دسترسی و شامل URLهای canonical را منتشر کن.");
+        return;
+      }
 
-    const xml = new DOMParser().parseFromString(sitemapText, "application/xml");
-    const parseError = xml.querySelector("parsererror");
-    const locations = [...xml.querySelectorAll("loc")].map(node => node.textContent.trim()).filter(Boolean);
-    const duplicates = locations.filter((url, index) => locations.indexOf(url) !== index);
-    const invalid = locations.filter(value => {
-      try {
-        const url = new URL(value);
-        return url.origin !== new URL(SITE_URL).origin || !url.pathname.startsWith(new URL(SITE_URL).pathname);
-      } catch (_) { return true; }
-    });
-    const auditListed = locations.some(value => new URL(value).pathname.endsWith("/audit.html"));
-    const status = parseError || !locations.length || invalid.length || duplicates.length ? "fail" : auditListed ? "warn" : "pass";
-    addResult("SEO و خزش", "ساختار و URLهای sitemap.xml", status,
-      "HTTP " + sitemapResponse.status + " · URLها: " + locations.length + " · تکراری: " + duplicates.length + " · خارج از دامنه: " + invalid.length + " · audit در sitemap: " + auditListed,
-      "sitemap نامعتبر یا شامل URL خصوصی/غیرقابل‌ایندکس می‌تواند کیفیت خزش را کاهش دهد.",
-      "فقط URLهای canonical عمومی را نگه دار و فایل را با XML parser و Search Console اعتبارسنجی کن.");
-    if (!sitemapDeclared) {
-      addResult("SEO و خزش", "ارجاع sitemap از robots.txt", "warn",
-        "در robots.txt ارجاعی به sitemap.xml پیدا نشد.",
-        "crawlerها ممکن است sitemap را دیرتر پیدا کنند.",
-        "یک خط Sitemap با URL کامل فایل sitemap در robots.txt اضافه کن.");
+      const xml = new DOMParser().parseFromString(sitemapText, "application/xml");
+      const parseError = xml.querySelector("parsererror");
+      const locations = [...xml.querySelectorAll("loc")].map(node => node.textContent.trim()).filter(Boolean);
+      const duplicates = locations.filter((url, index) => locations.indexOf(url) !== index);
+      const invalid = locations.filter(value => {
+        try {
+          const url = new URL(value);
+          return url.origin !== new URL(SITE_URL).origin || !url.pathname.startsWith(new URL(SITE_URL).pathname);
+        } catch (_) { return true; }
+      });
+      const auditListed = locations.some(value => {
+        try { return new URL(value).pathname.endsWith("/audit.html"); } catch (_) { return false; }
+      });
+      const status = parseError || !locations.length || invalid.length || duplicates.length ? "fail" : auditListed ? "warn" : "pass";
+      addResult("SEO و خزش", "ساختار و URLهای sitemap.xml", status,
+        "HTTP " + sitemapResponse.status + " · URLها: " + locations.length + " · تکراری: " + duplicates.length + " · خارج از دامنه: " + invalid.length + " · audit در sitemap: " + auditListed,
+        "sitemap نامعتبر یا شامل URL خصوصی/غیرقابل‌ایندکس می‌تواند کیفیت خزش را کاهش دهد.",
+        "فقط URLهای canonical عمومی را نگه دار و فایل را با XML parser و Search Console اعتبارسنجی کن.");
+      if (!sitemapDeclared) {
+        addResult("SEO و خزش", "ارجاع sitemap از robots.txt", "warn",
+          "در robots.txt ارجاعی به sitemap.xml پیدا نشد.",
+          "crawlerها ممکن است sitemap را دیرتر پیدا کنند.",
+          "یک خط Sitemap با URL کامل فایل sitemap در robots.txt اضافه کن.");
+      }
+    } catch (error) {
+      addResult("SEO و خزش", "بررسی robots.txt و sitemap.xml", "info", error.message || "دریافت فایل‌های خزش انجام نشد.",
+        "دسترسی به فایل‌های SEO در این نشست تأیید نشد.",
+        "robots.txt و sitemap.xml را در همان دامنه و بدون redirect غیرمنتظره بررسی کن.");
     }
   }
 
