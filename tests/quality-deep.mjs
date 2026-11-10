@@ -161,6 +161,7 @@ const axeLicense = fs.readFileSync("assets/vendor/AXE-CORE-LICENSE.txt", "utf8")
 assert.match(auditHtml, /frame-src 'self'/, "audit page must allow only same-origin diagnostic frames");
 assert.match(auditHtml, /https:\/\/validator\.w3\.org/, "W3C checker connect policy missing");
 assert.match(auditBridge, /portfolio-audit-bridge/, "runtime bridge message protocol missing");
+assert.match(boot, /audit-bridge\\.js\\?v=20261110-audit-bridge-v4/, "updated audit bridge cache key missing");
 assert.match(auditBridge, /securitypolicyviolation/, "browser CSP violations are not captured");
 assert.match(auditBridge, /unhandledrejection/, "unhandled promise rejections are not captured");
 assert.match(auditBridge, /largest-contentful-paint/, "live LCP observer missing");
@@ -186,6 +187,7 @@ assert.match(auditJs, /searchParams\.set\("audit", "1"\)/, "live probes must use
 assert.match(auditJs, /checkCrawlFiles/, "robots and sitemap audits missing");
 assert.match(auditJs, /check404Handling/, "real HTTP 404 probe missing");
 const serviceWorker = fs.readFileSync("sw.js", "utf8");
+assert.match(serviceWorker, /portfolio-static-v7/, "service worker cache version must be bumped after release changes");
 assert.match(serviceWorker, /searchParams\.get\("audit"\) === "1"/, "service worker must bypass audit navigations");
 assert.match(serviceWorker, /self\.clients\.get\(event\.clientId\)/, "service worker must bypass cached subresources for audit frames");
 
