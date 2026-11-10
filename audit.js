@@ -25,8 +25,6 @@
     running: false,
     filter: "all"
   };
-  const perf = { lcp: null, cls: 0, inp: null, longTasks: [] };
-
   function hex(buffer) {
     return [...new Uint8Array(buffer)].map(value => value.toString(16).padStart(2, "0")).join("");
   }
@@ -41,41 +39,6 @@
       hash: "SHA-256"
     }, key, 256);
     return hex(bits) === PIN_HASH;
-  }
-
-  function setupPerformanceObservers() {
-    if (!("PerformanceObserver" in window)) return;
-    try {
-      const lcp = new PerformanceObserver(list => {
-        const entries = list.getEntries();
-        if (entries.length) perf.lcp = entries[entries.length - 1].startTime;
-      });
-      lcp.observe({ type: "largest-contentful-paint", buffered: true });
-    } catch (_) {}
-    try {
-      const cls = new PerformanceObserver(list => {
-        for (const entry of list.getEntries()) {
-          if (!entry.hadRecentInput) perf.cls += entry.value;
-        }
-      });
-      cls.observe({ type: "layout-shift", buffered: true });
-    } catch (_) {}
-    try {
-      const events = new PerformanceObserver(list => {
-        for (const entry of list.getEntries()) {
-          if (entry.interactionId && entry.duration) {
-            perf.inp = Math.max(perf.inp || 0, entry.duration);
-          }
-        }
-      });
-      events.observe({ type: "event", buffered: true, durationThreshold: 40 });
-    } catch (_) {}
-    try {
-      const tasks = new PerformanceObserver(list => {
-        for (const entry of list.getEntries()) perf.longTasks.push(entry.duration);
-      });
-      tasks.observe({ type: "longtask", buffered: true });
-    } catch (_) {}
   }
 
   function addResult(category, title, status, evidence, impact, recommendation) {
@@ -137,7 +100,7 @@
       { key: "inp", label: "INP", field: fieldValue(field, "INTERACTION_TO_NEXT_PAINT"), lab: null, unit: "تأخیر تعامل کاربر" },
       { key: "cls", label: "CLS", field: fieldValue(field, "CUMULATIVE_LAYOUT_SHIFT_SCORE", 1000), lab: auditValue(audits, "cumulative-layout-shift"), unit: "پایداری چیدمان" },
       { key: "fcp", label: "FCP", field: fieldValue(field, "FIRST_CONTENTFUL_PAINT_MS"), lab: auditValue(audits, "first-contentful-paint"), unit: "اولین نمایش محتوای صفحه" },
-      { key: "ttfb", label: "TTFB", field: fieldValue(field, "EXPERIMENTAL_TIME_TO_FIRST_BYTE_MS") ?? fieldValue(field, "EXPERIMENTAL_TIME_TO_FIRST_BYTE"), lab: auditValue(audits, "server-response-time"), unit: "زمان دریافت اولین بایت" }
+      { key: "ttfb", label: "TTFB", field: fieldValue(field, "EXPERIMENTAL_TIME_TO_FIRST_BYTE_MS") ?? fieldValue(field, "EXPERIMENTAL_TIME_TO_FIRST_BYTE"), lab: null, unit: "زمان دریافت اولین بایت" }
     ];
     return metrics.map(metric => {
       const value = metric.field ?? metric.lab;
@@ -593,28 +556,35 @@
   function renderVitals() {
     const grid = $("#vitals-grid");
     grid.replaceChildren();
-    const primary = state.lighthouse.mobile;
-    if (!primary) {
-      grid.append(make("div", "empty-state", "شاخص‌های واقعی PageSpeed دریافت نشدند. پس از رفع دسترسی API دوباره اجرا کن."));
+    const platforms = [
+      ["mobile", "موبایل"],
+      ["desktop", "دسکتاپ"]
+    ].filter(([key]) => Boolean(state.lighthouse[key]));
+    if (!platforms.length) {
+      grid.append(make("div", "empty-state", "شاخص‌های PageSpeed دریافت نشدند. پس از رفع دسترسی API دوباره اجرا کن."));
       return;
     }
-    const vitals = extractVitals(primary);
-    state.vitals = vitals;
-    vitals.forEach(metric => {
+    const allVitals = [];
+    platforms.forEach(([key, label]) => {
+      extractVitals(state.lighthouse[key]).forEach(metric => {
+        allVitals.push({ ...metric, platform: label });
+      });
+    });
+    state.vitals = allVitals;
+    allVitals.forEach(metric => {
       const card = make("article", "vital-card");
-      card.append(make("span", "", metric.label));
+      card.append(make("span", "", metric.platform + " · " + metric.label));
       const shown = metric.value === null ? "—" : metric.key === "cls" ? metric.value.toFixed(3) : msLabel(metric.value);
       card.append(make("strong", "", shown));
       card.append(make("small", "", metric.source));
       const badge = make("small", "status-pill " + (metric.status === "unknown" ? "" : metric.status),
-        metric.status === "unknown" ? "ناشناخته" : metric.status === "pass" ? "خوب" : metric.status === "warn" ? "نیازمند توجه" : "ضعیف");
+        metric.status === "unknown" ? "داده موجود نیست" : metric.status === "pass" ? "خوب" : metric.status === "warn" ? "نیازمند توجه" : "ضعیف");
       card.append(badge);
       grid.append(card);
     });
-    const field = getFieldMetrics(primary);
-    const availableField = Object.keys(field).length > 0;
-    if (!availableField) {
-      grid.append(make("div", "empty-state", "داده میدانی CrUX در دسترس نیست؛ مقادیر موجود از Lighthouse Lab آمده‌اند. INP بدون داده میدانی قابل اعلام نیست."));
+    const hasFieldData = platforms.some(([key]) => Object.keys(getFieldMetrics(state.lighthouse[key])).length > 0);
+    if (!hasFieldData) {
+      grid.append(make("div", "empty-state", "داده میدانی CrUX برای این اجرا موجود نبود؛ مقادیر LCP، CLS و FCP در صورت وجود از Lighthouse Lab هستند. INP و TTFB بدون داده میدانی اعلام نمی‌شوند."));
     }
   }
 
@@ -884,7 +854,6 @@
   }
 
   function main() {
-    setupPerformanceObservers();
     setupGate();
     setupControls();
   }
