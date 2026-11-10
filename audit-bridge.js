@@ -307,14 +307,23 @@
     if (!message || message.source !== "portfolio-audit-parent" || message.runId !== runId) return;
 
     if (message.type === "RUN") {
+      let loadSnapshot = null;
       try {
         await document.fonts?.ready;
         await wait(1200);
+        // Capture page-load metrics before axe and click probes can change layout or add work.
+        loadSnapshot = snapshot();
         const accessibility = await runAccessibility();
         const interactions = await testInteractions();
-        post("audit-result", { snapshot: snapshot(), accessibility, interactions });
+        post("audit-result", { snapshot: loadSnapshot, accessibility, interactions });
       } catch (error) {
-        post("audit-result", { snapshot: snapshot(), error: clean(error.message || error), interactions: await testInteractions() });
+        let interactions = [];
+        try { interactions = await testInteractions(); } catch (_) {}
+        post("audit-result", {
+          snapshot: loadSnapshot || snapshot(),
+          error: clean(error.message || error),
+          interactions
+        });
       }
     }
 
