@@ -129,7 +129,7 @@ assert.match(auditJs, /PBKDF2/, "PIN verifier must use a password-based KDF");
 assert.match(auditJs, /runPageSpeed/, "PageSpeed Insights integration missing");
 assert.match(auditJs, /api.github.com/, "GitHub Actions integration missing");
 assert.match(auditJs, /localStorage\.setItem\(REPORT_KEY/, "previous-run comparison snapshot missing");
-assert.doesNotMatch(auditJs, /\\b(?:innerHTML|outerHTML|insertAdjacentHTML|document\.write)\\b/, "audit console must not use unsafe HTML sinks");
+assert.doesNotMatch(auditJs, /\b(?:innerHTML|outerHTML|insertAdjacentHTML|document\.write)\b/, "audit console must not use unsafe HTML sinks");
 assert.match(auditCss, /@media print/, "print stylesheet missing");
 assert.match(auditCss, /@media \(max-width: 520px\)/, "mobile audit layout missing");
 for (const source of [main, cases]) assert.match(source, /href="\.\/audit\.html"/, "site footer must link to the audit console");
