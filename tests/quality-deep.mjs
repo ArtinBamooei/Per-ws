@@ -169,7 +169,7 @@ const axeLicense = fs.readFileSync("assets/vendor/AXE-CORE-LICENSE.txt", "utf8")
 assert.match(auditHtml, /frame-src 'self'/, "audit page must allow only same-origin diagnostic frames");
 assert.match(auditHtml, /https:\/\/validator\.w3\.org/, "W3C checker connect policy missing");
 assert.match(auditBridge, /portfolio-audit-bridge/, "runtime bridge message protocol missing");
-assert.ok(boot.includes("audit-bridge.js?v=20261110-audit-bridge-v5"), "updated audit bridge cache key missing");
+assert.ok(boot.includes("audit-bridge.js?v=20261110-audit-bridge-v6"), "updated audit bridge cache key missing");
 assert.match(auditBridge, /securitypolicyviolation/, "browser CSP violations are not captured");
 assert.match(auditBridge, /unhandledrejection/, "unhandled promise rejections are not captured");
 assert.match(auditBridge, /largest-contentful-paint/, "live LCP observer missing");
@@ -195,11 +195,11 @@ assert.match(auditJs, /searchParams\.set\("audit", "1"\)/, "live probes must use
 assert.match(auditJs, /checkCrawlFiles/, "robots and sitemap audits missing");
 assert.match(auditJs, /check404Handling/, "real HTTP 404 probe missing");
 const serviceWorker = fs.readFileSync("sw.js", "utf8");
-assert.match(serviceWorker, /portfolio-static-v9/, "service worker cache version must be bumped after release changes");
+assert.match(serviceWorker, /portfolio-static-v10/, "service worker cache version must be bumped after release changes");
 assert.match(serviceWorker, /searchParams\.get\("audit"\) === "1"/, "service worker must bypass audit navigations");
 assert.match(serviceWorker, /self\.clients\.get\(event\.clientId\)/, "service worker must bypass cached subresources for audit frames");
 
-assert.match(auditHtml, /audit\.js\?v=20261110-audit-v8/, "audit engine cache key must match the final build");
+assert.match(auditHtml, /audit\.js\?v=20261110-audit-v9/, "audit engine cache key must match the final build");
 
 assert.match(auditBridge, /const loadSnapshot = snapshot\(\)|loadSnapshot = snapshot\(\)/, "page-load metrics must be captured before diagnostics and interactions");
 assert.match(auditBridge, /type: "paint", buffered: true/, "buffered Paint Timing observer missing");
@@ -208,6 +208,13 @@ assert.match(auditJs, /strategy\.toUpperCase\(\)/, "PageSpeed strategy must use 
 assert.match(auditJs, /intentionallyNoindex/, "intentional noindex pages must not get false canonical/OG warnings");
 assert.match(auditJs, /githubPagesStaticHost/, "GitHub Pages custom-header limitation must be reported accurately");
 assert.match(auditJs, /runPsiWorker/, "PageSpeed requests must use a bounded concurrency queue");
+assert.match(auditJs, /checkDeploymentIntegrity/, "live deployed files must be hash-verified against the GitHub main tree");
+assert.match(auditJs, /gitBlobSha/, "deployed asset comparison must use Git blob SHA-1, not filename/version strings");
+assert.match(auditJs, /schemaVersion: 2/, "audit reports must be versioned and reject legacy snapshots");
+assert.match(auditJs, /previous\\.schemaVersion === 2 && previous\\.validity === "valid"/, "legacy or invalid reports must not be used as valid baselines");
+assert.match(auditJs, /PORTFOLIO_AUDIT_INFO/, "active Service Worker must expose its actual cache version");
+assert.match(auditHtml, /id="integrity-panel"/, "deployment integrity panel missing");
+assert.match(auditBridge, /loadedAssets/, "real iframe loaded asset URLs must be captured");
 console.log("Deep quality audit: PASS (responsive semantics, local assets/fragments, language/theme persistence, RTL, reduced motion, keyboard navigation, case-study completeness and payload budgets).");
 
 
@@ -231,4 +238,4 @@ assert.doesNotMatch(main, /<a class="brand"[^>]*aria-label=/, "brand link must d
 assert.doesNotMatch(cases, /<a class="brand"[^>]*aria-label=/, "project brand link must derive its accessible name from visible content");
 assert.match(css, /\.brand-copy \{ position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect\(0, 0, 0, 0\); white-space: nowrap; border: 0; \}/, "mobile brand text must remain available to assistive technology");
 assert.match(css, /\.nav-link, \.footer-links > a, \.text-link, \.detail-back\s*\{\s*min-height: 24px;/, "compact navigation links must meet 24px target height");
-assert.match(serviceWorker, /portfolio-static-v9/, "service worker cache must be invalidated after target-size changes");
+assert.match(serviceWorker, /portfolio-static-v10/, "service worker cache must be invalidated after target-size changes");
