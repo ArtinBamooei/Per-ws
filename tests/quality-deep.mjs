@@ -157,6 +157,10 @@ assert.match(auditJs, /home-mobile[\s\S]*projects-desktop/, "Lighthouse must cov
 assert.match(auditHtml, /id="browser-runtime"/, "live browser report panel missing");
 assert.match(auditHtml, /id="markup-panel"/, "W3C validation panel missing");
 
+assert.match(auditBridge, /language-switcher/, "real three-language interaction probe missing");
+assert.match(auditBridge, /themePersisted/, "theme persistence assertion missing");
+assert.match(auditJs, /language-switcher/, "language interaction findings are not rendered");
+
 console.log("Deep quality audit: PASS (responsive semantics, local assets/fragments, language/theme persistence, RTL, reduced motion, keyboard navigation, case-study completeness and payload budgets).");
 
 
