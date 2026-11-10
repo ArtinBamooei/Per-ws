@@ -270,6 +270,19 @@
       }
     }
 
+    if (message.type === "ACCESSIBILITY") {
+      try {
+        const accessibility = await runAccessibility();
+        post("accessibility-result", { accessibility, viewport: innerWidth });
+      } catch (error) {
+        post("accessibility-result", { error: clean(error.message || error), viewport: innerWidth });
+      }
+    }
+
+    if (message.type === "INTERACTIONS") {
+      post("interactions-result", { interactions: testInteractions(), viewport: innerWidth });
+    }
+
     if (message.type === "VIEWPORT") {
       await wait(350);
       post("viewport-result", {
