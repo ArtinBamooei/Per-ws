@@ -300,3 +300,72 @@ html[data-theme="dark"] .theme-moon { display: block; }
   .finding, .ci-row, .manual-grid article { break-inside: avoid; }
   a { text-decoration: none !important; }
 }
+
+
+/* Live browser audit results and standards-engine output. */
+.audit-test-frame {
+  position: fixed;
+  inset-block-start: 0;
+  inset-inline-start: -10000px;
+  width: 1365px;
+  height: 900px;
+  opacity: 0;
+  pointer-events: none;
+  border: 0;
+  visibility: visible;
+}
+.audit-test-frame.viewport-390 { width: 390px; height: 844px; }
+.audit-test-frame.viewport-768 { width: 768px; height: 900px; }
+.audit-test-frame.viewport-1024 { width: 1024px; height: 900px; }
+.audit-test-frame.viewport-1365 { width: 1365px; height: 900px; }
+.browser-runtime { display: grid; gap: 12px; }
+.browser-page-card { border: 1px solid var(--line); border-radius: 14px; background: var(--surface-soft); overflow: hidden; }
+.browser-page-head { padding: 13px 15px; border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.browser-page-head strong { font-size: 12px; }
+.browser-page-head small { color: var(--quiet); font-size: 10px; }
+.browser-metrics { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 8px; padding: 12px; }
+.browser-metric { padding: 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); min-width: 0; }
+.browser-metric span { display: block; color: var(--quiet); font-size: 9px; }
+.browser-metric strong { display: block; margin-top: 3px; font-size: 14px; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+.browser-details { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0 12px 12px; }
+.browser-detail { border: 1px solid var(--line); border-radius: 10px; padding: 11px; background: var(--surface); min-width: 0; }
+.browser-detail strong { display: block; margin-bottom: 5px; font-size: 10px; }
+.browser-detail p, .browser-detail li { color: var(--muted); font-size: 9px; overflow-wrap: anywhere; }
+.browser-detail ul { margin: 0; padding-inline-start: 17px; }
+.browser-detail p { margin: 3px 0; }
+.viewport-list { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 12px 12px; }
+.viewport-chip { padding: 4px 9px; border-radius: 99px; border: 1px solid var(--line); background: var(--surface); color: var(--muted); font-size: 9px; }
+.viewport-chip.pass { color: var(--good); background: var(--good-soft); border-color: color-mix(in srgb,var(--good) 25%,var(--line)); }
+.viewport-chip.fail { color: var(--bad); background: var(--bad-soft); border-color: color-mix(in srgb,var(--bad) 25%,var(--line)); }
+.markup-panel { display: grid; gap: 8px; }
+.markup-summary { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 8px; }
+.markup-stat { padding: 11px; background: var(--surface-soft); border: 1px solid var(--line); border-radius: 10px; }
+.markup-stat strong { display: block; font-size: 20px; font-variant-numeric: tabular-nums; }
+.markup-stat span { color: var(--quiet); font-size: 9px; }
+.markup-message { padding: 11px 13px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface-soft); }
+.markup-message.error { border-inline-start: 3px solid var(--bad); }
+.markup-message.warning { border-inline-start: 3px solid var(--warn); }
+.markup-message strong { display: block; font-size: 10px; }
+.markup-message p { margin: 4px 0 0; color: var(--muted); font-size: 10px; }
+.axe-rule { padding: 11px 13px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+.axe-rule-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+.axe-rule strong { font-size: 11px; }
+.axe-rule p { margin: 5px 0 0; color: var(--muted); font-size: 10px; }
+.axe-node { margin-top: 8px; border-top: 1px solid var(--line); padding-top: 7px; }
+.axe-node code { display: block; direction: ltr; text-align: left; overflow-wrap: anywhere; color: var(--accent); font-size: 9px; }
+.axe-node p { margin-top: 3px; }
+.browser-error-list { display: grid; gap: 6px; }
+.browser-error { padding: 8px 10px; border-radius: 8px; background: var(--bad-soft); color: var(--bad); font-size: 9px; overflow-wrap: anywhere; }
+@media (max-width: 760px) {
+  .browser-metrics { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .browser-details { grid-template-columns: 1fr; }
+}
+@media (max-width: 520px) {
+  .markup-summary { grid-template-columns: repeat(3,minmax(0,1fr)); gap: 5px; }
+  .markup-stat { padding: 8px; }
+  .markup-stat strong { font-size: 17px; }
+}
+@media print {
+  .audit-test-frame { display: none !important; }
+  .browser-page-card, .axe-rule, .markup-message { break-inside: avoid; }
+}
