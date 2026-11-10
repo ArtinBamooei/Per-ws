@@ -21,7 +21,8 @@ for (const [name, html] of pages) {
   assert.match(html, /base-uri 'self'/, name + ": base-uri missing");
   assert.match(html, /script-src 'self'/, name + ": script-src missing");
   assert.match(html, /upgrade-insecure-requests/, name + ": HTTPS upgrade directive missing");
-  assert.match(html, /frame-src 'none'/, name + ": frame-src missing");
+  if (name === "audit.html") assert.match(html, /frame-src 'self'/, name + ": same-origin audit frame policy missing");
+  else assert.match(html, /frame-src 'none'/, name + ": frame-src missing");
   assert.match(html, /form-action 'self'/, name + ": form-action missing");
   assert.match(html, /name="referrer" content="strict-origin-when-cross-origin"/, name + ": referrer policy missing");
   assert.doesNotMatch(html, /unsafe-inline|unsafe-eval/, name + ": unsafe CSP exception");
