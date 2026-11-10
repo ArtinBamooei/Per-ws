@@ -1,5 +1,5 @@
 /* Lightweight runtime cache for the portfolio. */
-const CACHE_NAME = "portfolio-static-v9";
+const CACHE_NAME = "portfolio-static-v10";
 const CACHE_PREFIX = "portfolio-static-";
 
 self.addEventListener("install", (event) => {
@@ -14,6 +14,11 @@ self.addEventListener("activate", (event) => {
       .map((key) => caches.delete(key)));
     await self.clients.claim();
   })());
+});
+
+self.addEventListener("message", (event) => {
+  if (event.data?.type !== "PORTFOLIO_AUDIT_INFO" || !event.ports?.[0]) return;
+  event.ports[0].postMessage({ cacheName: CACHE_NAME, scriptURL: self.location.href, scope: self.registration.scope, state: "activated" });
 });
 
 self.addEventListener("fetch", (event) => {
