@@ -1,5 +1,5 @@
 /* Lightweight runtime cache for the portfolio. */
-const CACHE_NAME = "portfolio-static-v4";
+const CACHE_NAME = "portfolio-static-v5";
 const CACHE_PREFIX = "portfolio-static-";
 
 self.addEventListener("install", (event) => {
@@ -21,6 +21,8 @@ self.addEventListener("fetch", (event) => {
   const url = new URL(request.url);
 
   if (request.method !== "GET" || url.origin !== self.location.origin) return;
+  // Audit iframes must use a direct network navigation, not the site cache.
+  if (url.searchParams.get("audit") === "1") return;
 
   if (request.mode === "navigate") {
     event.respondWith((async () => {
