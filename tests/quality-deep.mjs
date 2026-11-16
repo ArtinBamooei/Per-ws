@@ -169,4 +169,4 @@ assert.doesNotMatch(main, /<a class="brand"[^>]*aria-label=/, "brand link must d
 assert.doesNotMatch(cases, /<a class="brand"[^>]*aria-label=/, "project brand link must derive its accessible name from visible content");
 assert.match(css, /\.brand-copy \{ position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect\(0, 0, 0, 0\); white-space: nowrap; border: 0; \}/, "mobile brand text must remain available to assistive technology");
 assert.match(css, /\.nav-link, \.footer-links > a, \.text-link, \.detail-back\s*\{\s*min-height: 24px;/, "compact navigation links must meet 24px target height");
-assert.match(serviceWorker, /portfolio-static-v13/, "service worker cache must be invalidated after target-size changes");
+assert.match(serviceWorker, /portfolio-static-v14/, "service worker cache must be invalidated after target-size changes");
