@@ -186,3 +186,8 @@ assert.ok(heroArtwork.includes("M635 758C690 735 755 705 820 705"), "module-to-b
 assert.ok(heroArtwork.includes("M820 705L820 657"), "bottom terminal must connect to the lower platform edge");
 assert.ok(heroArtwork.includes("M925 185C1000 205 1030 330 1005 410"), "right orbital filament must begin at the rear-fin corner and meet the side-fin edge");
 assert.ok(heroArtwork.includes("M635 165L625 195"), "top terminal must connect to the upper-sheet apex");
+
+assert.ok(!/\.signature-glass-scene \.((rear-fin)|(upper-sheets)|(lower-platform)|(front-panel))\{animation:glass-(fin|upper|lower|front)/.test(cinematic), "connected glass planes must not animate independently of their filaments");
+assert.ok(!/\.signature-glass-scene \.((rear-platform)|(upper-sheets)|(lower-platform)|(side-wings)|(front-panel))\{transform:translateY/.test(cinematic), "connected glass planes must not be statically offset from their connector geometry");
+assert.ok(!/\.signature-glass-scene \.node-(right|top|left|bottom)\{animation:glass-node-drift/.test(cinematic), "orbital terminals must remain attached to their filament endpoints");
+assert.match(cinematic, /Attachment integrity: glass planes and their terminals share one coordinate space/, "line attachment integrity guard missing");
