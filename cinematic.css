@@ -164,9 +164,9 @@ html[data-theme="light"] .hero-visual.data-field::before{opacity:.17}
 html[data-theme="light"] .hero-visual.data-field::after{box-shadow:inset 0 0 80px rgba(79,99,112,.08)}
 html[data-theme="light"] .hero-visual.data-field .hero-visual-caption{color:#60452f;background:rgba(255,255,255,.58);border-color:rgba(172,119,73,.22)}
 @keyframes glass-fin{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
-@keyframes glass-upper{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
-@keyframes glass-lower{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
-@keyframes glass-front{0%,100%{transform:translateX(0)}50%{transform:translateX(-3px)}}
+@keyframes glass-upper{0%,100%{transform:translateY(-9px)}50%{transform:translateY(-16px)}}
+@keyframes glass-lower{0%,100%{transform:translateY(7px)}50%{transform:translateY(12px)}}
+@keyframes glass-front{0%,100%{transform:translate(0,5px)}50%{transform:translate(-3px,9px)}}
 @keyframes glass-core-breathe{0%,100%{filter:brightness(1) drop-shadow(0 0 7px rgba(255,146,38,.2))}50%{filter:brightness(1.12) drop-shadow(0 0 18px rgba(255,146,38,.46))}}
 @keyframes glass-halo{0%,100%{opacity:.5;transform:scale(.96)}50%{opacity:.9;transform:scale(1.06)}}
 @keyframes glass-node-drift{0%,100%{translate:0 0}50%{translate:0 -7px}}
