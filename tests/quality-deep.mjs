@@ -145,7 +145,7 @@ assert.doesNotMatch(js, /innerHTML|outerHTML|insertAdjacentHTML|document\.write\
 const serviceWorker = fs.readFileSync("sw.js", "utf8");
 assert.doesNotMatch(main + cases + js + boot + serviceWorker, /audit\.html|audit-entry|navAudit|audit-bridge|PORTFOLIO_AUDIT_INFO/, "removed site audit feature must have no remaining references");
 assert.ok(!fs.existsSync("audit.html") && !fs.existsSync("audit.js") && !fs.existsSync("audit.css") && !fs.existsSync("audit-bridge.js"), "site audit console files must be removed");
-assert.match(serviceWorker, /portfolio-static-v13/, "service worker cache version must be bumped after release changes");
+assert.match(serviceWorker, /portfolio-static-v14/, "service worker cache version must be bumped after release changes");
 console.log("Deep quality audit: PASS (responsive semantics, local assets/fragments, language/theme persistence, RTL, reduced motion, keyboard navigation, case-study completeness and payload budgets).");
 
 
