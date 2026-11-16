@@ -10,6 +10,8 @@ const cases = docs.get("projects.html");
 const js = fs.readFileSync("script.js", "utf8");
 const css = fs.readFileSync("styles.css", "utf8");
 const boot = fs.readFileSync("theme-init.js", "utf8");
+const motion = fs.readFileSync("motion.js", "utf8");
+const heroArtwork = fs.readFileSync("assets/signature-glass-core.svg", "utf8");
 
 for (const [file, source] of docs) {
   assert.match(source, /<meta\s+name="viewport"[^>]*width=device-width/i, file + ": viewport missing");
@@ -145,7 +147,7 @@ assert.doesNotMatch(js, /innerHTML|outerHTML|insertAdjacentHTML|document\.write\
 const serviceWorker = fs.readFileSync("sw.js", "utf8");
 assert.doesNotMatch(main + cases + js + boot + serviceWorker, /audit\.html|audit-entry|navAudit|audit-bridge|PORTFOLIO_AUDIT_INFO/, "removed site audit feature must have no remaining references");
 assert.ok(!fs.existsSync("audit.html") && !fs.existsSync("audit.js") && !fs.existsSync("audit.css") && !fs.existsSync("audit-bridge.js"), "site audit console files must be removed");
-assert.match(serviceWorker, /portfolio-static-v15/, "service worker cache version must be bumped after release changes");
+assert.match(serviceWorker, /portfolio-static-v16/, "service worker cache version must be bumped after release changes");
 console.log("Deep quality audit: PASS (responsive semantics, local assets/fragments, language/theme persistence, RTL, reduced motion, keyboard navigation, case-study completeness and payload budgets).");
 
 
@@ -169,4 +171,11 @@ assert.doesNotMatch(main, /<a class="brand"[^>]*aria-label=/, "brand link must d
 assert.doesNotMatch(cases, /<a class="brand"[^>]*aria-label=/, "project brand link must derive its accessible name from visible content");
 assert.match(css, /\.brand-copy \{ position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect\(0, 0, 0, 0\); white-space: nowrap; border: 0; \}/, "mobile brand text must remain available to assistive technology");
 assert.match(css, /\.nav-link, \.footer-links > a, \.text-link, \.detail-back\s*\{\s*min-height: 24px;/, "compact navigation links must meet 24px target height");
-assert.match(serviceWorker, /portfolio-static-v15/, "service worker cache must be invalidated after target-size changes");
+assert.match(serviceWorker, /portfolio-static-v16/, "service worker cache must be invalidated after target-size changes");
+assert.match(main, /class="hero-visual data-field"/, "hero visual container missing");
+assert.ok(motion.includes("./assets/signature-glass-core.svg"), "dedicated glass-core SVG must be mounted");
+assert.match(motion, /prefers-reduced-motion/, "hero animation must respect reduced-motion preference");
+assert.match(heroArtwork, /class="core-cube"/, "amber core must remain a distinct SVG layer");
+assert.match(heroArtwork, /class="orbit-nodes"/, "orbital nodes must remain distinct SVG elements");
+assert.match(css, /@keyframes glass-core-breathe/, "core light animation missing");
+assert.ok(css.includes('html[data-theme="light"] .hero-visual.data-field'), "light theme artwork treatment missing");
