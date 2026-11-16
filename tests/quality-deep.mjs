@@ -148,7 +148,7 @@ assert.doesNotMatch(js, /innerHTML|outerHTML|insertAdjacentHTML|document\.write\
 const serviceWorker = fs.readFileSync("sw.js", "utf8");
 assert.doesNotMatch(main + cases + js + boot + serviceWorker, /audit\.html|audit-entry|navAudit|audit-bridge|PORTFOLIO_AUDIT_INFO/, "removed site audit feature must have no remaining references");
 assert.ok(!fs.existsSync("audit.html") && !fs.existsSync("audit.js") && !fs.existsSync("audit.css") && !fs.existsSync("audit-bridge.js"), "site audit console files must be removed");
-assert.match(serviceWorker, /portfolio-static-v17/, "service worker cache version must be bumped after release changes");
+assert.match(serviceWorker, /portfolio-static-v18/, "service worker cache version must be bumped after release changes");
 console.log("Deep quality audit: PASS (responsive semantics, local assets/fragments, language/theme persistence, RTL, reduced motion, keyboard navigation, case-study completeness and payload budgets).");
 
 
@@ -172,7 +172,7 @@ assert.doesNotMatch(main, /<a class="brand"[^>]*aria-label=/, "brand link must d
 assert.doesNotMatch(cases, /<a class="brand"[^>]*aria-label=/, "project brand link must derive its accessible name from visible content");
 assert.match(css, /\.brand-copy \{ position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect\(0, 0, 0, 0\); white-space: nowrap; border: 0; \}/, "mobile brand text must remain available to assistive technology");
 assert.match(css, /\.nav-link, \.footer-links > a, \.text-link, \.detail-back\s*\{\s*min-height: 24px;/, "compact navigation links must meet 24px target height");
-assert.match(serviceWorker, /portfolio-static-v17/, "service worker cache must be invalidated after target-size changes");
+assert.match(serviceWorker, /portfolio-static-v18/, "service worker cache must be invalidated after target-size changes");
 assert.match(main, /class="hero-visual data-field"/, "hero visual container missing");
 assert.ok(motion.includes("./assets/signature-glass-core.svg"), "dedicated glass-core SVG must be mounted");
 assert.match(motion, /prefers-reduced-motion/, "hero animation must respect reduced-motion preference");
@@ -186,3 +186,8 @@ assert.ok(heroArtwork.includes("M635 758C690 735 755 705 820 705"), "module-to-b
 assert.ok(heroArtwork.includes("M820 705L820 657"), "bottom terminal must connect to the lower platform edge");
 assert.ok(heroArtwork.includes("M925 185C1000 205 1030 330 1005 410"), "right orbital filament must begin at the rear-fin corner and meet the side-fin edge");
 assert.ok(heroArtwork.includes("M635 165L625 195"), "top terminal must connect to the upper-sheet apex");
+
+assert.ok(!/\.signature-glass-scene \.((rear-fin)|(upper-sheets)|(lower-platform)|(front-panel))\{animation:glass-(fin|upper|lower|front)/.test(cinematic), "connected glass planes must not animate independently of their filaments");
+assert.ok(!/\.signature-glass-scene \.((rear-platform)|(upper-sheets)|(lower-platform)|(side-wings)|(front-panel))\{transform:translateY/.test(cinematic), "connected glass planes must not be statically offset from their connector geometry");
+assert.ok(!/\.signature-glass-scene \.node-(right|top|left|bottom)\{animation:glass-node-drift/.test(cinematic), "orbital terminals must remain attached to their filament endpoints");
+assert.match(cinematic, /Attachment integrity: glass planes and their terminals share one coordinate space/, "line attachment integrity guard missing");

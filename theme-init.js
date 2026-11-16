@@ -20,13 +20,13 @@
   // Load the custom visual layer without blocking the initial HTML parse.
   const visualStyles = document.createElement("link");
   visualStyles.rel = "stylesheet";
-  visualStyles.href = "./cinematic.css?v=20261116-glass-core-v17";
+  visualStyles.href = "./cinematic.css?v=20261116-glass-core-v18";
   document.head.append(visualStyles);
 
   // Wait for the document structure before mounting the motion scene.
   document.addEventListener("DOMContentLoaded", () => {
     const motionScript = document.createElement("script");
-    motionScript.src = "./motion.js?v=20261116-glass-core-v17";
+    motionScript.src = "./motion.js?v=20261116-glass-core-v18";
     motionScript.async = true;
     document.body.append(motionScript);
   }, { once: true });
