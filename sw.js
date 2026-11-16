@@ -1,5 +1,5 @@
 /* Lightweight runtime cache for the portfolio. */
-const CACHE_NAME = "portfolio-static-v10";
+const CACHE_NAME = "portfolio-static-v11";
 const CACHE_PREFIX = "portfolio-static-";
 
 self.addEventListener("install", (event) => {
@@ -16,19 +16,11 @@ self.addEventListener("activate", (event) => {
   })());
 });
 
-self.addEventListener("message", (event) => {
-  if (event.data?.type !== "PORTFOLIO_AUDIT_INFO" || !event.ports?.[0]) return;
-  event.ports[0].postMessage({ cacheName: CACHE_NAME, scriptURL: self.location.href, scope: self.registration.scope, state: "activated" });
-});
-
 self.addEventListener("fetch", (event) => {
   const request = event.request;
   const url = new URL(request.url);
 
   if (request.method !== "GET" || url.origin !== self.location.origin) return;
-  // Audit iframes must use a direct network navigation, not the site cache.
-  if (url.searchParams.get("audit") === "1") return;
-
   if (request.mode === "navigate") {
     event.respondWith((async () => {
       const cache = await caches.open(CACHE_NAME);
@@ -44,15 +36,6 @@ self.addEventListener("fetch", (event) => {
   }
 
   event.respondWith((async () => {
-    if (event.clientId) {
-      try {
-        const client = await self.clients.get(event.clientId);
-        if (client && new URL(client.url).searchParams.get("audit") === "1") {
-          return fetch(request, { cache: "no-store" });
-        }
-      } catch (_) {}
-    }
-
     const cache = await caches.open(CACHE_NAME);
     const cached = await cache.match(request);
     if (cached) {
