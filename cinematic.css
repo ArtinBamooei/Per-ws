@@ -188,3 +188,8 @@ html[data-theme="light"] .hero-visual.data-field .hero-visual-caption{color:#604
 .signature-glass-scene .rear-platform path:nth-child(3),.signature-glass-scene .lower-platform path:nth-child(3),.signature-glass-scene .upper-sheets path:nth-child(3){filter:brightness(.82)}
 .signature-glass-scene .core-cube{filter:drop-shadow(0 13px 15px rgba(202,91,15,.3))}
 @media(prefers-reduced-motion:reduce){.signature-glass-scene .rear-platform,.signature-glass-scene .upper-sheets,.signature-glass-scene .lower-platform,.signature-glass-scene .side-wings,.signature-glass-scene .front-panel{transform:none}}
+
+/* Precision linework: consistent joins, stable stroke weight and single shadow pass. */
+.signature-glass-scene path{stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.signature-glass-scene .data-filaments path{stroke-width:1.65}
+.signature-glass-scene .rear-platform,.signature-glass-scene .lower-platform,.signature-glass-scene .upper-sheets,.signature-glass-scene .side-wings,.signature-glass-scene .front-panel,.signature-glass-scene .floating-module{filter:drop-shadow(0 9px 8px rgba(3,12,20,.18))}

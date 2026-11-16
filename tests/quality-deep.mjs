@@ -180,3 +180,9 @@ assert.match(heroArtwork, /class="core-cube"/, "amber core must remain a distinc
 assert.match(heroArtwork, /class="orbit-nodes"/, "orbital nodes must remain distinct SVG elements");
 assert.match(cinematic, /@keyframes glass-core-breathe/, "core light animation missing");
 assert.ok(cinematic.includes('html[data-theme="light"] .hero-visual.data-field'), "light theme artwork treatment missing");
+
+assert.ok(heroArtwork.includes("M235 690C270 790 400 815 520 790L565 775"), "lower-left filament must start at its terminal center");
+assert.ok(heroArtwork.includes("M820 755L840 790L940 748"), "lower filament must join the terminal anchor exactly");
+assert.ok(heroArtwork.includes("M800 165C950 205 970 390 1005 410"), "right orbital filament must meet the right anchor line");
+assert.ok(heroArtwork.includes("M535 800L635 758V778L535 820Z"), "floating module right bevel must be present");
+assert.ok(heroArtwork.includes("M300 250V320") && heroArtwork.includes("M1080 300C1080 340 1060 400 1040 430"), "satellite terminals must connect to the sculpture");
