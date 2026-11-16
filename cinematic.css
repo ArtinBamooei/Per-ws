@@ -175,3 +175,16 @@ html[data-theme="light"] .hero-visual.data-field .hero-visual-caption{color:#604
 @media(max-width:900px){.hero-visual.data-field{min-height:clamp(390px,70vw,520px)}.signature-glass-scene{inset:3% 1% 2%;width:98%;height:95%}}
 @media(max-width:600px){.hero-visual.data-field{min-height:0;aspect-ratio:1.04/1;padding:14px}.signature-glass-scene{inset:5% 0 4%;width:100%;height:91%}.hero-visual.data-field .field-topline,.hero-visual.data-field .field-bottomline{left:16px;right:16px}.hero-visual.data-field .field-topline{top:16px}.hero-visual.data-field .field-bottomline{bottom:14px}.hero-visual.data-field .hero-visual-overlay{left:14px;right:14px;bottom:49px}.hero-visual.data-field .hero-visual-caption{font-size:9px}}
 @media(prefers-reduced-motion:reduce){.signature-glass-scene,.artwork-animated .signature-glass-scene *{animation:none!important;transition:none!important;transform:none!important}.signature-glass-scene{filter:none}.hero-visual.data-field{transform:none!important}}
+
+/* Stronger optical separation: each glass plane has its own lift, edge and shadow. */
+.signature-glass-scene .rear-platform,.signature-glass-scene .lower-platform,.signature-glass-scene .upper-sheets,.signature-glass-scene .side-wings,.signature-glass-scene .front-panel,.signature-glass-scene .floating-module{filter:drop-shadow(0 10px 9px rgba(3,12,20,.2))}
+.signature-glass-scene .rear-platform{transform:translateY(-5px)}
+.signature-glass-scene .upper-sheets{transform:translateY(-9px)}
+.signature-glass-scene .lower-platform{transform:translateY(7px)}
+.signature-glass-scene .side-wings{transform:translateY(2px)}
+.signature-glass-scene .front-panel{transform:translateY(5px)}
+.signature-glass-scene .rear-platform path:first-child,.signature-glass-scene .lower-platform path:first-child,.signature-glass-scene .upper-sheets path:first-child{stroke-width:4;stroke-opacity:1}
+.signature-glass-scene .rear-platform path:nth-child(2),.signature-glass-scene .lower-platform path:nth-child(2),.signature-glass-scene .upper-sheets path:nth-child(2){filter:brightness(.88)}
+.signature-glass-scene .rear-platform path:nth-child(3),.signature-glass-scene .lower-platform path:nth-child(3),.signature-glass-scene .upper-sheets path:nth-child(3){filter:brightness(.82)}
+.signature-glass-scene .core-cube{filter:drop-shadow(0 13px 15px rgba(202,91,15,.3))}
+@media(prefers-reduced-motion:reduce){.signature-glass-scene .rear-platform,.signature-glass-scene .upper-sheets,.signature-glass-scene .lower-platform,.signature-glass-scene .side-wings,.signature-glass-scene .front-panel{transform:none}}
