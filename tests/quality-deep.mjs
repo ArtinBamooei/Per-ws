@@ -173,12 +173,12 @@ assert.match(serviceWorker, /portfolio-static-v16/, "service worker cache must b
 
 const heroMotion = fs.readFileSync("motion.js", "utf8");
 const heroStyle = fs.readFileSync("glass-core.css", "utf8");
-assert.doesNotMatch(main, /hero-data-pipeline-(?:dark|light)\\.jpg/, "obsolete raster hero images must be removed");
-assert.match(boot, /glass-core\\.css\\?v=20261116-glass-core-v16/, "glass core stylesheet cache version missing");
-assert.match(boot, /motion\\.js\\?v=20261116-glass-core-v16/, "glass core motion script cache version missing");
+assert.ok(!main.includes("hero-data-pipeline-dark.jpg") && !main.includes("hero-data-pipeline-light.jpg"), "obsolete raster hero images must be removed");
+assert.ok(boot.includes("glass-core.css?v=20261116-glass-core-v16"), "glass core stylesheet cache version missing");
+assert.ok(boot.includes("motion.js?v=20261116-glass-core-v16"), "glass core motion script cache version missing");
 assert.match(heroMotion, /glass-core-scene/, "glass core vector scene missing");
 assert.match(heroMotion, /pointermove/, "subtle pointer parallax missing");
 assert.match(heroMotion, /prefers-reduced-motion/, "glass core motion must respect reduced motion");
 assert.match(heroStyle, /@keyframes core-world-float/, "glass core float animation missing");
-assert.match(heroStyle, /data-theme="light"/, "glass core light theme styling missing");
-assert.match(heroStyle, /prefers-reduced-motion:\\s*reduce/, "glass core reduced motion styling missing");
+assert.ok(heroStyle.includes('data-theme="light"'), "glass core light theme styling missing");
+assert.ok(heroStyle.includes("prefers-reduced-motion:reduce"), "glass core reduced motion styling missing");
