@@ -1,5 +1,5 @@
 /* Lightweight runtime cache for the portfolio. */
-const CACHE_NAME = "portfolio-static-v11";
+const CACHE_NAME = "portfolio-static-v12";
 const CACHE_PREFIX = "portfolio-static-";
 
 self.addEventListener("install", (event) => {

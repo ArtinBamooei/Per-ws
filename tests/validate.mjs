@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import assert from "node:assert/strict";
 const html=fs.readFileSync("index.html","utf8"), projects=fs.readFileSync("projects.html","utf8"), js=fs.readFileSync("script.js","utf8"), css=fs.readFileSync("styles.css","utf8"), boot=fs.readFileSync("theme-init.js","utf8"), sitemap=fs.readFileSync("sitemap.xml","utf8");
-const version="20261110-performance-v13";
+const version="20261116-premium-v14";
 const errorPage=fs.readFileSync("404.html","utf8");
 assert.match(errorPage,/<a class="skip-link" href="#main">/,"404 page skip link missing");
 assert.match(errorPage,/<main class="error-page" id="main" tabindex="-1">/,"404 skip target must be focusable");
@@ -34,6 +34,8 @@ for(const [name,source] of [["index.html",html],["projects.html",projects]]){
 assert.equal((js.match(/innerHTML/g)||[]).length,0,"innerHTML usage detected");
 assert.equal((html.match(/style\s*=/gi)||[]).length,0,"inline styles violate CSP");
 assert.match(html,/fonts\.googleapis\.com\/css2\?family=Vazirmatn/,"Vazirmatn font missing");
+assert.match(html,/hero-data-pipeline-dark\.jpg/,"dark hero artwork missing");
+assert.match(html,/hero-data-pipeline-light\.jpg/,"light hero artwork missing");
 assert.doesNotMatch(html,/class="course-grade-value"[^>]*data-i18n-aria=/,"generic grade placeholder must not have aria-label");
 assert.doesNotMatch(html,/class="transcript-count"[^>]*data-i18n-aria=/,"generic transcript count must not have aria-label");
 assert.match(css,/--accent-warm: #a8441d/,"project number accent must meet WCAG AA contrast on the light card background");

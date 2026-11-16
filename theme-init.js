@@ -1,9 +1,9 @@
 (() => {
   const root = document.documentElement;
-  let theme = "light";
+  let theme = "dark";
   let language = null;
 
-  try { theme = localStorage.getItem("portfolio-theme") === "dark" ? "dark" : "light"; } catch (_) {}
+  try { theme = localStorage.getItem("portfolio-theme") === "light" ? "light" : "dark"; } catch (_) {}
   try { language = localStorage.getItem("portfolio-language"); } catch (_) {}
 
   const queryLanguage = new URLSearchParams(window.location.search).get("lang")?.toUpperCase();
