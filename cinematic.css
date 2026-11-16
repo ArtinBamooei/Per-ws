@@ -132,3 +132,46 @@ html[data-theme="light"] .loom-label{fill:#477f96}
 html[dir="rtl"] .signature-scene{transform:scaleX(-1)}
 @media(max-width:600px){.signature-scene{inset:34px 0 40px;width:100%;height:calc(100% - 74px)}.loom-label{font-size:8px}.loom-label-value{font-size:10px}}
 @media(prefers-reduced-motion:reduce){.loom-world,.loom-thread{animation:none!important}}
+
+/* Signature glass core — bespoke layered artwork and restrained motion. */
+.hero-visual.data-field{--pointer-x:0px;--pointer-y:0px;isolation:isolate;overflow:hidden;background:radial-gradient(ellipse at 54% 46%,rgba(245,145,52,.16),transparent 44%),radial-gradient(ellipse at 48% 52%,rgba(85,148,184,.16),transparent 66%),linear-gradient(145deg,#111d2a 0%,#0b1420 58%,#171a2a 100%);border-color:rgba(214,177,139,.26);box-shadow:0 34px 90px rgba(0,0,0,.34),inset 0 1px rgba(255,255,255,.1)}
+.hero-visual.data-field::before{opacity:.28;background-size:48px 48px;mask-image:radial-gradient(ellipse at 52% 48%,#000 10%,transparent 78%)}
+.hero-visual.data-field::after{z-index:3;background:linear-gradient(135deg,rgba(255,255,255,.075),transparent 27%,transparent 72%,rgba(240,157,87,.055));box-shadow:inset 0 0 100px rgba(3,9,16,.24)}
+.signature-glass-scene{position:absolute;z-index:2;inset:2% 1% 1%;width:98%;height:97%;overflow:visible;pointer-events:none;transform:translate3d(var(--pointer-x),var(--pointer-y),0);transition:transform .55s cubic-bezier(.2,.8,.2,1);filter:drop-shadow(0 24px 34px rgba(0,0,0,.22))}
+.signature-glass-scene .ambient{opacity:.78}
+.signature-glass-scene .rear-fin,.signature-glass-scene .rear-platform,.signature-glass-scene .lower-platform,.signature-glass-scene .side-wings,.signature-glass-scene .front-panel,.signature-glass-scene .upper-sheets,.signature-glass-scene .floating-module{transform-box:fill-box;transform-origin:center}
+.signature-glass-scene .core-halo{transform-origin:635px 450px;opacity:.68}
+.signature-glass-scene .core-cube{transform-box:fill-box;transform-origin:center}
+.signature-glass-scene .data-filaments path{stroke-dasharray:5 10;animation:glass-filament 13s linear infinite}
+.signature-glass-scene .orbit-nodes .node{transform-box:fill-box;transform-origin:center}
+.signature-glass-scene .orbit-nodes .node circle:first-child{filter:drop-shadow(0 0 8px rgba(255,153,43,.48))}
+.signature-glass-scene .orbit-nodes .node circle:last-child{animation:glass-node-ring 5.5s ease-in-out infinite}
+.signature-glass-scene .node-right{animation:glass-node-drift 8s ease-in-out infinite}
+.signature-glass-scene .node-top{animation:glass-node-drift 7s ease-in-out -2s infinite}
+.signature-glass-scene .node-left{animation:glass-node-drift 9s ease-in-out -4s infinite}
+.signature-glass-scene .node-bottom{animation:glass-node-drift 8.5s ease-in-out -1s infinite}
+.artwork-ready .signature-glass-scene{opacity:1}
+.artwork-animated .signature-glass-scene .rear-fin{animation:glass-fin 9s ease-in-out infinite}
+.artwork-animated .signature-glass-scene .upper-sheets{animation:glass-upper 8s ease-in-out infinite}
+.artwork-animated .signature-glass-scene .lower-platform{animation:glass-lower 10s ease-in-out infinite}
+.artwork-animated .signature-glass-scene .front-panel{animation:glass-front 9.5s ease-in-out infinite}
+.artwork-animated .signature-glass-scene .core-cube{animation:glass-core-breathe 5s ease-in-out infinite}
+.artwork-animated .signature-glass-scene .core-halo{animation:glass-halo 5s ease-in-out infinite}
+.hero-visual.data-field .hero-visual-overlay{z-index:5;left:26px;right:26px;bottom:62px;justify-content:flex-end}
+.hero-visual.data-field .hero-visual-caption{padding:8px 12px;border-color:rgba(238,185,128,.22);color:#f3e6d8;background:rgba(20,20,25,.42);font-size:10px}
+html[data-theme="light"] .hero-visual.data-field{background:radial-gradient(ellipse at 54% 46%,rgba(255,174,97,.2),transparent 44%),linear-gradient(145deg,#f8fbfd 0%,#e9f0f5 58%,#f8eee5 100%);border-color:rgba(130,147,159,.32);box-shadow:0 28px 72px rgba(49,69,83,.15),inset 0 1px rgba(255,255,255,.92)}
+html[data-theme="light"] .hero-visual.data-field::before{opacity:.17}
+html[data-theme="light"] .hero-visual.data-field::after{box-shadow:inset 0 0 80px rgba(79,99,112,.08)}
+html[data-theme="light"] .hero-visual.data-field .hero-visual-caption{color:#60452f;background:rgba(255,255,255,.58);border-color:rgba(172,119,73,.22)}
+@keyframes glass-fin{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+@keyframes glass-upper{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@keyframes glass-lower{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
+@keyframes glass-front{0%,100%{transform:translateX(0)}50%{transform:translateX(-3px)}}
+@keyframes glass-core-breathe{0%,100%{filter:brightness(1) drop-shadow(0 0 7px rgba(255,146,38,.2))}50%{filter:brightness(1.12) drop-shadow(0 0 18px rgba(255,146,38,.46))}}
+@keyframes glass-halo{0%,100%{opacity:.5;transform:scale(.96)}50%{opacity:.9;transform:scale(1.06)}}
+@keyframes glass-node-drift{0%,100%{translate:0 0}50%{translate:0 -7px}}
+@keyframes glass-node-ring{0%,100%{opacity:.25;transform:scale(.94)}50%{opacity:.65;transform:scale(1.12)}}
+@keyframes glass-filament{to{stroke-dashoffset:-180}}
+@media(max-width:900px){.hero-visual.data-field{min-height:clamp(390px,70vw,520px)}.signature-glass-scene{inset:3% 1% 2%;width:98%;height:95%}}
+@media(max-width:600px){.hero-visual.data-field{min-height:0;aspect-ratio:1.04/1;padding:14px}.signature-glass-scene{inset:5% 0 4%;width:100%;height:91%}.hero-visual.data-field .field-topline,.hero-visual.data-field .field-bottomline{left:16px;right:16px}.hero-visual.data-field .field-topline{top:16px}.hero-visual.data-field .field-bottomline{bottom:14px}.hero-visual.data-field .hero-visual-overlay{left:14px;right:14px;bottom:49px}.hero-visual.data-field .hero-visual-caption{font-size:9px}}
+@media(prefers-reduced-motion:reduce){.signature-glass-scene,.artwork-animated .signature-glass-scene *{animation:none!important;transition:none!important;transform:none!important}.signature-glass-scene{filter:none}.hero-visual.data-field{transform:none!important}}
