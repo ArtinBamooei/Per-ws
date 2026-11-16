@@ -97,3 +97,38 @@ html[data-theme="light"] .neural-label-key{fill:#456d89}
 html[data-theme="light"] .neural-label-value{fill:#1d4565}
 html[data-theme="light"] .neural-ticks path{stroke:rgba(49,100,140,.45)}
 @media(prefers-reduced-motion:reduce){.neural-link,.neural-lattice{animation:none!important}}
+
+/* Signature data sculpture — bespoke folded ribbon geometry. */
+.hero-visual.data-field{background:radial-gradient(ellipse at 50% 48%,rgba(35,111,147,.22),transparent 52%),linear-gradient(145deg,#091321 0%,#0b1222 52%,#14142d 100%);border-color:rgba(142,207,232,.2);box-shadow:0 42px 110px rgba(0,0,0,.48),inset 0 1px rgba(255,255,255,.08)}
+.signature-scene{inset:28px 0 44px;width:100%;height:calc(100% - 72px);overflow:visible}
+.loom-world{transform-origin:400px 320px;animation:loom-drift 16s ease-in-out infinite}
+.loom-field path{fill:none;stroke:rgba(120,167,201,.085);stroke-width:.7;stroke-dasharray:1 7}
+.loom-aura{fill:none;stroke:#5bd6ec;stroke-width:36;opacity:.13;filter:url(#loomSoft)}
+.loom-ribbon{fill:none;stroke-linecap:round;stroke-linejoin:round}
+.loom-ribbon-back{stroke:url(#loomShadow);stroke-width:48;opacity:.96;transform:translate(0 12px)}
+.loom-ribbon-front{stroke:url(#loomPearl);stroke-width:31;filter:drop-shadow(0 12px 13px rgba(0,0,0,.42))}
+.loom-contour{fill:none;stroke:rgba(220,249,255,.54);stroke-width:1.1;opacity:.72}
+.contour-two{stroke:#8bdff1;opacity:.48}.contour-three{stroke:#a9a0ff;opacity:.52}.contour-four{stroke:#d9faff;opacity:.3}
+.loom-ribs path{fill:none;stroke:url(#loomThread);stroke-width:1.35;opacity:.66;stroke-linecap:round}
+.loom-ribs .rib-2,.loom-ribs .rib-5,.loom-ribs .rib-8{stroke-width:2;opacity:.8}
+.loom-thread{fill:none;stroke:url(#loomThread);stroke-width:1.7;stroke-linecap:round;stroke-dasharray:5 9;opacity:.8;animation:loom-flow 11s linear infinite}
+.thread-1,.thread-4{animation-duration:14s;animation-direction:reverse}
+.loom-port{fill:#a8f4ff;stroke:#e5fdff;stroke-width:1;filter:url(#loomGlow)}
+.loom-port-halo{fill:none;stroke:rgba(117,222,244,.38);stroke-width:1}
+.loom-aperture-ring{fill:rgba(7,15,31,.72);stroke:rgba(190,239,255,.88);stroke-width:1.5;filter:url(#loomGlow)}
+.loom-aperture-core{fill:#101b37;stroke:rgba(158,157,255,.8);stroke-width:1}
+.loom-aperture-glint{fill:none;stroke:#e3fdff;stroke-width:1.5;stroke-linecap:round;opacity:.8}
+.loom-label{fill:#85c9df;font:700 9px Inter,system-ui,sans-serif;letter-spacing:2px}
+.loom-label-value{fill:#d5e6f3;font:500 11px Inter,system-ui,sans-serif;letter-spacing:.2px}
+.loom-measure path{stroke:rgba(147,199,225,.35);stroke-width:1}
+@keyframes loom-flow{to{stroke-dashoffset:-196}}
+@keyframes loom-drift{0%,100%{transform:translateY(0) rotate(-.4deg)}50%{transform:translateY(-5px) rotate(.4deg)}}
+html[data-theme="light"] .hero-visual.data-field{background:radial-gradient(ellipse at 50% 48%,rgba(66,157,184,.14),transparent 54%),linear-gradient(145deg,#eaf5f8,#e7edf8 58%,#eeebfa);border-color:rgba(58,111,143,.24);box-shadow:0 32px 75px rgba(35,66,91,.17),inset 0 1px rgba(255,255,255,.9)}
+html[data-theme="light"] .loom-field path{stroke:rgba(52,99,129,.12)}
+html[data-theme="light"] .loom-ribbon-back{stroke:#a9bdcf}
+html[data-theme="light"] .loom-ribbon-front{stroke:url(#loomPearl);filter:drop-shadow(0 9px 9px rgba(44,79,105,.18))}
+html[data-theme="light"] .loom-label-value{fill:#29465e}
+html[data-theme="light"] .loom-label{fill:#477f96}
+html[dir="rtl"] .signature-scene{transform:scaleX(-1)}
+@media(max-width:600px){.signature-scene{inset:34px 0 40px;width:100%;height:calc(100% - 74px)}.loom-label{font-size:8px}.loom-label-value{font-size:10px}}
+@media(prefers-reduced-motion:reduce){.loom-world,.loom-thread{animation:none!important}}
