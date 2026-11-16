@@ -37,3 +37,27 @@ html[data-theme="light"] .core-filament{opacity:.95}html[data-theme="light"] .no
 @media(max-width:900px){.glass-core-scene{inset:28px -8px 40px;width:calc(100% + 16px);height:calc(100% - 68px)}}
 @media(max-width:560px){.glass-core-scene{inset:34px -18px 40px;width:calc(100% + 36px);height:calc(100% - 74px)}}
 @media(prefers-reduced-motion:reduce){.glass-core-scene,.core-world,.core-filament,.node-orb{animation:none!important;transition:none!important}.glass-core-scene{transform:none!important}}
+
+/* Matching vector anatomy and optical treatment. */
+.glass-core-scene{transform:perspective(1250px) rotateX(var(--tx,0deg)) rotateY(var(--ty,0deg)) translate3d(var(--sx,0px),var(--sy,0px),18px)}
+.core-world{transform-origin:420px 340px;animation:core-world-float 10s ease-in-out infinite}
+.core-orbit{fill:none;stroke:rgba(244,177,119,.22);stroke-width:1.1;stroke-dasharray:2 7}
+.orbit-1{stroke:rgba(244,177,119,.2)}.orbit-2{stroke:rgba(137,197,219,.2);stroke-dasharray:1 9}.orbit-3{stroke:rgba(255,181,106,.18)}
+.glass-panel{fill:url(#core-glass);stroke:url(#core-edge);stroke-width:1.5;stroke-linejoin:round}
+.panel-left{fill-opacity:.62}.panel-right{fill:url(#core-side);fill-opacity:.5}.panel-edge{fill:rgba(238,249,255,.14);stroke:rgba(255,197,142,.52);stroke-width:1}
+.glass-plate{fill:url(#core-glass);stroke:url(#core-edge);stroke-width:1.55;stroke-linejoin:round}
+.glass-plate.base{fill-opacity:.24}.glass-plate.lower{fill-opacity:.23}.glass-plate.middle{fill-opacity:.2}.glass-plate.upper{fill-opacity:.42}
+.plate-side{fill:url(#core-side);stroke:rgba(198,224,237,.58);stroke-width:1.1}.plate-inset{fill:rgba(235,249,255,.07);stroke:rgba(255,255,255,.5);stroke-width:1}
+.plate-rim{fill:none;stroke:rgba(255,231,205,.72);stroke-width:1.3}.seat-top{fill:rgba(255,177,91,.18);stroke:rgba(255,194,126,.72);stroke-width:1.2}.seat-side{fill:rgba(206,126,59,.14);stroke:rgba(255,175,97,.45);stroke-width:1}
+.cpu-glow{fill:url(#core-glow);filter:url(#core-blur)}.cpu-top{fill:url(#core-amber);stroke:#ffd58b;stroke-width:1.7}.cpu-left{fill:url(#core-amber);stroke:#ffc16a;stroke-width:1.4}.cpu-right{fill:#d95b08;fill-opacity:.92;stroke:#ffad4c;stroke-width:1.4}
+.cpu-glint{fill:none;stroke:rgba(255,242,211,.8);stroke-width:1.2}.cpu-highlight{fill:none;stroke:rgba(255,249,224,.65);stroke-width:2;stroke-linecap:round}
+.detail{fill:none;stroke:rgba(206,229,240,.32);stroke-width:.9}.d1,.d4{stroke:rgba(255,181,113,.38)}
+.detached-plate{fill:rgba(211,232,242,.13);stroke:rgba(227,243,250,.58);stroke-width:1.2}.detached-edge{fill:none;stroke:rgba(255,182,113,.54);stroke-width:1}
+.core-wire{fill:none;stroke:url(#core-amber);stroke-width:1.5;stroke-linecap:round;stroke-dasharray:5 8;opacity:.82;animation:core-data-flow 13s linear infinite}.wire-1,.wire-3{animation-direction:reverse;animation-duration:16s}
+.node-halo{fill:none;stroke:rgba(255,169,78,.25);stroke-width:1}.node-orb{fill:url(#core-amber);stroke:rgba(255,229,183,.72);stroke-width:.9;filter:drop-shadow(0 0 9px rgba(255,147,38,.5));transform-box:fill-box;transform-origin:center;animation:core-node-breathe 5s ease-in-out infinite}.n1,.n3{animation-delay:-1.7s}.n2,.n4{animation-delay:-3.2s}.node-glint{fill:rgba(255,249,222,.86)}.core-tick{stroke:rgba(224,238,246,.27);stroke-width:.8}
+@keyframes core-world-float{0%,100%{transform:translateY(0) rotate(-.25deg)}50%{transform:translateY(-5px) rotate(.25deg)}}
+@keyframes core-data-flow{to{stroke-dashoffset:-182}}@keyframes core-node-breathe{0%,100%{transform:scale(.96);opacity:.9}50%{transform:scale(1.06);opacity:1}}
+html[data-theme="light"] .glass-core-scene{filter:drop-shadow(0 16px 22px rgba(43,74,92,.17))}
+html[data-theme="light"] .glass-panel{stroke:rgba(94,139,160,.68)}html[data-theme="light"] .plate-side{stroke:rgba(98,142,163,.52)}html[data-theme="light"] .plate-rim{stroke:rgba(179,113,62,.68)}
+html[data-theme="light"] .core-wire{opacity:.95}html[data-theme="light"] .node-orb{filter:drop-shadow(0 0 7px rgba(235,139,38,.4))}
+@media(prefers-reduced-motion:reduce){.glass-core-scene,.core-world,.core-wire,.node-orb{animation:none!important;transition:none!important}.glass-core-scene{transform:none!important}}
