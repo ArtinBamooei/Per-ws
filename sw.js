@@ -1,5 +1,5 @@
 /* Lightweight runtime cache for the portfolio. */
-const CACHE_NAME = "portfolio-static-v12";
+const CACHE_NAME = "portfolio-static-v13";
 const CACHE_PREFIX = "portfolio-static-";
 
 self.addEventListener("install", (event) => {
@@ -47,11 +47,9 @@ self.addEventListener("fetch", (event) => {
 
     try {
       const response = await fetch(request);
-      if (response.ok && response.type === "basic") {
-        await cache.put(request, response.clone());
-      }
+      if (response.ok && response.type === "basic") await cache.put(request, response.clone());
       return response;
-    } catch (error) {
+    } catch (_) {
       return Response.error();
     }
   })());

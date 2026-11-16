@@ -13,12 +13,24 @@
   }
 
   root.dataset.theme = theme;
-
-  if (![ "EN", "DE", "FA" ].includes(language)) language = "EN";
+  if (!["EN", "DE", "FA"].includes(language)) language = "EN";
   root.lang = language === "FA" ? "fa" : language.toLowerCase();
   root.dir = language === "FA" ? "rtl" : "ltr";
 
-  // Register a tiny same-origin cache; it never blocks the first paint.
+  // Load the custom visual layer without blocking the initial HTML parse.
+  const visualStyles = document.createElement("link");
+  visualStyles.rel = "stylesheet";
+  visualStyles.href = "./cinematic.css?v=20261116-cinematic-v1";
+  document.head.append(visualStyles);
+
+  // Wait for the document structure before mounting the motion scene.
+  document.addEventListener("DOMContentLoaded", () => {
+    const motionScript = document.createElement("script");
+    motionScript.src = "./motion.js?v=20261116-cinematic-v1";
+    motionScript.async = true;
+    document.body.append(motionScript);
+  }, { once: true });
+
   if ("serviceWorker" in navigator && window.isSecureContext) {
     window.addEventListener("load", () => {
       navigator.serviceWorker.register("./sw.js", { scope: "./" }).catch(() => {});
