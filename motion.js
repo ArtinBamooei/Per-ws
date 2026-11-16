@@ -29,7 +29,6 @@
   const barsGroup=el("g");[38,60,46,78,54,88,66,100,72].forEach((h,i)=>barsGroup.append(el("rect",{x:295+i*24,y:560-h*.62,width:9,height:h*.62,rx:4,class:"scene-bar bar-delay-"+(i+1)})));g.append(barsGroup);svg.append(g);
   visual.insertBefore(svg,visual.querySelector(".hero-visual-overlay")||visual.firstChild);
   if(!reduce){
-    const progress=document.createElement("div");progress.className="motion-progress";progress.setAttribute("aria-hidden","true");document.body.append(progress);
     document.documentElement.classList.add("motion-enabled");
     const progress=document.createElement("div");progress.className="motion-progress";progress.setAttribute("aria-hidden","true");document.body.append(progress);
   }
