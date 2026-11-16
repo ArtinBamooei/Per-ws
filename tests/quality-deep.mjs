@@ -10,6 +10,8 @@ const cases = docs.get("projects.html");
 const js = fs.readFileSync("script.js", "utf8");
 const css = fs.readFileSync("styles.css", "utf8");
 const boot = fs.readFileSync("theme-init.js", "utf8");
+const motion = fs.readFileSync("motion.js", "utf8");
+const heroArtwork = fs.readFileSync("assets/signature-glass-core.svg", "utf8");
 
 for (const [file, source] of docs) {
   assert.match(source, /<meta\s+name="viewport"[^>]*width=device-width/i, file + ": viewport missing");
@@ -170,3 +172,10 @@ assert.doesNotMatch(cases, /<a class="brand"[^>]*aria-label=/, "project brand li
 assert.match(css, /\.brand-copy \{ position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect\(0, 0, 0, 0\); white-space: nowrap; border: 0; \}/, "mobile brand text must remain available to assistive technology");
 assert.match(css, /\.nav-link, \.footer-links > a, \.text-link, \.detail-back\s*\{\s*min-height: 24px;/, "compact navigation links must meet 24px target height");
 assert.match(serviceWorker, /portfolio-static-v16/, "service worker cache must be invalidated after target-size changes");
+assert.match(main, /class="hero-visual data-field"/, "hero visual container missing");
+assert.match(motion, /signature-glass-core\\.svg/, "dedicated glass-core SVG must be mounted");
+assert.match(motion, /prefers-reduced-motion/, "hero animation must respect reduced-motion preference");
+assert.match(heroArtwork, /class="core-cube"/, "amber core must remain a distinct SVG layer");
+assert.match(heroArtwork, /class="orbit-nodes"/, "orbital nodes must remain distinct SVG elements");
+assert.match(css, /@keyframes glass-core-breathe/, "core light animation missing");
+assert.match(css, /html\\[data-theme="light"\\] \\.hero-visual\\.data-field/, "light theme artwork treatment missing");
