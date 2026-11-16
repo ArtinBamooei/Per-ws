@@ -23,10 +23,15 @@
   visualStyles.href = "./cinematic.css?v=20261116-signature-v1";
   document.head.append(visualStyles);
 
+  const coreStyles = document.createElement("link");
+  coreStyles.rel = "stylesheet";
+  coreStyles.href = "./glass-core.css?v=20261116-glass-core-v16";
+  document.head.append(coreStyles);
+
   // Wait for the document structure before mounting the motion scene.
   document.addEventListener("DOMContentLoaded", () => {
     const motionScript = document.createElement("script");
-    motionScript.src = "./motion.js?v=20261116-signature-v1";
+    motionScript.src = "./motion.js?v=20261116-glass-core-v16";
     motionScript.async = true;
     document.body.append(motionScript);
   }, { once: true });
