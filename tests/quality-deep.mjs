@@ -3,7 +3,7 @@ import path from "node:path";
 import assert from "node:assert/strict";
 
 const root = process.cwd();
-const pages = ["index.html", "projects.html", "404.html", "audit.html"];
+const pages = ["index.html", "projects.html", "404.html"];
 const docs = new Map(pages.map(file => [file, fs.readFileSync(path.join(root, file), "utf8")]));
 const main = docs.get("index.html");
 const cases = docs.get("projects.html");
@@ -142,79 +142,10 @@ assert.ok(Buffer.byteLength(css, "utf8") < 200000, "CSS payload exceeds 200 KB")
 assert.ok(Buffer.byteLength(js, "utf8") < 150000, "JS payload exceeds 150 KB");
 assert.doesNotMatch(js, /innerHTML|outerHTML|insertAdjacentHTML|document\.write\s*\(/, "unsafe HTML sink introduced");
 
-const auditHtml = docs.get("audit.html");
-const auditJs = fs.readFileSync("audit.js", "utf8");
-const auditCss = fs.readFileSync("audit.css", "utf8");
-assert.match(auditHtml, /id="pin-input"/, "audit console PIN gate missing");
-assert.match(auditHtml, /id="dashboard"/, "audit dashboard missing");
-assert.match(auditHtml, /id="download-button"/, "JSON report download missing");
-assert.match(auditHtml, /id="print-button"/, "print/PDF report action missing");
-assert.match(auditJs, /PBKDF2/, "PIN verifier must use a password-based KDF");
-assert.match(auditJs, /runPageSpeed/, "PageSpeed Insights integration missing");
-assert.ok(auditJs.includes("pagespeedonline.googleapis.com"), "canonical PageSpeed API endpoint missing");
-assert.match(auditJs, /api.github.com/, "GitHub Actions integration missing");
-assert.match(auditJs, /localStorage\.setItem\(REPORT_KEY/, "previous-run comparison snapshot missing");
-assert.doesNotMatch(auditJs, /\b(?:innerHTML|outerHTML|insertAdjacentHTML|document\.write)\b/, "audit console must not use unsafe HTML sinks");
-assert.match(auditCss, /@media print/, "print stylesheet missing");
-assert.match(auditCss, /@media \(max-width: 520px\)/, "mobile audit layout missing");
-assert.match(main, /class="audit-entry" href="\.\/audit\.html"[^>]*data-i18n="navAudit"/, "desktop navigation audit entry missing");
-assert.match(main, /class="audit-entry-mobile" href="\.\/audit\.html"[^>]*data-i18n="navAudit"/, "mobile navigation audit entry missing");
-assert.equal(js.split("\n").filter(line => line.includes("navAudit:")).length, 3, "audit navigation label must be translated in all three languages");
-for (const source of [main, cases]) assert.match(source, /href="\.\/audit\.html"/, "site footer must link to the audit console");
-
-
-const auditBridge = fs.readFileSync("audit-bridge.js", "utf8");
-const axeVendor = fs.readFileSync("assets/vendor/axe-core-4.14.0.min.js", "utf8");
-const axeLicense = fs.readFileSync("assets/vendor/AXE-CORE-LICENSE.txt", "utf8");
-assert.match(auditHtml, /frame-src 'self'/, "audit page must allow only same-origin diagnostic frames");
-assert.match(auditHtml, /https:\/\/validator\.w3\.org/, "W3C checker connect policy missing");
-assert.match(auditBridge, /portfolio-audit-bridge/, "runtime bridge message protocol missing");
-assert.ok(boot.includes("audit-bridge.js?v=20261110-audit-bridge-v6"), "updated audit bridge cache key missing");
-assert.match(auditBridge, /securitypolicyviolation/, "browser CSP violations are not captured");
-assert.match(auditBridge, /unhandledrejection/, "unhandled promise rejections are not captured");
-assert.match(auditBridge, /largest-contentful-paint/, "live LCP observer missing");
-assert.match(auditBridge, /longtask/, "long-task observer missing");
-assert.match(auditBridge, /axe\.run/, "axe-core execution missing");
-assert.match(js, /langENLabel:"EN — English"/, "English language accessible label translation missing");
-assert.match(js, /langDELabel:"DE — German"/, "German language accessible label translation missing");
-assert.match(js, /langFALabel:"FA — Persian"/, "Persian language accessible label translation missing");
-assert.ok(auditBridge.includes('document.fonts?.load(\'16px "Vazirmatn"\', "فارسی")'), "Vazirmatn probe must explicitly load the Persian font face");
-assert.match(axeVendor, /axe v4\.14\.0/, "pinned axe-core version missing");
-assert.ok(axeLicense.length > 1000, "axe-core MPL and third-party license notices missing");
-assert.match(auditJs, /runBrowserPageAudit/, "live browser page runner missing");
-assert.match(auditJs, /validateMarkup/, "W3C HTML validation integration missing");
-assert.match(auditJs, /home-mobile[\s\S]*projects-desktop/, "Lighthouse must cover both pages and both form factors");
-assert.match(auditHtml, /id="browser-runtime"/, "live browser report panel missing");
-assert.match(auditHtml, /id="markup-panel"/, "W3C validation panel missing");
-
-assert.match(auditBridge, /language-switcher/, "real three-language interaction probe missing");
-assert.match(auditBridge, /themePersisted/, "theme persistence assertion missing");
-assert.match(auditJs, /language-switcher/, "language interaction findings are not rendered");
-
-assert.match(auditJs, /searchParams\.set\("audit", "1"\)/, "live probes must use direct-network cache-bypass URLs");
-assert.match(auditJs, /checkCrawlFiles/, "robots and sitemap audits missing");
-assert.match(auditJs, /check404Handling/, "real HTTP 404 probe missing");
 const serviceWorker = fs.readFileSync("sw.js", "utf8");
-assert.match(serviceWorker, /portfolio-static-v10/, "service worker cache version must be bumped after release changes");
-assert.match(serviceWorker, /searchParams\.get\("audit"\) === "1"/, "service worker must bypass audit navigations");
-assert.match(serviceWorker, /self\.clients\.get\(event\.clientId\)/, "service worker must bypass cached subresources for audit frames");
-
-assert.match(auditHtml, /audit\.js\?v=20261110-audit-v10/, "audit engine cache key must match the final build");
-
-assert.match(auditBridge, /const loadSnapshot = snapshot\(\)|loadSnapshot = snapshot\(\)/, "page-load metrics must be captured before diagnostics and interactions");
-assert.match(auditBridge, /type: "paint", buffered: true/, "buffered Paint Timing observer missing");
-assert.match(auditBridge, /vazirmatnFaces/, "Persian font load result must include loaded font faces");
-assert.match(auditJs, /strategy\.toUpperCase\(\)/, "PageSpeed strategy must use the API enum casing");
-assert.match(auditJs, /intentionallyNoindex/, "intentional noindex pages must not get false canonical/OG warnings");
-assert.match(auditJs, /githubPagesStaticHost/, "GitHub Pages custom-header limitation must be reported accurately");
-assert.match(auditJs, /runPsiWorker/, "PageSpeed requests must use a bounded concurrency queue");
-assert.match(auditJs, /checkDeploymentIntegrity/, "live deployed files must be hash-verified against the GitHub main tree");
-assert.match(auditJs, /gitBlobSha/, "deployed asset comparison must use Git blob SHA-1, not filename/version strings");
-assert.match(auditJs, /schemaVersion: 2/, "audit reports must be versioned and reject legacy snapshots");
-assert.match(auditJs, /previous\.schemaVersion === 2 && previous\.validity === "valid"/, "legacy or invalid reports must not be used as valid baselines");
-assert.match(auditJs, /PORTFOLIO_AUDIT_INFO/, "active Service Worker must expose its actual cache version");
-assert.match(auditHtml, /id="integrity-panel"/, "deployment integrity panel missing");
-assert.match(auditBridge, /loadedAssets/, "real iframe loaded asset URLs must be captured");
+assert.doesNotMatch(main + cases + js + boot + serviceWorker, /audit\.html|audit-entry|navAudit|audit-bridge|PORTFOLIO_AUDIT_INFO/, "removed site audit feature must have no remaining references");
+assert.ok(!fs.existsSync("audit.html") && !fs.existsSync("audit.js") && !fs.existsSync("audit.css") && !fs.existsSync("audit-bridge.js"), "site audit console files must be removed");
+assert.match(serviceWorker, /portfolio-static-v11/, "service worker cache version must be bumped after release changes");
 console.log("Deep quality audit: PASS (responsive semantics, local assets/fragments, language/theme persistence, RTL, reduced motion, keyboard navigation, case-study completeness and payload budgets).");
 
 
@@ -238,4 +169,4 @@ assert.doesNotMatch(main, /<a class="brand"[^>]*aria-label=/, "brand link must d
 assert.doesNotMatch(cases, /<a class="brand"[^>]*aria-label=/, "project brand link must derive its accessible name from visible content");
 assert.match(css, /\.brand-copy \{ position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect\(0, 0, 0, 0\); white-space: nowrap; border: 0; \}/, "mobile brand text must remain available to assistive technology");
 assert.match(css, /\.nav-link, \.footer-links > a, \.text-link, \.detail-back\s*\{\s*min-height: 24px;/, "compact navigation links must meet 24px target height");
-assert.match(serviceWorker, /portfolio-static-v10/, "service worker cache must be invalidated after target-size changes");
+assert.match(serviceWorker, /portfolio-static-v11/, "service worker cache must be invalidated after target-size changes");
